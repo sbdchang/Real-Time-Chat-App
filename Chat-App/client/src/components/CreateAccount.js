@@ -1,0 +1,96 @@
+import React from 'react';
+import PageNavbar from './PageNavbar';
+import RecommendationsRow from './RecommendationsRow';
+import '../style/CreateAccount.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
+
+export default class CreateAccount extends React.Component {
+	constructor(props) {
+		super(props);
+
+		// State maintained by this React component is the selected movie name,
+		// and the list of recommended movies.
+		this.state = {
+			// movieName: "",
+			// recMovies: []
+			username: "",
+			email: "",
+			password: ""
+		}
+
+		// this.handleMovieNameChange = this.handleMovieNameChange.bind(this);
+		this.handleUsernameChange = this.handleUsernameChange.bind(this);
+		this.handleEmailChange = this.handleEmailChange.bind(this);
+		this.handlePasswordChange = this.handlePasswordChange.bind(this);
+		this.createAcct = this.createAcct.bind(this);
+	}
+
+	handleUsernameChange(e) {
+		this.setState({
+			username: e.target.value
+		});
+	}
+
+	handleEmailChange(e) {
+		this.setState({
+			email: e.target.value
+		});
+	}
+
+	handlePasswordChange(e) {
+		this.setState({
+			password: e.target.value
+		});
+	}
+
+	createAcct() {
+		let messageOne = document.querySelector("#message-1");
+		messageOne.textContent = "";
+		fetch(`http://localhost:8081/users/register?username=${this.state.username}&email=${this.state.email}&password=${this.state.password}`, {
+			mode: "no-cors",
+			method: "POST"
+		}).then(res => res.json()).then((data) => {
+			
+			return messageOne.textContent = "Account created.";
+		}).catch((err) => {
+			// console.log(err);
+			
+			messageOne.textContent = "Invalid information. Please try again. ";
+		}) // Print the error if there is one.
+	}
+
+	
+	render() {
+
+		return (
+			<div className="Recommendations">
+				<PageNavbar active="recommendations" />
+
+			    <div className="container recommendations-container">
+			    	<div className="jumbotron">
+			    		<div className="h5">Create An Account</div>
+			    		<br></br>
+			    		<div className="input-container">
+							<input type='text' placeholder="Username" value={this.state.username} onChange={this.handleUsernameChange} id="username" className="username-input"/>
+							<input type='text' placeholder="Email" value={this.state.email} onChange={this.handleEmailChange} id="email" className="email-input"/>
+							<input type='text' placeholder="Password" value={this.state.password} onChange={this.handlePasswordChange} id="password" className="password-input"/>
+			    			<button id="createAccounttBtn" className="createAcct-btn" onClick={this.createAcct}>Create Account</button>
+			    		</div>
+						
+			    		<div className="results-container" id="results">
+			    			{/* {this.state.recMovies} */}
+							<p id = "message-1">  </p>
+			    		</div>
+
+						<div className="input-container-login">
+			    			{/* <input type='text' placeholder="Enter movie" value={this.state.movieName} onChange={this.handleMovieNameChange} id="movieName" className="movie-input"/> */}
+							<input type='text' placeholder="Username" value={this.state.username} onChange={this.handleUsernameChange} id="username" className="username-input"/>
+							<input type='text' placeholder="Password" value={this.state.password} onChange={this.handlePasswordChange} id="password" className="password-input"/>
+			    			<button id="loginBtn" className="login-btn" onClick={this.submitMovie}>Log In</button>
+			    		</div>
+			    	</div>
+			    </div>
+		    </div>
+		);
+	}
+}
