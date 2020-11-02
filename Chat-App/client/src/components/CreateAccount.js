@@ -18,7 +18,7 @@ export default class CreateAccount extends React.Component {
 			password: ""
 		}
 
-		// this.handleMovieNameChange = this.handleMovieNameChange.bind(this);
+		
 		this.handleUsernameChange = this.handleUsernameChange.bind(this);
 		this.handleEmailChange = this.handleEmailChange.bind(this);
 		this.handlePasswordChange = this.handlePasswordChange.bind(this);
@@ -43,10 +43,10 @@ export default class CreateAccount extends React.Component {
 		});
 	}
 
-	createAcct() {
+	async createAcct() {
 		let messageOne = document.querySelector("#message-1");
 		messageOne.textContent = "";
-		fetch(`http://localhost:8081/users/register?username=${this.state.username}&email=${this.state.email}&password=${this.state.password}`, {
+		await fetch(`http://localhost:8081/users/register?username=${this.state.username}&email=${this.state.email}&password=${this.state.password}`, {
 			mode: "no-cors",
 			method: "POST"
 		}).then(res => res.json()).then((data) => {
