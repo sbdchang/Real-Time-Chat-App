@@ -47,16 +47,30 @@ export default class CreateAccount extends React.Component {
 		let messageOne = document.querySelector("#message-1");
 		messageOne.textContent = "";
 		await fetch(`http://localhost:8081/users/register?username=${this.state.username}&email=${this.state.email}&password=${this.state.password}`, {
-			mode: "no-cors",
 			method: "POST"
-		}).then(res => res.json()).then((data) => {
-			
+		}).then((data) => {
+			if (data.status === 400) {
+				console.log(data);
+				return messageOne.textContent = "Invalid information. Please try again. ";
+			} else if (data.status === 460) {
+				console.log(data);
+				return messageOne.textContent = "Username or email already exists.";
+			} else if (data.status === 461) {
+				console.log(data);
+				return messageOne.textContent = "Invalid email.";
+			} else if (data.status === 462) {
+				console.log(data);
+				return messageOne.textContent = "Invalid password.";
+			} else if (data.status === 463) {
+				console.log(data);
+				return messageOne.textContent = "All fields are required.";
+			}
+
 			return messageOne.textContent = "Account created.";
 		}).catch((err) => {
-			// console.log(err);
-			
-			messageOne.textContent = "Invalid information. Please try again. ";
-		}) // Print the error if there is one.
+			// Print the error if there is one
+			messageOne.textContent = "Could not log in at this time. Please try again later.";
+		}) 
 	}
 
 	

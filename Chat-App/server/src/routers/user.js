@@ -1,18 +1,45 @@
 const express = require("express");
 const User = require("../models/user");
+const cors = require("cors");
 const router = new express.Router();
 
 
-router.post("/users/register", async (req, res) => {
+router.post("/users/register", cors(), async (req, res) => {
     //create new user using information parsed from incoming JSON
     console.log(req.query);
     const user = new User(req.query);
 
+    // await user.save().then((res) => {
+    //     return res.status(200).send(user);
+    // }).catch((e) => {
+        // if (e.code === 11000) {
+        //     res.status(460).send(e);
+        // } else if (e.errors.email) {
+        //     console.log("email");
+        //     res.status(461).send(e);
+        // } else if (e.errors.password) {
+        //     console.log("password");
+        //     res.status(462).send(e);
+        // } else {
+        //     res.status(463).send(e);
+        // }
+    // })
+    
     try {
         await user.save();
-        res.status(201).send(user);
+        res.status(200).send(user);
     } catch(e) {
-        res.status(400).send(e);
+        if (e.code === 11000) {
+            res.status(460).send(e);
+        } else if (e.errors.email) {
+            console.log("email");
+            res.status(461).send(e);
+        } else if (e.errors.password) {
+            console.log("password");
+            res.status(462).send(e);
+        } else {
+            res.status(463).send(e);
+        }
     }
 
     // user.save().then(() => {
