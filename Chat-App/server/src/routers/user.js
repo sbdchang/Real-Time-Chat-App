@@ -6,7 +6,7 @@ const router = new express.Router();
 
 router.post("/users/register", cors(), async (req, res) => {
     //create new user using information parsed from incoming JSON
-    console.log(req.query);
+    // console.log(req.query);
     const user = new User(req.query);
 
     // await user.save().then((res) => {
@@ -51,10 +51,16 @@ router.post("/users/register", cors(), async (req, res) => {
 });
 
 //log in to existing account
-router.post("/users/login", async(req, res) => {
+router.post("/users/login", cors(), async(req, res) => {
+    console.log(req.query);
     try {
-        const user = await User.findByCredentials(req.body.username, req.body.password);
-        res.send(user);
+        const user = await User.findByCredentials(req.query.username, req.query.password);
+        // const user = await User.findByCredentials(req.body.username, req.body.password);
+        const token = await user.generateAuthToken();
+        res.send({
+            user: user,
+            token: token
+        });
     } catch (e) {
         res.status(400).send(e);
     }

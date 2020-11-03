@@ -26,6 +26,7 @@ export default class CreateAccount extends React.Component {
 		this.handleLoginUsernameChange = this.handleLoginUsernameChange.bind(this);
 		this.handleLoginPasswordChange = this.handleLoginPasswordChange.bind(this);
 		this.createAcct = this.createAcct.bind(this);
+		this.loginAcct = this.loginAcct.bind(this);
 	}
 
 	handleUsernameChange(e) {
@@ -87,6 +88,29 @@ export default class CreateAccount extends React.Component {
 		}) 
 	}
 
+	async loginAcct() {
+		let messageTwo = document.querySelector("#message-2");
+		messageTwo.textContent = "";
+
+		console.log(this.state.lusername);
+		console.log(this.state.lpassword);
+
+		await fetch(`http://localhost:8081/users/login/?username=${this.state.lusername}&password=${this.state.lpassword}`, {
+			method: "POST"
+		}).then((response) => {
+			console.log(response.status);
+			if (response.status === 200) {
+				messageTwo.textContent = "Login successful.";
+				//not yet implemented: loads Main view upon successful login
+			} else {
+				messageTwo.textContent = "Incorrect login credentials. Please try again.";
+			}			
+		}).catch((err) => {
+			// Print the error if there is one
+			messageTwo.textContent = "Unable to log in at this time. Please try again later.";
+		});
+	}
+
 	
 	render() {
 
@@ -116,7 +140,12 @@ export default class CreateAccount extends React.Component {
 			    			{/* <input type='text' placeholder="Enter movie" value={this.state.movieName} onChange={this.handleMovieNameChange} id="movieName" className="movie-input"/> */}
 							<input type='text' placeholder="Username" value={this.state.lusername} onChange={this.handleLoginUsernameChange} id="lusername" className="lusername-input"/>
 							<input type='text' placeholder="Password" value={this.state.lpassword} onChange={this.handleLoginPasswordChange} id="lpassword" className="lpassword-input"/>
-			    			<button id="loginBtn" className="login-btn" onClick={this.login}>Log In</button>
+			    			<button id="loginBtn" className="login-btn" onClick={this.loginAcct}>Log In</button>
+			    		</div>
+
+						<div className="results-container" id="results">
+			    			{/* {this.state.recMovies} */}
+							<p id = "message-2">  </p>
 			    		</div>
 			    	</div>
 			    </div>

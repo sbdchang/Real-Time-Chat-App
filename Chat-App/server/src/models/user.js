@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 const validator = require("validator");
 const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
 
 //creates a schema for mongoose object "User" which contains all the attributes defined for a User
 const userSchema = new mongoose.Schema({
@@ -40,8 +41,34 @@ const userSchema = new mongoose.Schema({
                 throw new Error("Password must contain at least one special character.");
             }
         }    
-    }
+    },
+    tokens: [{
+        //array of token objects, each has a token property
+        token: {
+            type: String,
+            required: true
+        }
+    }]
 });
+
+//instance method, accessible on the instance of User created (user)
+userSchema.methods.generateAuthToken = async function() {
+    const user = this;
+
+    //generate a token for this user using jwt.sign() method
+    //first param: use _id of user as data embedded in the token; user._id is object ID, so need to convert to String for jwt
+    //second param: tamper-proof secret
+    const token = jwt.sign({ _id: user._id.toString() }, "thisismynewcourse");
+
+    //concatenate new token to tokens, which is an array of token objects. As such, newly token must be an object, so use {}
+    //new token object has one property token - use newly generated token for this property's value
+    user.tokens = user.tokens.concat({ token: token });
+    
+    //call save so the token is saved to the user database
+    await user.save();
+
+    return token;
+}
 
 userSchema.statics.findByCredentials = async(username, password) => {
     const user = await User.findOne({ username: username });

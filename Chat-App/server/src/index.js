@@ -1,5 +1,6 @@
 const express = require("express");
 const cors = require("cors");
+const jwt = require("jsonwebtoken");
 //following line ensures mongoose.js runs and mongoose connects to the database
 require("./db/mongoose");
 const userRouter = require("./routers/user");
