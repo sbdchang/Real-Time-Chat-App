@@ -5,7 +5,6 @@ import {
 	Switch
 } from 'react-router-dom';
 import Dashboard from './Dashboard';
-import Recommendations from './CreateAccount';
 import BestGenres from './BestGenres';
 import CreateAccount from './CreateAccount';
 

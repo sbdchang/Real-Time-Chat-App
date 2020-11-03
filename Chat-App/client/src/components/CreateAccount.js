@@ -15,13 +15,16 @@ export default class CreateAccount extends React.Component {
 			// recMovies: []
 			username: "",
 			email: "",
-			password: ""
+			password: "",
+			lusername: "",
+			lpassword: ""
 		}
 
-		
 		this.handleUsernameChange = this.handleUsernameChange.bind(this);
 		this.handleEmailChange = this.handleEmailChange.bind(this);
 		this.handlePasswordChange = this.handlePasswordChange.bind(this);
+		this.handleLoginUsernameChange = this.handleLoginUsernameChange.bind(this);
+		this.handleLoginPasswordChange = this.handleLoginPasswordChange.bind(this);
 		this.createAcct = this.createAcct.bind(this);
 	}
 
@@ -40,6 +43,18 @@ export default class CreateAccount extends React.Component {
 	handlePasswordChange(e) {
 		this.setState({
 			password: e.target.value
+		});
+	}
+
+	handleLoginUsernameChange(e) {
+		this.setState({
+			lusername: e.target.value
+		});
+	}
+
+	handleLoginPasswordChange(e) {
+		this.setState({
+			lpassword: e.target.value
 		});
 	}
 
@@ -65,7 +80,6 @@ export default class CreateAccount extends React.Component {
 				console.log(data);
 				return messageOne.textContent = "All fields are required.";
 			}
-
 			return messageOne.textContent = "Account created.";
 		}).catch((err) => {
 			// Print the error if there is one
@@ -96,11 +110,13 @@ export default class CreateAccount extends React.Component {
 							<p id = "message-1">  </p>
 			    		</div>
 
+						<div className="h5">Log In</div>
+
 						<div className="input-container-login">
 			    			{/* <input type='text' placeholder="Enter movie" value={this.state.movieName} onChange={this.handleMovieNameChange} id="movieName" className="movie-input"/> */}
-							<input type='text' placeholder="Username" value={this.state.username} onChange={this.handleUsernameChange} id="username" className="username-input"/>
-							<input type='text' placeholder="Password" value={this.state.password} onChange={this.handlePasswordChange} id="password" className="password-input"/>
-			    			<button id="loginBtn" className="login-btn" onClick={this.submitMovie}>Log In</button>
+							<input type='text' placeholder="Username" value={this.state.lusername} onChange={this.handleLoginUsernameChange} id="lusername" className="lusername-input"/>
+							<input type='text' placeholder="Password" value={this.state.lpassword} onChange={this.handleLoginPasswordChange} id="lpassword" className="lpassword-input"/>
+			    			<button id="loginBtn" className="login-btn" onClick={this.login}>Log In</button>
 			    		</div>
 			    	</div>
 			    </div>
