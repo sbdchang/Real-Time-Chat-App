@@ -1,6 +1,8 @@
 const express = require("express");
 const User = require("../models/user");
+const auth = require("../middleware/auth");
 const cors = require("cors");
+
 const router = new express.Router();
 
 
@@ -63,6 +65,39 @@ router.post("/users/login", cors(), async(req, res) => {
         });
     } catch (e) {
         res.status(400).send(e);
+    }
+})
+
+router.post("/users/logout", auth, async (req, res) => {
+    try {
+        //filter out and remove the token from the session that the user is logging out from
+        req.user.tokens = req.user.tokens.filter((token) => {
+            //iterate through each token in the user's tokens array
+            //if the token being logged out from matches one of the user's current tokens, function returns false and
+            //that token is removed from the tokens array. Otherwise, returns true and token is kept in tokens array
+            return token.token != req.token;
+        });
+
+        //save the user again, with that token removed
+        await req.user.save();
+
+        res.send();
+    } catch (e) {
+        res.status(500).send();
+    }
+})
+
+router.post("/users/logoutall", cors(), auth, async (req, res) => {
+    try {
+        //remove all tokens from this user's tokens array by setting it to an empty array
+        req.user.tokens = [];
+
+        //save the user again, with all tokens removed
+        await req.user.save();
+
+        res.send();
+    } catch (e) {
+        res.status(500).send();
     }
 })
 

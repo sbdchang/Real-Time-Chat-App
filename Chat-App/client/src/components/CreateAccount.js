@@ -3,6 +3,7 @@ import PageNavbar from './PageNavbar';
 import RecommendationsRow from './RecommendationsRow';
 import '../style/CreateAccount.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import { Link } from 'react-router-dom';
 
 export default class CreateAccount extends React.Component {
 	constructor(props) {
