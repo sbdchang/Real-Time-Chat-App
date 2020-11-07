@@ -4,7 +4,7 @@ import BestGenreRow from './BestGenreRow';
 import '../style/BestGenres.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-export default class BestGenre extends React.Component {
+export default class UserProfile extends React.Component {
 	constructor(props) {
 		super(props);
 
@@ -64,35 +64,20 @@ export default class BestGenre extends React.Component {
 	}
 
 	render() {
-
+		const a = "111";
 		return (
-			<div className="BestGenres">
-				<PageNavbar active="bestgenres" />
+			<div className="UserProfile">
+				<PageNavbar active="userprofile" />
 
 				<div className="container bestgenres-container">
 			      <div className="jumbotron">
-			        <div className="h5">Best Genres</div>
-
-			        <div className="years-container">
-			          <div className="dropdown-container">
-			            <select value={this.state.selectedDecade} onChange={this.handleChange} className="dropdown" id="decadesDropdown">
-			            	<option select value> -- select an option -- </option>
-			            	{this.state.decades}
-			            </select>
-			            <button className="submit-btn" id="decadesSubmitBtn" onClick={this.submitDecade}>Submit</button>
-			          </div>
-			        </div>
+			        <div className="h5">Username: </div>
+					<div className="h6">Registration Date:</div>
 			      </div>
+			
 			      <div className="jumbotron">
-			        <div className="movies-container">
-			          <div className="movie">
-			            <div className="header"><strong>Genre</strong></div>
-			            <div className="header"><strong>Average Rating</strong></div>
-			          </div>
-			          <div className="movies-container" id="results">
-			            {this.state.genres}
-			          </div>
-			        </div>
+				  <input type='text' placeholder="New Password" id="cpassword" className="cpassword-input"/>
+				  <button id="change" className="change-btn">Change Password</button>
 			      </div>
 			    </div>
 			</div>

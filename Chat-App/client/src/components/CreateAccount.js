@@ -1,6 +1,6 @@
 import React from 'react';
-import PageNavbar from './PageNavbar';
-import RecommendationsRow from './RecommendationsRow';
+//import PageNavbar from './PageNavbar';
+//import RecommendationsRow from './RecommendationsRow';
 import '../style/CreateAccount.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Link } from 'react-router-dom';
@@ -99,10 +99,13 @@ export default class CreateAccount extends React.Component {
 		await fetch(`http://localhost:8081/users/login/?username=${this.state.lusername}&password=${this.state.lpassword}`, {
 			method: "POST"
 		}).then((response) => {
-			console.log(response.status);
+			const json = response.json();
+			console.log(json);
 			if (response.status === 200) {
+				console.log("!!!!");
 				messageTwo.textContent = "Login successful.";
 				//not yet implemented: loads Main view upon successful login
+				window.location.href = `/mainview/?username=${this.state.lusername}`;
 			} else {
 				messageTwo.textContent = "Incorrect login credentials. Please try again.";
 			}			
@@ -117,7 +120,7 @@ export default class CreateAccount extends React.Component {
 
 		return (
 			<div className="Recommendations">
-				<PageNavbar active="recommendations" />
+				
 
 			    <div className="container recommendations-container">
 			    	<div className="jumbotron">

@@ -4,8 +4,8 @@ import {
 	Route,
 	Switch
 } from 'react-router-dom';
-import Dashboard from './Dashboard';
-import BestGenres from './BestGenres';
+import Mainview from './Mainview';
+import UserProfile from './UserProfile';
 import CreateAccount from './CreateAccount';
 
 export default class App extends React.Component {
@@ -19,14 +19,14 @@ export default class App extends React.Component {
 							exact
 							path="/"
 							render={() => (
-								<Dashboard />
+								<CreateAccount />
 							)}
 						/>
 						<Route
 							exact
-							path="/dashboard"
+							path="/mainview"
 							render={() => (
-								<Dashboard />
+								<Mainview />
 							)}
 						/>
 						<Route
@@ -36,9 +36,9 @@ export default class App extends React.Component {
 							)}
 						/>
 						<Route
-							path="/bestgenres"
+							path="/userprofile"
 							render={() => (
-								<BestGenres />
+								<UserProfile />
 							)}
 						/>
 					</Switch>

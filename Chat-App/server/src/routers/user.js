@@ -59,7 +59,7 @@ router.post("/users/login", cors(), async(req, res) => {
         const user = await User.findByCredentials(req.query.username, req.query.password);
         // const user = await User.findByCredentials(req.body.username, req.body.password);
         const token = await user.generateAuthToken();
-        res.send({
+        res.json({
             user: user,
             token: token
         });
