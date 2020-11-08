@@ -42,13 +42,38 @@ const userSchema = new mongoose.Schema({
             }
         }    
     },
+    pin: {
+        type: String,
+        required: true,
+        validate(value) {
+            if (!validator.isLength(value, {min: 8, max: undefined})) {
+                throw new Error("Password must be at least 8 characters long.");
+            }
+
+            if (value.toLowerCase().includes("password")) {
+                throw new Error("Password cannot contain 'password'.");
+            }
+        }
+    },
     tokens: [{
         //array of token objects, each has a token property
         token: {
             type: String,
             required: true
         }
-    }]
+    }],
+    incorrectAttempts: {
+        type: Number,
+        default: 0
+    },
+    dateRegistered: {
+        type: Date,
+        default: Date.now
+    },
+    dateNextAvailLoginAttempt: {
+        type: Date,
+        default: Date.now
+    }
 });
 
 //instance method, accessible on the instance of User created (user)
@@ -72,17 +97,75 @@ userSchema.methods.generateAuthToken = async function() {
 
 userSchema.statics.findByCredentials = async(username, password) => {
     const user = await User.findOne({ username: username });
+    const currentTime = new Date();
+    if (currentTime.getTime() < user.dateNextAvailLoginAttempt) {
+        const waitTime = Math.round((user.dateNextAvailLoginAttempt.getTime() - currentTime.getTime()) / 60000);
+        throw new Error("Acount under lockdown. Please try again in " + waitTime + " minute(s).");
+    }
 
     if (!user) {
         throw new Error("Unable to log in.");
     }
 
+    if (user.incorrectAttempts >= 3) {
+        user.incorrectAttempts = 2;
+        
+        const afterLockout = new Date(currentTime.getTime() + 3*60000);
+        user.dateNextAvailLoginAttempt = afterLockout;
+        await user.save();
+        throw new Error("Too many incorrect attempts. Account locked down for XXX.");
+    }
+
     const isMatch = await bcrypt.compare(password, user.password);
 
     if (!isMatch) {
+        // console.log(user.incorrectAttempts);
+        
+        user.incorrectAttempts = user.incorrectAttempts + 1;
+        await user.save();
         throw new Error("Unable to log in.");
     }
 
+    user.incorrectAttempts = 0;
+    user.dateNextAvailLoginAttempt = Date.now();
+    await user.save();
+    return user;
+}
+
+userSchema.statics.findByCredentialsResetPass = async(username, pin) => {
+    const user = await User.findOne({ username: username });
+    const currentTime = new Date();
+    if (currentTime.getTime() < user.dateNextAvailLoginAttempt) {
+        const waitTime = Math.round((user.dateNextAvailLoginAttempt.getTime() - currentTime.getTime()) / 60000);
+        throw new Error("Acount under lockdown. Please try again in " + waitTime + " minute(s).");
+    }
+
+    if (!user) {
+        throw new Error("Unable to log in.");
+    }
+
+    if (user.incorrectAttempts >= 3) {
+        user.incorrectAttempts = 2;
+        
+        const afterLockout = new Date(currentTime.getTime() + 3*60000);
+        user.dateNextAvailLoginAttempt = afterLockout;
+        await user.save();
+        throw new Error("Too many incorrect attempts. Account locked down for XXX.");
+    }
+
+    const isMatch = await bcrypt.compare(pin, user.pin);
+
+    if (!isMatch) {
+        // console.log(user.incorrectAttempts);
+        
+        user.incorrectAttempts = user.incorrectAttempts + 1;
+        await user.save();
+        throw new Error("Unable to log in.");
+    }
+
+    user.incorrectAttempts = 0;
+    user.dateNextAvailLoginAttempt = Date.now();
+    await user.save();
     return user;
 }
 
@@ -96,6 +179,10 @@ userSchema.pre("save", async function (next) {
     if (user.isModified("password")) {
         //updates the user's password if the password is changed
         user.password = await bcrypt.hash(user.password, 8)
+    }
+
+    if (user.isModified("pin")) {
+        user.pin = await bcrypt.hash(user.pin, 8);
     }
 
     next();
