@@ -2,13 +2,13 @@ const express = require("express");
 const User = require("../models/user");
 const auth = require("../middleware/auth");
 const cors = require("cors");
-
 const router = new express.Router();
 
+const app = express();
+app.use(cors);
 
 router.post("/users/register", cors(), async (req, res) => {
     //create new user using information parsed from incoming JSON
-    // console.log(req.query);
     const user = new User(req.query);
 
     // await user.save().then((res) => {
@@ -59,8 +59,7 @@ router.post("/users/register", cors(), async (req, res) => {
 router.post("/users/login", cors(), async(req, res) => {
     console.log(req.query);
     try {
-
-        const user = await User.findByCredentials(req.query.username, req.query.password);
+        //const user = await User.findByCredentials(req.query.username, req.query.password);
         // const user = await User.findByCredentials(req.body.username, req.body.password);
         
         const token = await user.generateAuthToken();
@@ -144,14 +143,14 @@ router.post("/users/logoutall", cors(), auth, async (req, res) => {
 })
 
 //get all users currently in database
-router.get("/users", async (req, res) => {
+router.get("/users", cors(), async (req, res) => {
     try {
         const users = await User.find({});
-        res.send(users);
+        //res.send(users);
+        res.status(200).send();
     } catch(e) {
         res.status(500).send();
     }
-
     // User.find({}).then((users) => {
     //     res.send(users);
     // }).catch((e) => {
@@ -160,7 +159,7 @@ router.get("/users", async (req, res) => {
 });
 
 //get particular user, using dynamically forming URL's
-router.get("/users/:id", async (req, res) => {
+router.get("/users/:id", cors(), async (req, res) => {
     //req.params stores the user that is being requested
     const _id = req.params.id;
 
@@ -190,7 +189,7 @@ router.get("/users/:id", async (req, res) => {
 
 });
 
-router.patch("/users/update/:id", async (req, res) => {
+router.patch("/users/update/:id", cors(), async (req, res) => {
     //updates will hold an array of keys (attributes) that the incoming parameter is trying to update
     const updates = Object.keys(req.body);
     const allowedUpdates = ["username", "email", "password"];

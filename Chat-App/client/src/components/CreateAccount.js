@@ -1,9 +1,5 @@
 import React from 'react';
-//import PageNavbar from './PageNavbar';
-//import RecommendationsRow from './RecommendationsRow';
-import '../style/CreateAccount.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { Link } from 'react-router-dom';
 
 export default class CreateAccount extends React.Component {
 	constructor(props) {
@@ -125,12 +121,12 @@ export default class CreateAccount extends React.Component {
 		}) 
 	}
 
-	async loginAcct() {
+	async loginAcct(e) {
+		e.preventDefault();
+        this.props.changeUsername("Test!!!");
+
 		let messageTwo = document.querySelector("#message-2");
 		messageTwo.textContent = "";
-
-		console.log(this.state.lusername);
-		console.log(this.state.lpassword);
 
 		await fetch(`http://localhost:8081/users/login/?username=${this.state.lusername}&password=${this.state.lpassword}`, {
 			method: "POST"
@@ -138,10 +134,8 @@ export default class CreateAccount extends React.Component {
 			const json = response.json();
 			console.log(json);
 			if (response.status === 200) {
-				console.log("!!!!");
 				messageTwo.textContent = "Login successful.";
-				//not yet implemented: loads Main view upon successful login
-				window.location.href = `/mainview/?username=${this.state.lusername}`;
+				window.location.href = `/userprofile`;
 			} else if (response.status === 401) {
 				messageTwo.textContent = "Too many unsuccessful login attempts. Account locked down for XXX. Try again later.";
 			} else if (response.status === 400) {
@@ -176,14 +170,10 @@ export default class CreateAccount extends React.Component {
 			messageThree.textContent = "Unable to reset password at this time. Please try again later.";
 		});
 	}
-
 	
 	render() {
-
 		return (
-			<div className="Recommendations">
-				
-
+			<div className="CreateAccount">
 			    <div className="container recommendations-container">
 			    	<div className="jumbotron">
 			    		<div className="h5">Create An Account</div>
@@ -211,7 +201,7 @@ export default class CreateAccount extends React.Component {
 			    			{/* <input type='text' placeholder="Enter movie" value={this.state.movieName} onChange={this.handleMovieNameChange} id="movieName" className="movie-input"/> */}
 							<input type='text' placeholder="Username" value={this.state.lusername} onChange={this.handleLoginUsernameChange} id="lusername" className="lusername-input"/>
 							<input type='text' placeholder="Password" value={this.state.lpassword} onChange={this.handleLoginPasswordChange} id="lpassword" className="lpassword-input"/>
-			    			<button id="loginBtn" className="login-btn" onClick={this.loginAcct}>Log In</button>							
+							<button id="loginBtn" className="login-btn" onClick={this.loginAcct.bind(this)}>Log In</button>
 			    		</div>
 
 						<div className="results-container" id="results">

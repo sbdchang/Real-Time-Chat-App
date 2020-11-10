@@ -9,6 +9,16 @@ import UserProfile from './UserProfile';
 import CreateAccount from './CreateAccount';
 
 export default class App extends React.Component {
+	constructor(props) {
+		super(props);
+		this.state = {
+			pusername: "username"
+		}
+	}
+
+	changeState = (u)=>{
+        this.setState({pusername: u});
+    }
 
 	render() {
 		return (
@@ -16,29 +26,21 @@ export default class App extends React.Component {
 				<Router>
 					<Switch>
 						<Route
-							exact
-							path="/"
+							exact path="/"
 							render={() => (
-								<CreateAccount />
+								<CreateAccount changeUsername={this.changeState.bind(this)}/>
 							)}
 						/>
 						<Route
-							exact
-							path="/mainview"
+							exact path="/userprofile"
+							render={() => (
+								<UserProfile changedUsername={this.state.pusername}/>
+							)}
+						/>
+						<Route
+							exact path="/mainview"
 							render={() => (
 								<Mainview />
-							)}
-						/>
-						<Route
-							path="/createaccount"
-							render={() => (
-								<CreateAccount />
-							)}
-						/>
-						<Route
-							path="/userprofile"
-							render={() => (
-								<UserProfile />
 							)}
 						/>
 					</Switch>
