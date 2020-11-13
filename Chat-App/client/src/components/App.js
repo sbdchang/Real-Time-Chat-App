@@ -4,11 +4,21 @@ import {
 	Route,
 	Switch
 } from 'react-router-dom';
-import Dashboard from './Dashboard';
-import BestGenres from './BestGenres';
+import Mainview from './Mainview';
+import UserProfile from './UserProfile';
 import CreateAccount from './CreateAccount';
 
 export default class App extends React.Component {
+	constructor(props) {
+		super(props);
+		this.state = {
+			pusername: "username"
+		}
+	}
+
+	changeState = (u)=>{
+        this.setState({pusername: u});
+    }
 
 	render() {
 		return (
@@ -16,29 +26,21 @@ export default class App extends React.Component {
 				<Router>
 					<Switch>
 						<Route
-							exact
-							path="/"
+							exact path="/"
 							render={() => (
-								<Dashboard />
+								<CreateAccount changeUsername={this.changeState.bind(this)}/>
 							)}
 						/>
 						<Route
-							exact
-							path="/dashboard"
+							exact path="/userprofile"
 							render={() => (
-								<Dashboard />
+								<UserProfile changedUsername={this.state.pusername}/>
 							)}
 						/>
 						<Route
-							path="/createaccount"
+							exact path="/mainview"
 							render={() => (
-								<CreateAccount />
-							)}
-						/>
-						<Route
-							path="/bestgenres"
-							render={() => (
-								<BestGenres />
+								<Mainview />
 							)}
 						/>
 					</Switch>

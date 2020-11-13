@@ -5,7 +5,7 @@ import PageNavbar from './PageNavbar';
 import GenreButton from './GenreButton';
 import DashboardMovieRow from './DashboardMovieRow';
 
-export default class Dashboard extends React.Component {
+export default class Mainview extends React.Component {
   constructor(props) {
     super(props);
 
@@ -67,26 +67,22 @@ export default class Dashboard extends React.Component {
 
   render() {    
     return (
-      <div className="Dashboard">
+      <div className="Mainview">
 
-        <PageNavbar active="dashboard" />
+        <PageNavbar active="mainview" />
 
         <br></br>
-        <div className="container movies-container">
+        <div className="container">
           <div className="jumbotron">
-            <div className="h5">Top Movies</div>
-            <div className="genres-container">
-              {this.state.genres}
-            </div>
+            <div className="h5">Contacts</div>
+            <button id="user1" className="user1">User 1</button>
           </div>
 
           <br></br>
           <div className="jumbotron">
             <div className="movies-container">
               <div className="movies-header">
-                <div className="header-lg"><strong>Title</strong></div>
-                <div className="header"><strong>Rating</strong></div>
-                <div className="header"><strong>Vote Count</strong></div>
+                <button id="search" className="search">Search Contact</button>
               </div>
               <div className="results-container" id="results">
                 {this.state.movies}
