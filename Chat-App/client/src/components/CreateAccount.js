@@ -18,7 +18,8 @@ export default class CreateAccount extends React.Component {
 			rpin: "",
 			rpassword: "",
 			lusername: "",
-			lpassword: ""
+			lpassword: "",
+			f: props.changeUsername
 		}
 
 		this.handleUsernameChange = this.handleUsernameChange.bind(this);
@@ -122,20 +123,19 @@ export default class CreateAccount extends React.Component {
 	}
 
 	async loginAcct(e) {
-		e.preventDefault();
-        this.props.changeUsername("Test!!!");
-
 		let messageTwo = document.querySelector("#message-2");
 		messageTwo.textContent = "";
+		console.log(window.location.href);
 
 		await fetch(`http://localhost:8081/users/login/?username=${this.state.lusername}&password=${this.state.lpassword}`, {
 			method: "POST"
 		}).then((response) => {
-			const json = response.json();
-			console.log(json);
 			if (response.status === 200) {
 				messageTwo.textContent = "Login successful.";
-				window.location.href = `/userprofile`;
+				// e.preventDefault();
+				this.props.changeUsername(this.state.lusername); // to pass username
+				
+				//window.location.href = `/userprofile`;
 			} else if (response.status === 401) {
 				messageTwo.textContent = "Too many unsuccessful login attempts. Account locked down for XXX. Try again later.";
 			} else if (response.status === 400) {
@@ -187,8 +187,7 @@ export default class CreateAccount extends React.Component {
 			    		</div>
 						
 			    		<div className="results-container" id="results">
-			    			{/* {this.state.recMovies} */}
-							<p id = "message-1">  </p>
+			    			<p id = "message-1">  </p>
 			    		</div>
 
 						<br></br>
@@ -198,14 +197,12 @@ export default class CreateAccount extends React.Component {
 						<br></br>
 
 						<div className="input-container-login">
-			    			{/* <input type='text' placeholder="Enter movie" value={this.state.movieName} onChange={this.handleMovieNameChange} id="movieName" className="movie-input"/> */}
 							<input type='text' placeholder="Username" value={this.state.lusername} onChange={this.handleLoginUsernameChange} id="lusername" className="lusername-input"/>
 							<input type='text' placeholder="Password" value={this.state.lpassword} onChange={this.handleLoginPasswordChange} id="lpassword" className="lpassword-input"/>
 							<button id="loginBtn" className="login-btn" onClick={this.loginAcct.bind(this)}>Log In</button>
 			    		</div>
 
 						<div className="results-container" id="results">
-			    			{/* {this.state.recMovies} */}
 							<p id = "message-2">  </p>
 			    		</div>
 
@@ -216,16 +213,14 @@ export default class CreateAccount extends React.Component {
 						<br></br>
 
 						<div className="input-container-resetpassword">
-			    			{/* <input type='text' placeholder="Enter movie" value={this.state.movieName} onChange={this.handleMovieNameChange} id="movieName" className="movie-input"/> */}
-							<input type='text' placeholder="Username" value={this.state.rusername} onChange={this.handleResetPasswordUsernameChange} id="rusername" className="rusername-input"/>
+			    			<input type='text' placeholder="Username" value={this.state.rusername} onChange={this.handleResetPasswordUsernameChange} id="rusername" className="rusername-input"/>
 							<input type='text' placeholder="Reset PIN" value={this.state.rpin} onChange={this.handleResetPinChange} id="rpin" className="rpin-input"/>
 							<input type='text' placeholder="New Password" value={this.state.rpassword} onChange={this.handleResetPasswordChange} id="rpassword" className="rpassword-input"/>
 			    			<button id="resetBtn" className="reset-btn" onClick={this.resetPassword}>Reset Password</button>							
 			    		</div>
 
 						<div className="results-container" id="results">
-			    			{/* {this.state.recMovies} */}
-							<p id = "message-3">  </p>
+			    			<p id = "message-3">  </p>
 			    		</div>
 						
 			    	</div>

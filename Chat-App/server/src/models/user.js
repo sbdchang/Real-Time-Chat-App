@@ -91,8 +91,15 @@ userSchema.methods.generateAuthToken = async function() {
     
     //call save so the token is saved to the user database
     await user.save();
-
+    
     return token;
+}
+
+userSchema.statics.resetPassword = async(u) => {
+    const user = await User.findOne({ username: u });
+    user.email = 'haha@gmail.com';
+    await user.save();
+    return user.email;
 }
 
 userSchema.statics.findByCredentials = async(username, password) => {

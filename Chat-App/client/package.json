@@ -18,7 +18,7 @@
     "selenium-webdriver": "^4.0.0-alpha.5"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "PORT=4000 react-scripts start",
     "build": "react-scripts build",
     "test": "mocha --no-timeouts",
     "eject": "react-scripts eject"

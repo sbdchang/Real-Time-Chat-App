@@ -12,15 +12,19 @@ export default class App extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			pusername: "username"
+			temp: "username"
 		}
 	}
 
-	changeState = (u)=>{
-        this.setState({pusername: u});
+	async changeState(u) {
+		await this.setState({
+			temp: u
+		});
     }
 
 	render() {
+		// console.log(this.state.temp);
+		const u = this.state.temp;
 		return (
 			<div className="App">
 				<Router>
@@ -34,7 +38,7 @@ export default class App extends React.Component {
 						<Route
 							exact path="/userprofile"
 							render={() => (
-								<UserProfile changedUsername={this.state.pusername}/>
+								<UserProfile changedUsername={u}/>
 							)}
 						/>
 						<Route

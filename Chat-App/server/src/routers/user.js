@@ -59,9 +59,8 @@ router.post("/users/register", cors(), async (req, res) => {
 router.post("/users/login", cors(), async(req, res) => {
     console.log(req.query);
     try {
-        //const user = await User.findByCredentials(req.query.username, req.query.password);
+        const user = await User.findByCredentials(req.query.username, req.query.password);
         // const user = await User.findByCredentials(req.body.username, req.body.password);
-        
         const token = await user.generateAuthToken();
         res.json({
             user: user,
@@ -142,20 +141,35 @@ router.post("/users/logoutall", cors(), auth, async (req, res) => {
     }
 })
 
-//get all users currently in database
-router.get("/users", cors(), async (req, res) => {
+router.post("/users/cpw", cors(), async (req, res) => {
     try {
-        const users = await User.find({});
-        //res.send(users);
-        res.status(200).send();
+        // const users = await User.find();
+        // const email = await User.resetPassword(req.query.username);
+        // // search a particular user in the user array
+        // for(var i = 0; i < users.length; i++) {
+        //     if(users[i].username == req.query.username) {
+        //         res.status(200).send(users[i].email);
+        //     }
+        // }
+        res.status(200);
     } catch(e) {
         res.status(500).send();
     }
-    // User.find({}).then((users) => {
-    //     res.send(users);
-    // }).catch((e) => {
-    //     res.status(500).send();
-    // });
+});
+
+//get all users currently in database
+router.get("/users", cors(), async (req, res) => {
+    try {
+        const users = await User.find();
+        // search a particular user in the user array
+        for(var i = 0; i < users.length; i++) {
+            if(users[i].username == req.query.username) {
+                res.status(200).json(users[i]);
+            }
+        }
+    } catch(e) {
+        res.status(500).send();
+    }
 });
 
 //get particular user, using dynamically forming URL's
@@ -168,7 +182,6 @@ router.get("/users/:id", cors(), async (req, res) => {
         if (!user) {
             return res.status(404).send();
         }
-
         res.send(user);
     } catch (e) {
         res.status(500).send();
