@@ -114,14 +114,14 @@ userSchema.statics.findByCredentials = async(username, password) => {
         throw new Error("Unable to log in.");
     }
 
-    // if (user.incorrectAttempts >= 3) {
-    //     user.incorrectAttempts = 2;
+    if (user.incorrectAttempts >= 3) {
+        user.incorrectAttempts = 2;
         
-    //     const afterLockout = new Date(currentTime.getTime() + 3*60000);
-    //     user.dateNextAvailLoginAttempt = afterLockout;
-    //     await user.save();
-    //     throw new Error("Too many incorrect attempts. Account locked down for XXX.");
-    // }
+        const afterLockout = new Date(currentTime.getTime() + 3*60000);
+        user.dateNextAvailLoginAttempt = afterLockout;
+        await user.save();
+        throw new Error("Too many incorrect attempts. Account locked down for XXX.");
+    }
 
     const isMatch = await bcrypt.compare(password, user.password);
 
@@ -142,23 +142,23 @@ userSchema.statics.findByCredentials = async(username, password) => {
 userSchema.statics.findByCredentialsResetPass = async(username, pin) => {
     const user = await User.findOne({ username: username });
     const currentTime = new Date();
-    // if (currentTime.getTime() < user.dateNextAvailLoginAttempt) {
-    //     const waitTime = Math.round((user.dateNextAvailLoginAttempt.getTime() - currentTime.getTime()) / 60000);
-    //     throw new Error("Acount under lockdown. Please try again in " + waitTime + " minute(s).");
-    // }
+    if (currentTime.getTime() < user.dateNextAvailLoginAttempt) {
+        const waitTime = Math.round((user.dateNextAvailLoginAttempt.getTime() - currentTime.getTime()) / 60000);
+        throw new Error("Acount under lockdown. Please try again in " + waitTime + " minute(s).");
+    }
 
     if (!user) {
         throw new Error("Unable to log in.");
     }
 
-    // if (user.incorrectAttempts >= 3) {
-    //     user.incorrectAttempts = 2;
+    if (user.incorrectAttempts >= 3) {
+        user.incorrectAttempts = 2;
         
-    //     const afterLockout = new Date(currentTime.getTime() + 3*60000);
-    //     user.dateNextAvailLoginAttempt = afterLockout;
-    //     await user.save();
-    //     throw new Error("Too many incorrect attempts. Account locked down for XXX.");
-    // }
+        const afterLockout = new Date(currentTime.getTime() + 3*60000);
+        user.dateNextAvailLoginAttempt = afterLockout;
+        await user.save();
+        throw new Error("Too many incorrect attempts. Account locked down for XXX.");
+    }
 
     const isMatch = await bcrypt.compare(pin, user.pin);
 
