@@ -9,15 +9,15 @@ export default class UserProfile extends React.Component {
 		super(props);
 
 		this.state = {
-			username: "hzw",
+			username: "",
 			date: "Registration Time"
 		};
+
+		this.changePassword = this.changePassword.bind(this);
+		this.deactivateAccount = this.deactivateAccount.bind(this);
 	}
 
 	componentDidMount() {
-		// this.setState({
-		// 	username: this.props.changedUsername
-		// });
 		fetch(`http://localhost:8081/users?username=${this.state.username}`, {
 			method: "GET" 
 		}).then(response => response.json()).then((response) => {
@@ -25,20 +25,38 @@ export default class UserProfile extends React.Component {
 				date: response.dateRegistered.substr(0, response.dateRegistered.indexOf('T'))
 			});
 		})
+		this.setState({
+			username: window.location.href.split('='). pop()
+		});
 	}
 
 	async changePassword() {
 		let messageOne = document.querySelector("#message-1");
 		messageOne.textContent = "";
-		await fetch(`http://localhost:8081/users/cpw`, {
-			method: "POST" 
-		}).then((response) => {
-			if (document.getElementById('cpw').value === document.getElementById('npw').value) {
-				messageOne.textContent = "Password NOT Changed";
-			} else {
-				messageOne.textContent = "Password Changed";
-			}
-		})
+		const cpw = document.getElementById('cpw').value;
+		const npw = document.getElementById('npw').value;
+		if (cpw == npw) {
+			messageOne.textContent = "Try a Different New Password!";
+		} else {
+			await fetch(`http://localhost:8081/users/change?username=${this.state.username}&cpw=${cpw}&npw=${npw}`, {
+				method: "POST" 
+			}).then((response) => {
+				if (response.status === 200) {
+					messageOne.textContent = "Password Changed";
+				} else {
+					messageOne.textContent = "Incorrect Current Password"
+				}
+			})
+		}
+	}
+
+	async deactivateAccount() {
+		this.setState({
+			username: "N/A",
+			date: "N/A"
+		});
+		let messageOne = document.querySelector("#message-2");
+		messageOne.textContent = "Account Deactivated";
 	}
 
 	render() {	
@@ -61,7 +79,7 @@ export default class UserProfile extends React.Component {
 			      </div>
 				  <br></br>
 				  <input type='text' placeholder="Current Password" id="dcpw" className="cpw-input"/>
-				  <button id="da" className="da-btn">Deactivate Account</button>
+				  <button id="da" className="da-btn" onClick={this.deactivateAccount}>Deactivate Account</button>
 				  <div className="results-container" id="results">
 			    		<p id = "message-2">  </p>
 			      </div>

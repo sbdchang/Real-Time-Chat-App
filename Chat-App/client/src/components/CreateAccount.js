@@ -134,8 +134,7 @@ export default class CreateAccount extends React.Component {
 				messageTwo.textContent = "Login successful.";
 				// e.preventDefault();
 				this.props.changeUsername(this.state.lusername); // to pass username
-				
-				//window.location.href = `/userprofile`;
+				window.location.href = `/userprofile?username=${this.state.lusername}`;
 			} else if (response.status === 401) {
 				messageTwo.textContent = "Too many unsuccessful login attempts. Account locked down for XXX. Try again later.";
 			} else if (response.status === 400) {

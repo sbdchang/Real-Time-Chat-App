@@ -141,17 +141,21 @@ router.post("/users/logoutall", cors(), auth, async (req, res) => {
     }
 })
 
-router.post("/users/cpw", cors(), async (req, res) => {
+router.post("/users/change", cors(), async (req, res) => {
     try {
-        // const users = await User.find();
-        // const email = await User.resetPassword(req.query.username);
-        // // search a particular user in the user array
-        // for(var i = 0; i < users.length; i++) {
-        //     if(users[i].username == req.query.username) {
-        //         res.status(200).send(users[i].email);
-        //     }
-        // }
-        res.status(200);
+        const users = await User.find();
+        const result = await User.resetPassword(req.query.username, req.query.cpw, req.query.npw);
+        // search a particular user in the user array
+        if (result === 0) {
+            res.status(300).send();
+        } else {
+            for(var i = 0; i < users.length; i++) {
+                if(users[i].username == req.query.username) {
+                    res.status(200).send();
+                }
+            }
+        }
+        // res.status(200).send("!");
     } catch(e) {
         res.status(500).send();
     }
@@ -161,12 +165,13 @@ router.post("/users/cpw", cors(), async (req, res) => {
 router.get("/users", cors(), async (req, res) => {
     try {
         const users = await User.find();
+        res.status(200).json(users[0]);
         // search a particular user in the user array
-        for(var i = 0; i < users.length; i++) {
-            if(users[i].username == req.query.username) {
-                res.status(200).json(users[i]);
-            }
-        }
+        // for(var i = 0; i < users.length; i++) {
+        //     if(users[i].username == req.query.username) {
+        //         res.status(200).json(users[i]);
+        //     }
+        // }
     } catch(e) {
         res.status(500).send();
     }

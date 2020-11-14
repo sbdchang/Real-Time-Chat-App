@@ -75,13 +75,14 @@ export default class Mainview extends React.Component {
         <div className="container">
           <div className="jumbotron">
             <div className="h5">Contacts</div>
-            <button id="user1" className="user1">User 1</button>
+            <button id="user1" className="user1">Contact 1</button>
           </div>
 
           <br></br>
           <div className="jumbotron">
             <div className="movies-container">
               <div className="movies-header">
+                <input type='text' placeholder="Contact" id="sc" className="sc-input"/>
                 <button id="search" className="search">Search Contact</button>
               </div>
               <div className="results-container" id="results">

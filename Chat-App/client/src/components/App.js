@@ -31,19 +31,19 @@ export default class App extends React.Component {
 					<Switch>
 						<Route
 							exact path="/"
-							render={() => (
+							component={() => (
 								<CreateAccount changeUsername={this.changeState.bind(this)}/>
 							)}
 						/>
 						<Route
 							exact path="/userprofile"
-							render={() => (
+							component={() => (
 								<UserProfile changedUsername={u}/>
 							)}
 						/>
 						<Route
 							exact path="/mainview"
-							render={() => (
+							component={() => (
 								<Mainview />
 							)}
 						/>

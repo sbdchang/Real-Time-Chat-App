@@ -95,11 +95,14 @@ userSchema.methods.generateAuthToken = async function() {
     return token;
 }
 
-userSchema.statics.resetPassword = async(u) => {
-    const user = await User.findOne({ username: u });
-    user.email = 'haha@gmail.com';
-    await user.save();
-    return user.email;
+userSchema.statics.resetPassword = async(username, cpw, npw) => {
+    const user = await User.findOne({ username: username });
+    const isMatch = await bcrypt.compare(cpw, user.password);
+    if (!isMatch) {
+        return 0;
+    }
+    await User.update({username: username}, {$set: {password: await bcrypt.hash(npw, 8)}});
+    return 1;
 }
 
 userSchema.statics.findByCredentials = async(username, password) => {
