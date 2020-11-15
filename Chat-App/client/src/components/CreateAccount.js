@@ -122,20 +122,18 @@ export default class CreateAccount extends React.Component {
 	}
 
 	async loginAcct(e) {
-		e.preventDefault();
-        this.props.changeUsername("Test!!!");
-
 		let messageTwo = document.querySelector("#message-2");
 		messageTwo.textContent = "";
+		console.log(window.location.href);
 
 		await fetch(`http://localhost:8081/users/login/?username=${this.state.lusername}&password=${this.state.lpassword}`, {
 			method: "POST"
 		}).then((response) => {
-			const json = response.json();
-			console.log(json);
 			if (response.status === 200) {
 				messageTwo.textContent = "Login successful.";
-				window.location.href = `/userprofile`;
+				// e.preventDefault();
+				this.props.changeUsername(this.state.lusername); // to pass username
+				window.location.href = `/userprofile?username=${this.state.lusername}`;
 			} else if (response.status === 401) {
 				messageTwo.textContent = "Too many unsuccessful login attempts. Account locked down for XXX. Try again later.";
 			} else if (response.status === 400) {

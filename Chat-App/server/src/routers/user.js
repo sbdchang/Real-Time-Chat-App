@@ -145,17 +145,17 @@ router.post("/users/logoutall", cors(), auth, async (req, res) => {
 //get all users currently in database
 router.get("/users", cors(), async (req, res) => {
     try {
-        const users = await User.find({});
-        //res.send(users);
-        res.status(200).send();
+        const users = await User.find();
+        // res.status(200).json(users[0]);
+        // search a particular user in the user array
+        for(var i = 0; i < users.length; i++) {
+            if(users[i].username === req.query.username) {
+                res.status(200).json(users[i]);
+            }
+        }
     } catch(e) {
         res.status(500).send();
     }
-    // User.find({}).then((users) => {
-    //     res.send(users);
-    // }).catch((e) => {
-    //     res.status(500).send();
-    // });
 });
 
 //get particular user, using dynamically forming URL's
@@ -240,6 +240,50 @@ router.delete("/users/delete/:id", async(req, res) => {
     } catch (e) {
         res.status(500).send();
     }
+});
+
+
+router.post("/users/change", cors(), async (req, res) => {
+    try {
+        const users = await User.find();
+        const result = await User.resetPassword(req.query.username, req.query.cpw, req.query.npw);
+        // search a particular user in the user array
+        if (result === 0) {
+            res.status(300).send();
+        } else {
+            for(var i = 0; i < users.length; i++) {
+                if(users[i].username == req.query.username) {
+                    res.status(200).send();
+                }
+            }
+        }
+        // res.status(200).send("!");
+    } catch(e) {
+        res.status(500).send();
+    }
+    // try {
+    //     const users = await User.find();
+    //     const result = await User.resetPassword(req.query.username, req.query.cpw, req.query.npw);
+    //     // search a particular user in the user array
+    //     for(var i = 0; i < users.length; i++) {
+    //         if(users[i].username == req.query.username) {
+    //             res.status(200).send(result);
+    //         }
+    //     }
+    // } catch(e) {
+    //     const errorMessage = e.toString();
+    //     if (errorMessage.includes("Password must be at least 8 characters long.")) {
+    //         res.status(401).send(e);
+    //     } else if (errorMessage.includes("Password cannot contain 'password'.")) {
+    //         res.status(402).send(e);
+    //     } else if (errorMessage.includes("Password must contain at least one special character.")) {
+    //         res.status(403).send(e);
+    //     } else if (errorMessage.includes("Incorrect corrent password.")) {
+    //         res.status(400).send(e);
+    //     } else {
+    //         res.status(470).send(e);
+    //     }
+    // }
 });
 
 module.exports = router;

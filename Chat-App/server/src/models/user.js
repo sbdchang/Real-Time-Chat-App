@@ -95,6 +95,26 @@ userSchema.methods.generateAuthToken = async function() {
     return token;
 }
 
+userSchema.statics.resetPassword = async(username, cpw, npw) => {
+    const user = await User.findOne({ username: username });
+    const isMatch = await bcrypt.compare(cpw, user.password);
+    if (!isMatch) {
+        throw new Error("Incorrect corrent password.");
+    }
+    // if (!validator.isLength(npw, {min: 8, max: undefined})) {
+    //     throw new Error("Password must be at least 8 characters long.");
+    // }
+    // if (npw.toLowerCase().includes("password")) {
+    //     throw new Error("Password cannot contain 'password'.");
+    // }
+    // const letters = /^[A-Za-z0-9 ]+$/;
+    // if (letters.test(npw)) {
+    //     throw new Error("Password must contain at least one special character.");
+    // }
+    await User.update({username: username}, {$set: {password: await bcrypt.hash(npw, 8)}});
+    return "Password Changed";
+}
+
 userSchema.statics.findByCredentials = async(username, password) => {
     const user = await User.findOne({ username: username });
     const currentTime = new Date();
