@@ -126,6 +126,7 @@ export default class CreateAccount extends React.Component {
 	async loginAcct(e) {
 		let messageTwo = document.querySelector("#message-2");
 		messageTwo.textContent = "";
+		console.log(urlToUse);
 		console.log(window.location.href);
 
 		await fetch(`${urlToUse.url.API_URL}/users/login/?username=${this.state.lusername}&password=${this.state.lpassword}`, {
@@ -152,6 +153,7 @@ export default class CreateAccount extends React.Component {
 	async resetPassword() {
 		let messageThree = document.querySelector("#message-3");
 		messageThree.textContent = "";
+		console.log(urlToUse);
 
 		await fetch(`${urlToUse.url.API_URL}/users/login/reset?username=${this.state.rusername}&rpin=${this.state.rpin}&rpassword=${this.state.rpassword}`, {
 			method: "POST"
