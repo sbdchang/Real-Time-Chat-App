@@ -2,6 +2,7 @@ import React from 'react';
 import PageNavbar from './PageNavbar';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import avatar from './avatar.png';
+import {urlToUse} from "./url";
 
 export default class UserProfile extends React.Component {
 	constructor(props) {
@@ -21,7 +22,7 @@ export default class UserProfile extends React.Component {
 		this.setState({
 			username: await window.location.href.split('=').pop()
 		});
-		await fetch(`http://localhost:8081/users?username=${this.state.username}`, {
+		await fetch(`${urlToUse.url.API_URL}/users?username=${this.state.username}`, {
 			method: "GET" 
 		}).then(response => response.json()).then((response) => {
 			console.log(response.status);
@@ -40,7 +41,7 @@ export default class UserProfile extends React.Component {
 		if (cpw == npw) {
 			messageOne.textContent = "Try a Different New Password!";
 		} else {
-			await fetch(`http://localhost:8081/users/change?username=${this.state.username}&cpw=${cpw}&npw=${npw}`, {
+			await fetch(`${urlToUse.url.API_URL}/users/change?username=${this.state.username}&cpw=${cpw}&npw=${npw}`, {
 				method: "POST" 
 			}).then((response) => {
 				if (response.status === 200) {
