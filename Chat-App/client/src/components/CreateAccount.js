@@ -128,7 +128,7 @@ export default class CreateAccount extends React.Component {
 		messageTwo.textContent = "";
 		console.log(window.location.href);
 
-		await fetch(`http://localhost:8081/users/login/?username=${this.state.lusername}&password=${this.state.lpassword}`, {
+		await fetch(`${urlToUse.url.API_URL}/users/login/?username=${this.state.lusername}&password=${this.state.lpassword}`, {
 			method: "POST"
 		}).then((response) => {
 			if (response.status === 200) {
@@ -153,7 +153,7 @@ export default class CreateAccount extends React.Component {
 		let messageThree = document.querySelector("#message-3");
 		messageThree.textContent = "";
 
-		await fetch(`http://localhost:8081/users/login/reset?username=${this.state.rusername}&rpin=${this.state.rpin}&rpassword=${this.state.rpassword}`, {
+		await fetch(`${urlToUse.url.API_URL}/users/login/reset?username=${this.state.rusername}&rpin=${this.state.rpin}&rpassword=${this.state.rpassword}`, {
 			method: "POST"
 		}).then((response) => {
 			if (response.status === 200) {
