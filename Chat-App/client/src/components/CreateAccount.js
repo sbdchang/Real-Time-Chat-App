@@ -1,5 +1,6 @@
 import React from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import {urlToUse} from "./url";
 
 export default class CreateAccount extends React.Component {
 	constructor(props) {
@@ -92,7 +93,8 @@ export default class CreateAccount extends React.Component {
 	async createAcct() {
 		let messageOne = document.querySelector("#message-1");
 		messageOne.textContent = "";
-		await fetch(`http://localhost:8081/users/register?username=${this.state.username}&email=${this.state.email}&password=${this.state.password}&pin=${this.state.pin}`, {
+		console.log(urlToUse);
+		await fetch(`${urlToUse.url.API_URL}/users/register?username=${this.state.username}&email=${this.state.email}&password=${this.state.password}&pin=${this.state.pin}`, {
 			method: "POST"
 		}).then((data) => {
 			if (data.status === 400) {
@@ -124,9 +126,10 @@ export default class CreateAccount extends React.Component {
 	async loginAcct(e) {
 		let messageTwo = document.querySelector("#message-2");
 		messageTwo.textContent = "";
+		console.log(urlToUse);
 		console.log(window.location.href);
 
-		await fetch(`http://localhost:8081/users/login/?username=${this.state.lusername}&password=${this.state.lpassword}`, {
+		await fetch(`${urlToUse.url.API_URL}/users/login/?username=${this.state.lusername}&password=${this.state.lpassword}`, {
 			method: "POST"
 		}).then((response) => {
 			if (response.status === 200) {
@@ -150,8 +153,9 @@ export default class CreateAccount extends React.Component {
 	async resetPassword() {
 		let messageThree = document.querySelector("#message-3");
 		messageThree.textContent = "";
+		console.log(urlToUse);
 
-		await fetch(`http://localhost:8081/users/login/reset?username=${this.state.rusername}&rpin=${this.state.rpin}&rpassword=${this.state.rpassword}`, {
+		await fetch(`${urlToUse.url.API_URL}/users/login/reset?username=${this.state.rusername}&rpin=${this.state.rpin}&rpassword=${this.state.rpassword}`, {
 			method: "POST"
 		}).then((response) => {
 			if (response.status === 200) {

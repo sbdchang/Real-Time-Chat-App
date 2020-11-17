@@ -7,6 +7,10 @@ const router = new express.Router();
 const app = express();
 app.use(cors);
 
+router.get("/", function(req, res) {
+    res.send("Hello world");
+})
+
 router.post("/users/register", cors(), async (req, res) => {
     //create new user using information parsed from incoming JSON
     const user = new User(req.query);
