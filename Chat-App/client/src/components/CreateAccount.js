@@ -92,7 +92,7 @@ export default class CreateAccount extends React.Component {
 	async createAcct() {
 		let messageOne = document.querySelector("#message-1");
 		messageOne.textContent = "";
-		await fetch(`http://localhost:8081/users/register?username=${this.state.username}&email=${this.state.email}&password=${this.state.password}&pin=${this.state.pin}`, {
+		await fetch(`https://chat-app-557-server.herokuapp.com/users/register?username=${this.state.username}&email=${this.state.email}&password=${this.state.password}&pin=${this.state.pin}`, {
 			method: "POST"
 		}).then((data) => {
 			if (data.status === 400) {
