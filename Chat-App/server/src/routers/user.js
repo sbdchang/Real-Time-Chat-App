@@ -30,7 +30,7 @@ router.post("/users/register", cors(), async (req, res) => {
         //     res.status(463).send(e);
         // }
     // })
-    
+
     try {
         await user.save();
         res.status(200).send(user);
@@ -65,13 +65,14 @@ router.post("/users/login", cors(), async(req, res) => {
     try {
         const user = await User.findByCredentials(req.query.username, req.query.password);
         // const user = await User.findByCredentials(req.body.username, req.body.password);
-        
+
         const token = await user.generateAuthToken();
+
         res.json({
             user: user,
             token: token
         });
-    } catch (e) {        
+    } catch (e) {
         const errorMessage = e.toString();
         console.log(errorMessage);
         if (errorMessage.includes("Too many incorrect attempts")) {
@@ -97,7 +98,7 @@ router.post("/users/login/reset", cors(), async(req, res) => {
         user.password = req.query.rpassword;
         await user.save();
         res.status(200).send();
-    } catch (e) {        
+    } catch (e) {
         const errorMessage = e.toString();
         console.log(errorMessage);
         if (errorMessage.includes("Too many incorrect attempts")) {
@@ -150,13 +151,11 @@ router.post("/users/logoutall", cors(), auth, async (req, res) => {
 router.get("/users", cors(), async (req, res) => {
     try {
         const users = await User.find();
-        // res.status(200).json(users[0]);
-        // search a particular user in the user array
+        var users_stripped = []
         for(var i = 0; i < users.length; i++) {
-            if(users[i].username === req.query.username) {
-                res.status(200).json(users[i]);
-            }
+          users_stripped.push({username: users[i].username, email: users[i].email});
         }
+        res.json(users_stripped);
     } catch(e) {
         res.status(500).send();
     }
