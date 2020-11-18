@@ -6,24 +6,28 @@ export default class PageNavbar extends React.Component {
 		super(props);
 
 		this.state = {
+			username: "",
 			navDivs: []
 		}
 	}
 
-	componentDidMount() {
+	async componentDidMount() {
+		this.setState({
+			username: await window.location.href.split('=').pop()
+		});
 		const pageList = ['mainview', 'userprofile'];
 
 		let navbarDivs = pageList.map((page, i) => {
 			if (this.props.active === page) {
 				return (
-					<a className="nav-item nav-link active" key={i} href={"/" + page}>
+					<a className="nav-item nav-link active" key={i} href={"/" + page + "?username=" + this.state.username}>
 						{page.charAt(0).toUpperCase() + page.substring(1, page.length)}
 					</a>
 				)
 			}
 			else {
 				return (
-					<a className="nav-item nav-link" key={i} href={"/" + page}>
+					<a className="nav-item nav-link" key={i} href={"/" + page + "?username=" + this.state.username}>
 						{page.charAt(0).toUpperCase() + page.substring(1, page.length)}
 					</a>
 				)

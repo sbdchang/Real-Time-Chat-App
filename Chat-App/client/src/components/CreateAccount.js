@@ -140,7 +140,7 @@ export default class CreateAccount extends React.Component {
 						localStorage.setItem('token', r.token);
 						localStorage.setItem('username', this.state.lusername);
 						this.props.changeUsername(this.state.lusername); // to pass username
-						window.location.href = `/userprofile?username=${this.state.lusername}`;
+						window.location.href = `/mainview?username=${this.state.lusername}`;
 					})
 				}
 			} else if (response.status === 401) {

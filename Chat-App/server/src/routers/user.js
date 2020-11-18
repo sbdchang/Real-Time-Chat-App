@@ -161,6 +161,32 @@ router.get("/users", cors(), async (req, res) => {
     }
 });
 
+router.get("/users/date", cors(), async (req, res) => {
+    try {
+        const users = await User.find();
+        res.status(200).json(users[0]);
+        // search a particular user in the user array
+        for(var i = 0; i < users.length; i++) {
+            if(users[i].username == req.query.username) {
+                res.status(200).json(users[i]);
+            }
+        }
+    } catch(e) {
+        res.status(500).send();
+    }
+});
+
+router.get("/users/message", cors(), async (req, res) => {
+    try {
+        const users = await User.find();
+        const user = users[0];
+        //res.status(200).send(user["test2"][0]);
+        res.status(200).send("!");
+    } catch(e) {
+        res.status(500).send();
+    }
+});
+
 //get particular user, using dynamically forming URL's
 router.get("/users/:id", cors(), async (req, res) => {
     //req.params stores the user that is being requested
@@ -244,7 +270,6 @@ router.delete("/users/delete/:id", async(req, res) => {
         res.status(500).send();
     }
 });
-
 
 router.post("/users/change", cors(), async (req, res) => {
     try {

@@ -73,6 +73,12 @@ const userSchema = new mongoose.Schema({
     dateNextAvailLoginAttempt: {
         type: Date,
         default: Date.now
+    },
+    messagesSent: {
+        
+    },
+    messagesReceived: {
+        
     }
 });
 
@@ -205,6 +211,11 @@ userSchema.pre("save", async function (next) {
         user.pin = await bcrypt.hash(user.pin, 8);
     }
 
+    // const users = await User.find();
+    // for(var i = 0; i < users.length; i++) {
+    //     user.messagesSent[users[i].username] = "!";
+    //     users[i].messagesReceived[user.username] = "?";
+    // }
     next();
 })
 

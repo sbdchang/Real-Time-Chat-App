@@ -22,11 +22,9 @@ export default class UserProfile extends React.Component {
 		this.setState({
 			username: await window.location.href.split('=').pop()
 		});
-		await fetch(`${urlToUse.url.API_URL}/users?username=${this.state.username}`, {
-			method: "GET" 
+		await fetch(`${urlToUse.url.API_URL}/users/date?username=${this.state.username}`, {
+			method: "GET"
 		}).then(response => response.json()).then((response) => {
-			console.log(response.status);
-			console.log(response.dateRegistered);
 			this.setState({
 				date: response.dateRegistered.substr(0, response.dateRegistered.indexOf('T'))
 			});
@@ -38,7 +36,7 @@ export default class UserProfile extends React.Component {
 		messageOne.textContent = "";
 		const cpw = document.getElementById('cpw').value;
 		const npw = document.getElementById('npw').value;
-		if (cpw == npw) {
+		if (cpw === npw) {
 			messageOne.textContent = "Try a Different New Password!";
 		} else {
 			await fetch(`${urlToUse.url.API_URL}/users/change?username=${this.state.username}&cpw=${cpw}&npw=${npw}`, {
