@@ -93,7 +93,6 @@ export default class CreateAccount extends React.Component {
 	async createAcct() {
 		let messageOne = document.querySelector("#message-1");
 		messageOne.textContent = "";
-		console.log(urlToUse);
 		await fetch(`${urlToUse.url.API_URL}/users/register?username=${this.state.username}&email=${this.state.email}&password=${this.state.password}&pin=${this.state.pin}`, {
 			method: "POST"
 		}).then((data) => {

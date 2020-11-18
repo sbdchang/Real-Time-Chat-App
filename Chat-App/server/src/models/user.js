@@ -74,12 +74,22 @@ const userSchema = new mongoose.Schema({
         type: Date,
         default: Date.now
     },
-    messagesSent: {
-        
+    index: {
+        type: Number,
+        default: 0
     },
-    messagesReceived: {
-        
-    }
+    messagesSent: [{
+        messages: {
+            type: Array,
+            default: []
+        }
+    }],
+    messagesReceived: [{
+        messages: {
+            type: Array,
+            default: []
+        }
+    }],
 });
 
 //instance method, accessible on the instance of User created (user)
@@ -119,6 +129,36 @@ userSchema.statics.resetPassword = async(username, cpw, npw) => {
     // }
     await User.update({username: username}, {$set: {password: await bcrypt.hash(npw, 8)}});
     return "Password Changed";
+}
+
+userSchema.statics.updateMessage = async function(s, r, m) {
+    const sender = await User.findOne({username: s});
+    const receiver = await User.findOne({username: r});
+    const sidx = sender.index;
+    const ridx = receiver.index;
+    if (sidx < ridx) {
+        sender.messagesSent[ridx-1].messages.push(m);
+        receiver.messagesReceived[sidx].messages.push(m);
+    } else {
+        sender.messagesSent[ridx].messages.push(m);
+        receiver.messagesReceived[sidx-1].messages.push(m);
+    }
+    await sender.save();
+    await receiver.save();
+}
+
+userSchema.methods.initMessage = async function() {
+    const user = this;
+    const users = await User.find();
+    user.index = users.length;
+    for (var i = 0; i < users.length; i++) {
+        const tempUser = await User.findOne({index: i });
+        tempUser.messagesSent = tempUser.messagesSent.concat({messages: []});
+        tempUser.messagesReceived = tempUser.messagesReceived.concat({messages: []});
+        tempUser.save();
+        user.messagesSent = user.messagesSent.concat({messages: []});
+        user.messagesReceived = user.messagesReceived.concat({messages: []});
+    }
 }
 
 userSchema.statics.findByCredentials = async(username, password) => {
@@ -210,12 +250,6 @@ userSchema.pre("save", async function (next) {
     if (user.isModified("pin")) {
         user.pin = await bcrypt.hash(user.pin, 8);
     }
-
-    // const users = await User.find();
-    // for(var i = 0; i < users.length; i++) {
-    //     user.messagesSent[users[i].username] = "!";
-    //     users[i].messagesReceived[user.username] = "?";
-    // }
     next();
 })
 

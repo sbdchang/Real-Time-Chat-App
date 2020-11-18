@@ -8,7 +8,16 @@ import { Modal } from 'react-bootstrap';
 export default class Mainview extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { username: "", users: [], showModal: false, currentUser: "", currentUserEmail: "", usersCopy: [], messages: {}, currentMessages: []};
+    this.state = {
+      username: "",
+      users: [],
+      showModal: false,
+      currentUser: "",
+      currentUserEmail: "",
+      usersCopy: [],
+      messages: {},
+      currentMessages: []
+    };
     this.contactOpen = this.contactOpen.bind(this);
     this.hideModal = this.hideModal.bind(this);
     this.searchContact = this.searchContact.bind(this);
@@ -65,21 +74,26 @@ export default class Mainview extends React.Component {
     }
   }
 
-  sendMessage() {
+  async sendMessage() {
     var newMessages = this.state.messages[this.state.currentUser];
     const msent = document.getElementById("msent").value;
     newMessages.push(msent);
     var map = this.state.messages;
     map[this.state.currentUser] = newMessages;
     this.setState({ messages: map, currentMessages: newMessages});
+    await fetch(`${urlToUse.url.API_URL}/users/send?sender=${this.state.username}&receiver=${this.state.currentUser}&msg=${msent}`, {
+			method: "POST"
+		}).then((response) => {
+			// console.log(response.data);
+		})
   }
 
   async receiveMessage() {
-    await fetch(`${urlToUse.url.API_URL}/users/message`, {
-			method: "GET"
-		}).then(response => response.json()).then((response) => {
-			console.log(response);
-		})
+    // await fetch(`${urlToUse.url.API_URL}/users/message`, {
+		// 	method: "GET"
+		// }).then((response) => {
+		// 	console.log(response.data);
+		// })
   }
 
   render() {
