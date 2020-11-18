@@ -1,18 +1,28 @@
 import React from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import PageNavbar from './PageNavbar';
+import axios from 'axios';
+import {urlToUse} from "./url";
 
 export default class Mainview extends React.Component {
   constructor(props) {
     super(props);
   }
 
-  // React function that is called when the page load.
-  componentDidMount() {
-
+  pullContacts() {
+    axios.get(`${urlToUse.url.API_URL}/contacts`)
+      .then(res => {
+        const persons = res.data;
+        this.setState({ persons });
+      })
   }
 
-  render() {    
+  // React function that is called when the page load.
+  componentDidMount() {
+    this.pullContacts();
+  }
+
+  render() {
     return (
       <div className="Mainview">
 
@@ -33,7 +43,7 @@ export default class Mainview extends React.Component {
                 <button id="search" className="search">Search Contact</button>
               </div>
               <div className="results-container" id="results">
-                {this.state.movies}
+
               </div>
             </div>
           </div>

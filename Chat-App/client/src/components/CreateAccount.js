@@ -120,7 +120,7 @@ export default class CreateAccount extends React.Component {
 		}).catch((err) => {
 			// Print the error if there is one
 			messageOne.textContent = "Could not log in at this time. Please try again later.";
-		}) 
+		})
 	}
 
 	async loginAcct(e) {
@@ -133,17 +133,23 @@ export default class CreateAccount extends React.Component {
 			method: "POST"
 		}).then((response) => {
 			if (response.status === 200) {
-				messageTwo.textContent = "Login successful.";
-				// e.preventDefault();
-				this.props.changeUsername(this.state.lusername); // to pass username
-				window.location.href = `/userprofile?username=${this.state.lusername}`;
+				if (response.status === 200) {
+					response.json().then(r => {
+						messageTwo.textContent = "Login successful.";
+						// e.preventDefault();
+						localStorage.setItem('token', r.token);
+						localStorage.setItem('username', this.state.lusername);
+						this.props.changeUsername(this.state.lusername); // to pass username
+						window.location.href = `/userprofile?username=${this.state.lusername}`;
+					})
+				}
 			} else if (response.status === 401) {
 				messageTwo.textContent = "Too many unsuccessful login attempts. Account locked down for XXX. Try again later.";
 			} else if (response.status === 400) {
 				messageTwo.textContent = "Incorrect login credentials. Please try again.";
 			} else {
 				messageTwo.textContent = "Account under lockdown for XXX. Try again later.";
-			}	 	
+			}
 		}).catch((err) => {
 			// Print the error if there is one
 			messageTwo.textContent = "Unable to log in at this time. Please try again later.";
@@ -166,13 +172,13 @@ export default class CreateAccount extends React.Component {
 				messageThree.textContent = "Incorrect password reset credentials. Please try again.";
 			} else {
 				messageThree.textContent = "Account under lockdown for XXX. Try again later.";
-			}	 	
+			}
 		}).catch((err) => {
 			// Print the error if there is one
 			messageThree.textContent = "Unable to reset password at this time. Please try again later.";
 		});
 	}
-	
+
 	render() {
 		return (
 			<div className="CreateAccount">
@@ -187,7 +193,7 @@ export default class CreateAccount extends React.Component {
 							<input type='text' placeholder="Reset PIN" value={this.state.pin} onChange={this.handlePinChange} id="pin" className="pin-input"/>
 			    			<button id="createAccounttBtn" className="createAcct-btn" onClick={this.createAcct}>Create Account</button>
 			    		</div>
-						
+
 			    		<div className="results-container" id="results">
 			    			{/* {this.state.recMovies} */}
 							<p id = "message-1">  </p>
@@ -222,14 +228,14 @@ export default class CreateAccount extends React.Component {
 							<input type='text' placeholder="Username" value={this.state.rusername} onChange={this.handleResetPasswordUsernameChange} id="rusername" className="rusername-input"/>
 							<input type='text' placeholder="Reset PIN" value={this.state.rpin} onChange={this.handleResetPinChange} id="rpin" className="rpin-input"/>
 							<input type='text' placeholder="New Password" value={this.state.rpassword} onChange={this.handleResetPasswordChange} id="rpassword" className="rpassword-input"/>
-			    			<button id="resetBtn" className="reset-btn" onClick={this.resetPassword}>Reset Password</button>							
+			    			<button id="resetBtn" className="reset-btn" onClick={this.resetPassword}>Reset Password</button>
 			    		</div>
 
 						<div className="results-container" id="results">
 			    			{/* {this.state.recMovies} */}
 							<p id = "message-3">  </p>
 			    		</div>
-						
+
 			    	</div>
 			    </div>
 		    </div>
