@@ -189,14 +189,12 @@ router.post("/users/send", cors(), async (req, res) => {
 });
 
 router.get("/users/receive", cors(), async (req, res) => {
-    // try {
-    //     const users = await User.find();
-    //     const user = users[0];
-    //     //res.status(200).send(user["test2"][0]);
-    //     res.status(200).send("!");
-    // } catch(e) {
-    //     res.status(500).send();
-    // }
+    try {
+        const user = await User.findOne({username: req.query.receiver});
+        res.status(200).json(user.messages);
+    } catch(e) {
+        res.status(500).send();
+    }
 });
 
 //get particular user, using dynamically forming URL's

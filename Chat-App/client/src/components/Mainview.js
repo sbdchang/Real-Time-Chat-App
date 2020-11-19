@@ -22,7 +22,7 @@ export default class Mainview extends React.Component {
     this.hideModal = this.hideModal.bind(this);
     this.searchContact = this.searchContact.bind(this);
     this.sendMessage = this.sendMessage.bind(this);
-    this.receiveMessage = this.receiveMessage.bind(this);
+    this.sendImage = this.sendImage.bind(this);
   }
 
   pullContacts() {
@@ -34,8 +34,7 @@ export default class Mainview extends React.Component {
         for(var i = 0; i < users.length; i++) {
           if (users[i].username !== this.state.username) {
             validUsers.push(users[i]);
-            var array = [];
-            map[users[i].username] = array;
+            map[users[i].username] = [];
           }
         }
         this.setState({ users: validUsers, usersCopy: users, messages: map });
@@ -47,6 +46,13 @@ export default class Mainview extends React.Component {
 			username: await window.location.href.split('=').pop()
 		});
     this.pullContacts();
+    axios.get(`${urlToUse.url.API_URL}/users/receive?receiver=${this.state.username}`)
+      .then(res => {
+        for(var i = 0; i < this.state.users.length; i++) {
+          const msg = res.data[i].usermsg;
+          this.state.messages[this.state.users[i].username] = msg;
+        }
+    })
   }
 
   contactOpen(user, email) {
@@ -74,28 +80,22 @@ export default class Mainview extends React.Component {
     }
   }
 
-  async sendMessage() {
+  sendMessage() {
     var newMessages = this.state.messages[this.state.currentUser];
+    console.log(this.state.messages);
     const msent = document.getElementById("msent").value;
-    newMessages.push(msent);
+    newMessages.push({key: msent, value: "Sent: "});
     var map = this.state.messages;
     map[this.state.currentUser] = newMessages;
     this.setState({ messages: map, currentMessages: newMessages});
-    await fetch(`${urlToUse.url.API_URL}/users/send?sender=${this.state.username}&receiver=${this.state.currentUser}&msg=${msent}`, {
-			method: "POST"
-		}).then((response) => {
-			// console.log(response.data);
-		})
+    axios.post(`${urlToUse.url.API_URL}/users/send?sender=${this.state.username}&receiver=${this.state.currentUser}&msg=${msent}`);
   }
 
-  async receiveMessage() {
-    // await fetch(`${urlToUse.url.API_URL}/users/message`, {
-		// 	method: "GET"
-		// }).then((response) => {
-		// 	console.log(response.data);
-		// })
+  sendImage() {
+    const fsent = document.getElementById("fsent").value;
+    console.log(fsent);
   }
-
+  
   render() {
     return (
       <div className="Mainview">
@@ -117,15 +117,17 @@ export default class Mainview extends React.Component {
                 </Modal.Header>
                 <Modal.Body>
                 <b>Messages: </b>
-                {this.state.currentMessages.map((value) => {
+                {this.state.currentMessages.map(x => {
                 return <div>
-                  <b>Sent: {value}</b>
+                  {x.value} {x.key}
                   </div>;
                 })}
                 </Modal.Body>
                 <Modal.Body>
                 <input type='text' placeholder="Enter your message here" id="msent" size = "48"/>
                 <button id="sendbtn" className="btn" onClick={this.sendMessage}>Send</button>
+                {/* <input type='image' src="/avatar.png" id="fsent" size = "48"/>
+                <button id="imgbtn" className="btn" onClick={this.sendImage}>Send Image</button> */}
                 </Modal.Body>
                 <Modal.Footer>
                 </Modal.Footer>

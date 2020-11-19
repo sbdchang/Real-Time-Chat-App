@@ -78,14 +78,20 @@ const userSchema = new mongoose.Schema({
         type: Number,
         default: 0
     },
-    messagesSent: [{
-        messages: {
-            type: Array,
-            default: []
-        }
-    }],
-    messagesReceived: [{
-        messages: {
+    // messagesSent: [{
+    //     messages: {
+    //         type: Array,
+    //         default: []
+    //     }
+    // }],
+    // messagesReceived: [{
+    //     messages: {
+    //         type: Array,
+    //         default: []
+    //     }
+    // }],
+    messages: [{
+        usermsg: {
             type: Array,
             default: []
         }
@@ -137,11 +143,15 @@ userSchema.statics.updateMessage = async function(s, r, m) {
     const sidx = sender.index;
     const ridx = receiver.index;
     if (sidx < ridx) {
-        sender.messagesSent[ridx-1].messages.push(m);
-        receiver.messagesReceived[sidx].messages.push(m);
+        // sender.messagesSent[ridx-1].messages.push(m);
+        // receiver.messagesReceived[sidx].messages.push(m);
+        sender.messages[ridx-1].usermsg.push({key: m, value: "Sent: "});
+        receiver.messages[sidx].usermsg.push({key: m, value: "Received: "});
     } else {
-        sender.messagesSent[ridx].messages.push(m);
-        receiver.messagesReceived[sidx-1].messages.push(m);
+        // sender.messagesSent[ridx].messages.push(m);
+        // receiver.messagesReceived[sidx-1].messages.push(m);
+        sender.messages[ridx].usermsg.push({key: m, value: "Sent: "});
+        receiver.messages[sidx-1].usermsg.push({key: m, value: "Received: "});
     }
     await sender.save();
     await receiver.save();
@@ -153,11 +163,13 @@ userSchema.methods.initMessage = async function() {
     user.index = users.length;
     for (var i = 0; i < users.length; i++) {
         const tempUser = await User.findOne({index: i });
-        tempUser.messagesSent = tempUser.messagesSent.concat({messages: []});
-        tempUser.messagesReceived = tempUser.messagesReceived.concat({messages: []});
+        // tempUser.messagesSent = tempUser.messagesSent.concat({messages: []});
+        // tempUser.messagesReceived = tempUser.messagesReceived.concat({messages: []});
+        tempUser.messages = tempUser.messages.concat({usermsg: []});
         tempUser.save();
-        user.messagesSent = user.messagesSent.concat({messages: []});
-        user.messagesReceived = user.messagesReceived.concat({messages: []});
+        // user.messagesSent = user.messagesSent.concat({messages: []});
+        // user.messagesReceived = user.messagesReceived.concat({messages: []});
+        user.messages = user.messages.concat({usermsg: []});
     }
 }
 
