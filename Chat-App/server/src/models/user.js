@@ -129,18 +129,40 @@ userSchema.statics.resetPassword = async(username, cpw, npw) => {
     return "Password Changed";
 }
 
-userSchema.statics.updateMessage = async function(s, r, m) {
+userSchema.statics.updateMessage = async function(s, r, m, t) {
     const sender = await User.findOne({username: s});
     const receiver = await User.findOne({username: r});
     const sidx = sender.index;
     const ridx = receiver.index;
     if (sidx < ridx) {
-        sender.messages[ridx-1].usermsg.push({key: m, value: "Sent: "});
-        receiver.messages[sidx].usermsg.push({key: m, value: "Received: "});
+        if (t === "text") {
+            sender.messages[ridx-1].usermsg.push({key: m, value: "Text Sent: "});
+            receiver.messages[sidx].usermsg.push({key: m, value: "Text Received: "});
+        } else if (t === "image") {
+            sender.messages[ridx-1].usermsg.push({key: m, value: "Image Sent: "});
+            receiver.messages[sidx].usermsg.push({key: m, value: "Image Received: "});
+        } else if (t === "audio") {
+            sender.messages[ridx-1].usermsg.push({key: m, value: "Audio Sent: "});
+            receiver.messages[sidx].usermsg.push({key: m, value: "Audio Received: "});
+        } else if (t === "video") {
+            sender.messages[ridx-1].usermsg.push({key: m, value: "Video Sent: "});
+            receiver.messages[sidx].usermsg.push({key: m, value: "Video Received: "});
+        }
         receiver.messages[sidx].received = receiver.messages[sidx].received + 1;
     } else {
-        sender.messages[ridx].usermsg.push({key: m, value: "Sent: "});
-        receiver.messages[sidx-1].usermsg.push({key: m, value: "Received: "});
+        if (t === "text") {
+            sender.messages[ridx].usermsg.push({key: m, value: "Text Sent: "});
+            receiver.messages[sidx-1].usermsg.push({key: m, value: "Text Received: "});
+        } else if (t === "image") {
+            sender.messages[ridx].usermsg.push({key: m, value: "Image Sent: "});
+            receiver.messages[sidx-1].usermsg.push({key: m, value: "Image Received: "});
+        } else if (t === "audio") {
+            sender.messages[ridx].usermsg.push({key: m, value: "Audio Sent: "});
+            receiver.messages[sidx-1].usermsg.push({key: m, value: "Audio Received: "});
+        } else if (t === "video") {
+            sender.messages[ridx].usermsg.push({key: m, value: "Video Sent: "});
+            receiver.messages[sidx-1].usermsg.push({key: m, value: "Video Received: "});
+        }
         receiver.messages[sidx-1].received = receiver.messages[sidx-1].received + 1;
     }
     await sender.save();

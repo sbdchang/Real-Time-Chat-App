@@ -180,7 +180,8 @@ router.get("/users/date", cors(), async (req, res) => {
 
 router.post("/users/send", cors(), async (req, res) => {
     try {
-        await User.updateMessage(req.query.sender, req.query.receiver, req.query.msg);
+        await User.updateMessage(req.query.sender, req.query.receiver, req.query.msg, req.query.type);
+        console.log(req.query.msg);
         res.status(200).send();
     } catch(e) {
         res.status(500).send();
