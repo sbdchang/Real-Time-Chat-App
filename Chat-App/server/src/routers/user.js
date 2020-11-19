@@ -181,8 +181,7 @@ router.get("/users/date", cors(), async (req, res) => {
 router.post("/users/send", cors(), async (req, res) => {
     try {
         await User.updateMessage(req.query.sender, req.query.receiver, req.query.msg);
-        console.log(req.query.msg);
-        res.status(200).send("!");
+        res.status(200).send();
     } catch(e) {
         res.status(500).send();
     }
@@ -192,6 +191,15 @@ router.get("/users/receive", cors(), async (req, res) => {
     try {
         const user = await User.findOne({username: req.query.receiver});
         res.status(200).json(user.messages);
+    } catch(e) {
+        res.status(500).send();
+    }
+});
+
+router.post("/users/read", cors(), async (req, res) => {
+    try {
+        await User.clearMessage(req.query.sender, req.query.receiver);
+        res.status(200).send();
     } catch(e) {
         res.status(500).send();
     }

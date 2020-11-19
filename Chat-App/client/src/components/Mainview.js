@@ -16,7 +16,8 @@ export default class Mainview extends React.Component {
       currentUserEmail: "",
       usersCopy: [],
       messages: {},
-      currentMessages: []
+      currentMessages: [],
+      read: "No New Messages"
     };
     this.contactOpen = this.contactOpen.bind(this);
     this.hideModal = this.hideModal.bind(this);
@@ -49,15 +50,22 @@ export default class Mainview extends React.Component {
     axios.get(`${urlToUse.url.API_URL}/users/receive?receiver=${this.state.username}`)
       .then(res => {
         for(var i = 0; i < this.state.users.length; i++) {
-          const msg = res.data[i].usermsg;
-          this.state.messages[this.state.users[i].username] = msg;
+          const msg = res.data[i];
+          this.state.messages[this.state.users[i].username] = msg.usermsg;
+          if (msg.received == 1) {
+            this.setState({read: `${msg.received} New Message!`});
+          } else if (msg.received > 1) {
+            this.setState({read: `${msg.received} New Messages!`});
+          }
         }
-    })
+    });
+
   }
 
   contactOpen(user, email) {
     var userMessages = this.state.messages[user];
     this.setState({ currentUser: user, showModal: true, currentUserEmail: email, currentMessages: userMessages });
+    axios.post(`${urlToUse.url.API_URL}/users/read?sender=${user}&receiver=${this.state.username}`);
   }
 
   hideModal() {
@@ -95,7 +103,11 @@ export default class Mainview extends React.Component {
     const fsent = document.getElementById("fsent").value;
     console.log(fsent);
   }
-  
+
+  msgRead(m) {
+
+  }
+
   render() {
     return (
       <div className="Mainview">
@@ -107,8 +119,7 @@ export default class Mainview extends React.Component {
               {this.state.users.map((value) => {
                 return <div>
                   <button  onClick={() => this.contactOpen(value.username, value.email)} className="user1">{value.username} - {value.email}</button>
-                  <b> No New Messages</b>
-                  <br/><br/>
+                  <p>{this.state.read}</p>
                   </div>;
               })}
               <Modal show={this.state.showModal} onHide={() => this.hideModal()} >
