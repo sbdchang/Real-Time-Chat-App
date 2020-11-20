@@ -9,7 +9,7 @@ To run the app locally:
 1. Run backend
 
 - Open command prompt in the folder: /Chat-App/server
-- run in terminal `???`
+- run in terminal `node index.js`
 
 2. Run front end:
 
@@ -31,7 +31,7 @@ Swagger API Documentation: _Will be Here_
 3. [User Stories: Feature Specification](#feature)
 4. [User Stories: Implementation Specification](#implementation)
 5. [Grading](#grading)
-6. [References] (#references)
+6. [References](#References)
 
 ---
 
