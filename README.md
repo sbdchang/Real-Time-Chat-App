@@ -8,8 +8,8 @@ To run the app locally:
 
 1. Run backend
 
-- Open command prompt in the folder: /Chat-App/client
-- run in terminal `npm run dev`
+- Open command prompt in the folder: /Chat-App/server
+- run in terminal `???`
 
 2. Run front end:
 
