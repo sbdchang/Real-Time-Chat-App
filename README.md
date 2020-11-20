@@ -2,8 +2,21 @@
 
 Deployed here: https://chat-app-557-client.herokuapp.com/
 
-Swagger API Documentation: *Will be Here*
+# Instructions
 
+To run the app locally:
+
+1. Run backend
+
+- Open command prompt in the folder: /Chat-App/client
+- run in terminal `npm run dev`
+
+2. Run front end:
+
+- Open command prompt in the folder: /Chat-App/client
+- run in terminal `npm run dev`
+
+Swagger API Documentation: _Will be Here_
 
 ## This document describes the project requirements for the Fall 2020 CIS557 Group Project.
 
@@ -19,6 +32,7 @@ Swagger API Documentation: *Will be Here*
 4. [User Stories: Implementation Specification](#implementation)
 5. [Grading](#grading)
 6. [References] (#references)
+
 ---
 
 We will use [GitHub projects](https://github.com/features/project-management/) and [Extreme Programming (XP)](http://www.extremeprogramming.org/) methodology when
@@ -185,7 +199,7 @@ terms of Planning , Managing , Designing , Coding , and Testing.
       - Exceptions Handling
       - Secured random token
       - Prepared SQL Statements with parameterized queries (**SQL DB only**)
-      
-## References
-This document is based on file [here](https://d1b10bmlvqabco.cloudfront.net/paste/jlckgm7uaQEF/399a4bf21fc045a2f94347e8bf4c2fc3c4c279eab61e484f8472b5e93e7c5a27/readme.md)
 
+## References
+
+This document is based on file [here](https://d1b10bmlvqabco.cloudfront.net/paste/jlckgm7uaQEF/399a4bf21fc045a2f94347e8bf4c2fc3c4c279eab61e484f8472b5e93e7c5a27/readme.md)
