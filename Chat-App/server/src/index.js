@@ -11,8 +11,8 @@ const port = process.env.PORT || 8081
 
 //automatically parse incoming JSON to an object that can be accessed later
 app.use(express.json());
-app.use(userRouter);
 app.use(cors());
+app.use(userRouter);
 // app.use(taskRouter);
 
 app.listen(port, () => {
@@ -30,11 +30,3 @@ app.listen(port, () => {
 // }
 
 // myFunction();
-
-
-
-
-
-
-
-
