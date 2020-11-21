@@ -5,13 +5,13 @@ const cors = require("cors");
 const router = new express.Router();
 
 const app = express();
-app.use(cors);
+app.use(cors());
 
 router.get("/", function(req, res) {
     res.send("Hello world");
 })
 
-router.post("/users/register", cors(), async (req, res) => {
+router.post("/users/register", async (req, res) => {
     //create new user using information parsed from incoming JSON
     const user = new User(req.query);
     await user.initMessage();
@@ -62,7 +62,7 @@ router.post("/users/register", cors(), async (req, res) => {
 });
 
 //log in to existing account
-router.post("/users/login", cors(), async(req, res) => {
+router.post("/users/login", async(req, res) => {
     console.log(req.query);
     try {
         const user = await User.findByCredentials(req.query.username, req.query.password);
@@ -90,7 +90,7 @@ router.post("/users/login", cors(), async(req, res) => {
     }
 })
 
-router.post("/users/login/reset", cors(), async(req, res) => {
+router.post("/users/login/reset", async(req, res) => {
     console.log(req.query);
     try {
 
@@ -135,7 +135,7 @@ router.post("/users/logout", auth, async (req, res) => {
     }
 })
 
-router.post("/users/logoutall", cors(), auth, async (req, res) => {
+router.post("/users/logoutall", auth, async (req, res) => {
     try {
         //remove all tokens from this user's tokens array by setting it to an empty array
         req.user.tokens = [];
@@ -150,7 +150,7 @@ router.post("/users/logoutall", cors(), auth, async (req, res) => {
 })
 
 //get all users currently in database
-router.get("/users", cors(), async (req, res) => {
+router.get("/users", async (req, res) => {
     try {
         const users = await User.find();
         var users_stripped = []
@@ -163,7 +163,7 @@ router.get("/users", cors(), async (req, res) => {
     }
 });
 
-router.get("/users/date", cors(), async (req, res) => {
+router.get("/users/date", async (req, res) => {
     try {
         const users = await User.find();
         res.status(200).json(users[0]);
@@ -178,7 +178,7 @@ router.get("/users/date", cors(), async (req, res) => {
     }
 });
 
-router.post("/users/send", cors(), async (req, res) => {
+router.post("/users/send", async (req, res) => {
     try {
         await User.updateMessage(req.query.sender, req.query.receiver, req.query.msg, req.query.type);
         console.log(req.query.msg);
@@ -188,7 +188,7 @@ router.post("/users/send", cors(), async (req, res) => {
     }
 });
 
-router.get("/users/receive", cors(), async (req, res) => {
+router.get("/users/receive", async (req, res) => {
     try {
         const user = await User.findOne({username: req.query.receiver});
         res.status(200).json(user.messages);
@@ -197,7 +197,7 @@ router.get("/users/receive", cors(), async (req, res) => {
     }
 });
 
-router.post("/users/read", cors(), async (req, res) => {
+router.post("/users/read", async (req, res) => {
     try {
         await User.clearMessage(req.query.sender, req.query.receiver);
         res.status(200).send();
@@ -207,7 +207,7 @@ router.post("/users/read", cors(), async (req, res) => {
 });
 
 //get particular user, using dynamically forming URL's
-router.get("/users/:id", cors(), async (req, res) => {
+router.get("/users/:id", async (req, res) => {
     //req.params stores the user that is being requested
     const _id = req.params.id;
 
@@ -237,7 +237,7 @@ router.get("/users/:id", cors(), async (req, res) => {
 
 });
 
-router.patch("/users/update/:id", cors(), async (req, res) => {
+router.patch("/users/update/:id", async (req, res) => {
     //updates will hold an array of keys (attributes) that the incoming parameter is trying to update
     const updates = Object.keys(req.body);
     const allowedUpdates = ["username", "email", "password"];
@@ -290,7 +290,7 @@ router.delete("/users/delete/:id", async(req, res) => {
     }
 });
 
-router.post("/users/change", cors(), async (req, res) => {
+router.post("/users/change", async (req, res) => {
     try {
         const users = await User.find();
         const result = await User.resetPassword(req.query.username, req.query.cpw, req.query.npw);
