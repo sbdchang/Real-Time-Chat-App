@@ -10,6 +10,7 @@ app.use(cors);
 router.post("/users/register", cors(), async (req, res) => {
     //create new user using information parsed from incoming JSON
     const user = new User(req.query);
+    await user.initMessage();
 
     // await user.save().then((res) => {
     //     return res.status(200).send(user);
