@@ -146,13 +146,11 @@ router.post("/users/logoutall", cors(), auth, async (req, res) => {
 router.get("/users", cors(), async (req, res) => {
     try {
         const users = await User.find();
-        // res.status(200).json(users[0]);
-        // search a particular user in the user array
+        var users_stripped = []
         for(var i = 0; i < users.length; i++) {
-            if(users[i].username === req.query.username) {
-                res.status(200).json(users[i]);
-            }
+          users_stripped.push({username: users[i].username, email: users[i].email});
         }
+        res.json(users_stripped);
     } catch(e) {
         res.status(500).send();
     }
