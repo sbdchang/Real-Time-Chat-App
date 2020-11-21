@@ -158,6 +158,49 @@ router.get("/users", cors(), async (req, res) => {
     }
 });
 
+router.get("/users/date", cors(), async (req, res) => {
+    try {
+        const users = await User.find();
+        res.status(200).json(users[0]);
+        // search a particular user in the user array
+        // for(var i = 0; i < users.length; i++) {
+        //     if(users[i].username == req.query.username) {
+        //         res.status(200).json(users[i]);
+        //     }
+        // }
+    } catch(e) {
+        res.status(500).send();
+    }
+});
+
+router.post("/users/send", cors(), async (req, res) => {
+    try {
+        await User.updateMessage(req.query.sender, req.query.receiver, req.query.msg, req.query.type);
+        console.log(req.query.msg);
+        res.status(200).send();
+    } catch(e) {
+        res.status(500).send();
+    }
+});
+
+router.get("/users/receive", cors(), async (req, res) => {
+    try {
+        const user = await User.findOne({username: req.query.receiver});
+        res.status(200).json(user.messages);
+    } catch(e) {
+        res.status(500).send();
+    }
+});
+
+router.post("/users/read", cors(), async (req, res) => {
+    try {
+        await User.clearMessage(req.query.sender, req.query.receiver);
+        res.status(200).send();
+    } catch(e) {
+        res.status(500).send();
+    }
+});
+
 //get particular user, using dynamically forming URL's
 router.get("/users/:id", cors(), async (req, res) => {
     //req.params stores the user that is being requested
