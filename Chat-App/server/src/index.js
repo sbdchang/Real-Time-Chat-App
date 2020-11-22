@@ -4,6 +4,7 @@ const jwt = require("jsonwebtoken");
 //following line ensures mongoose.js runs and mongoose connects to the database
 require("./db/mongoose");
 const userRouter = require("./routers/user");
+const statusRouter = require("./routers/status");
 // const taskRouter = require("./routers/task");
 
 const app = express();
@@ -13,6 +14,7 @@ const port = process.env.PORT || 8081
 app.use(express.json());
 app.use(cors());
 app.use(userRouter);
+app.use(statusRouter);
 // app.use(taskRouter);
 
 app.listen(port, () => {
