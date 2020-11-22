@@ -13,6 +13,7 @@ export default class UserProfile extends React.Component {
 			date: "N/A"
 		};
 
+		this.postStatus = this.postStatus.bind(this);
 		this.changePassword = this.changePassword.bind(this);
 		this.deactivateAccount = this.deactivateAccount.bind(this);
 		this.logOut = this.logOut.bind(this);
@@ -29,6 +30,21 @@ export default class UserProfile extends React.Component {
 				date: response.dateRegistered.substr(0, response.dateRegistered.indexOf('T'))
 			});
 		})
+	}
+
+	async postStatus() {
+		let messageThree = document.querySelector("#message-3");
+		messageThree.textContent = "";
+		const newStatus = document.getElementById("postStatus").value;
+		if (!newStatus || newStatus === "") {
+			messageThree.textContent = "Status cannot be empty.";
+		} else {
+			await fetch(`${urlToUse.url.API_URL}/status/postStatus?username=${this.state.username}&statusContent=${newStatus}`, {
+				method: "POST"
+			}).then((response) => {
+				messageThree.textContent = "Status posted.";
+			})
+		}
 	}
 
 	async changePassword() {
@@ -75,21 +91,29 @@ export default class UserProfile extends React.Component {
 					<img src={avatar}/>
 			      </div>
 
+				  <div className="jumbotron">
+				  	<input type='text' placeholder="What's up?" id="postStatus" className="input"/>
+					<button id="cp" className="btn" onClick={this.postStatus}>Post Status</button>
+					<div className="results-container" id="results">
+			    		<p id = "message-3">  </p>
+			      	</div>
+			      </div>
+
 			      <div className="jumbotron">
-				  <input type='text' placeholder="Current Password" id="cpw" className="input"/>
-				  <input type='text' placeholder="New Password" id="npw" className="input"/>
-				  <button id="cp" className="btn" onClick={this.changePassword}>Change Password</button>
-				  <div className="results-container" id="results">
+				  	<input type='text' placeholder="Current Password" id="cpw" className="input"/>
+				  	<input type='text' placeholder="New Password" id="npw" className="input"/>
+				  	<button id="cp" className="btn" onClick={this.changePassword}>Change Password</button>
+				  	<div className="results-container" id="results">
 			    		<p id = "message-1">  </p>
-			      </div>
-				  <br></br>
-				  <input type='text' placeholder="Current Password" id="dcpw" className="input"/>
-				  <button id="da" className="btn" onClick={this.deactivateAccount}>Deactivate Account</button>
-				  <div className="results-container" id="results">
+			      	</div>
+				  	<br></br>
+				  	<input type='text' placeholder="Current Password" id="dcpw" className="input"/>
+				  	<button id="da" className="btn" onClick={this.deactivateAccount}>Deactivate Account</button>
+				  	<div className="results-container" id="results">
 			    		<p id = "message-2">  </p>
-			      </div>
-				  <br></br>
-				  <button id="lo" className="btn" onClick={this.logOut}>Log Out</button>
+			      	</div>
+				  	<br></br>
+				  	<button id="lo" className="btn" onClick={this.logOut}>Log Out</button>
 			      </div>
 			    </div>
 			</div>
