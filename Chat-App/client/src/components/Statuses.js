@@ -53,12 +53,28 @@ export default class UserProfile extends React.Component {
 					<br></br>
 					<br></br>
 					{this.state.statuses.map((value) => {
-                		return <div>
-                  			<p> {value.username} </p>
-							<p> {value.status} </p>
-							<p> {value.time} </p>
-							<br></br>
-                  		</div>;
+						if (Object.keys(value.statusImage).length === 0) {
+							return <div>
+                  				<p> {value.username} </p>
+								<p> {value.status} </p>
+								{/* <img src = {value.imageStatus}> */}
+								<p> {value.time} </p>
+								<br></br>
+                  			</div>;
+						} else {
+							const image = new Buffer(value.statusImage.data.data).toString("base64");
+							const imageLink = "data:image/png;base64," + image;
+							return <div>
+                  				<p> {value.username} </p>
+								{/* <p> {imageLink}</p> */}
+								{/* <img src = "data:image/png;base64,{image}"/> */}
+								<img src = {imageLink}/>
+								{/* <img src = "https://icon-library.com/images/chat-app-icon/chat-app-icon-0.jpg"></img> */}
+								<p> {value.time} </p>
+								<br></br>
+                  			</div>;
+						}
+                		
               		})}
 					
 			      </div>
