@@ -14,6 +14,7 @@ export default class UserProfile extends React.Component {
 		};
 
 		this.postStatus = this.postStatus.bind(this);
+		this.postImageStatus = this.postImageStatus.bind(this);
 		this.changePassword = this.changePassword.bind(this);
 		this.deactivateAccount = this.deactivateAccount.bind(this);
 		this.logOut = this.logOut.bind(this);
@@ -43,6 +44,36 @@ export default class UserProfile extends React.Component {
 				method: "POST"
 			}).then((response) => {
 				messageThree.textContent = "Status posted.";
+			})
+		}
+	}
+
+	postImageStatus = async(event) => {
+		let messageThree = document.querySelector("#message-3");
+		messageThree.textContent = "";
+		const file = event.target.files;
+    	if (file && file[0]) {
+			// console.log("File selected");
+			// const image = await URL.createObjectURL(file[0]);
+			// await fetch(`${urlToUse.url.API_URL}/status/postImageStatus?username=${this.state.username}&statusImage=${image}`, {
+			// 	method: "POST"
+			// }).then((response) => {
+			// 	messageThree.textContent = "Status posted.";
+			// })
+			const image = file[0];
+			let formData = new FormData();
+			formData.append("image", image);
+			fetch(`${urlToUse.url.API_URL}/status/postImageStatus?username=${this.state.username}`, {
+				method: "POST",
+				body: formData
+			}).then(resp => resp.json())
+			.then(data => {
+			   if (data.errors) {
+				  alert(data.errors)
+			   }
+			   else {
+				  console.log(data)
+			   }
 			})
 		}
 	}
@@ -94,6 +125,8 @@ export default class UserProfile extends React.Component {
 				  <div className="jumbotron">
 				  	<input type='text' placeholder="What's up?" id="postStatus" className="input"/>
 					<button id="cp" className="btn" onClick={this.postStatus}>Post Status</button>
+					<br></br>
+					<input type="file" onChange={this.postImageStatus} className="filetype" id="image_inpt"/>
 					<div className="results-container" id="results">
 			    		<p id = "message-3">  </p>
 			      	</div>

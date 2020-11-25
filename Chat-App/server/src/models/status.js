@@ -10,7 +10,11 @@ const statusSchema = new mongoose.Schema({
     },
     statusContent: {
         type: String,
-        required: true
+        default: ""
+    },
+    statusImage: {
+        data: Buffer,
+        contentType: String,
     },
     timestamp: {
         type: Date,
