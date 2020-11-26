@@ -3,6 +3,7 @@ const User = require("../models/user");
 const auth = require("../middleware/auth");
 const cors = require("cors");
 const router = new express.Router();
+const { videoToken } = require('./tokens');
 
 const app = express();
 app.use(cors);
@@ -27,7 +28,7 @@ router.post("/users/register", cors(), async (req, res) => {
         //     res.status(463).send(e);
         // }
     // })
-    
+
     try {
         await user.save();
         res.status(200).send(user);
@@ -62,13 +63,13 @@ router.post("/users/login", cors(), async(req, res) => {
     try {
         const user = await User.findByCredentials(req.query.username, req.query.password);
         // const user = await User.findByCredentials(req.body.username, req.body.password);
-        
+
         const token = await user.generateAuthToken();
         res.json({
             user: user,
             token: token
         });
-    } catch (e) {        
+    } catch (e) {
         const errorMessage = e.toString();
         console.log(errorMessage);
         if (errorMessage.includes("Too many incorrect attempts")) {
@@ -94,7 +95,7 @@ router.post("/users/login/reset", cors(), async(req, res) => {
         user.password = req.query.rpassword;
         await user.save();
         res.status(200).send();
-    } catch (e) {        
+    } catch (e) {
         const errorMessage = e.toString();
         console.log(errorMessage);
         if (errorMessage.includes("Too many incorrect attempts")) {
@@ -326,6 +327,29 @@ router.post("/users/change", cors(), async (req, res) => {
     //         res.status(470).send(e);
     //     }
     // }
+});
+
+const sendTokenResponse = (token, res) => {
+  res.set('Content-Type', 'application/json');
+  res.send(
+    JSON.stringify({
+      token: token.toJwt()
+    })
+  );
+};
+
+app.get('/video/token', (req, res) => {
+  const identity = req.query.identity;
+  const room = req.query.room;
+  const token = videoToken(identity, room, config);
+  sendTokenResponse(token, res);
+
+});
+app.post('/video/token', (req, res) => {
+  const identity = req.body.identity;
+  const room = req.body.room;
+  const token = videoToken(identity, room, config);
+  sendTokenResponse(token, res);
 });
 
 module.exports = router;
