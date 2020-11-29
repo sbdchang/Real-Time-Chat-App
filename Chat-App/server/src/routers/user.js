@@ -4,6 +4,12 @@ const auth = require("../middleware/auth");
 const cors = require("cors");
 const router = new express.Router();
 const { videoToken } = require('./tokens');
+const multer = require("multer");
+const upload = multer({ 
+    dest: "uploads/",     
+});
+const fs = require("fs");
+const { EWOULDBLOCK } = require("constants");
 
 const app = express();
 app.use(cors);
@@ -173,10 +179,21 @@ router.get("/users/date", cors(), async (req, res) => {
     }
 });
 
+
+router.post("/users/images", cors(), upload.single("image"), async (req, res) => {
+    try {
+        const img = fs.readFileSync(req.file.path);
+        console.log(img);
+        await User.updateMessage(req.query.sender, req.query.receiver, img, req.query.type);
+        res.status(200).send();
+    } catch(e) {
+        res.status(500).send();
+    }
+});
+
 router.post("/users/send", cors(), async (req, res) => {
     try {
         await User.updateMessage(req.query.sender, req.query.receiver, req.query.msg, req.query.type);
-        console.log(req.query.msg);
         res.status(200).send();
     } catch(e) {
         res.status(500).send();
@@ -186,6 +203,7 @@ router.post("/users/send", cors(), async (req, res) => {
 router.get("/users/receive", cors(), async (req, res) => {
     try {
         const user = await User.findOne({username: req.query.receiver});
+        console.log(user.messages[0]);
         res.status(200).json(user.messages);
     } catch(e) {
         res.status(500).send();

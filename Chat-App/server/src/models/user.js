@@ -88,6 +88,10 @@ const userSchema = new mongoose.Schema({
             default: 0
         },
     }],
+    temp: {
+        type: Array,
+        default: []
+    }
 });
 
 //instance method, accessible on the instance of User created (user)

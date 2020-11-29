@@ -5,6 +5,7 @@ const jwt = require("jsonwebtoken");
 require("./db/mongoose");
 const userRouter = require("./routers/user");
 const statusRouter = require("./routers/status");
+const messageRouter = require("./routers/message");
 // const taskRouter = require("./routers/task");
 
 const app = express();
@@ -15,6 +16,7 @@ app.use(express.json());
 app.use(cors());
 app.use(userRouter);
 app.use(statusRouter);
+app.use(messageRouter);
 // app.use(taskRouter);
 
 app.listen(port, () => {

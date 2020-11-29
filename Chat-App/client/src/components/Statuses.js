@@ -1,7 +1,6 @@
 import React from 'react';
 import PageNavbar from './PageNavbar';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import avatar from './avatar.png';
 import axios from 'axios';
 import {urlToUse} from "./url";
 
@@ -27,11 +26,10 @@ export default class UserProfile extends React.Component {
 				validStatuses.push(statuses[i]);
 				map[statuses[i].username] = [];
 			}
-			
 			this.setState({
 				statuses: validStatuses
 			})
-			console.log(this.state.statuses);
+			// console.log(this.state.statuses);
 		  })
 	  }
 
@@ -62,6 +60,7 @@ export default class UserProfile extends React.Component {
 								<br></br>
                   			</div>;
 						} else {
+							console.log(value.statusImage.data);
 							const image = new Buffer(value.statusImage.data.data).toString("base64");
 							const imageLink = "data:image/png;base64," + image;
 							return <div>
@@ -74,14 +73,8 @@ export default class UserProfile extends React.Component {
 								<br></br>
                   			</div>;
 						}
-                		
               		})}
-					
 			      </div>
-
-				  
-
-			      
 			    </div>
 			</div>
 		);

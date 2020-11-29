@@ -15,9 +15,9 @@ app.use(cors);
 
 router.post("/status/postStatus", cors(), async (req, res) => {
     //create new user using information parsed from incoming JSON
-    console.log(req.query);
+    // console.log(req.query);
     const status = new Status(req.query);
-    console.log(status);
+    // console.log(status);
     try {
         await status.save();
         res.status(200).send(status);
@@ -36,6 +36,8 @@ router.post("/status/postImageStatus", cors(), upload.single("image"), async (re
     
     // console.log(req.file);
     status.statusImage.data = fs.readFileSync(req.file.path);
+    console.log(fs.readFileSync(req.file.path));
+    console.log(status.statusImage.data.data);
     status.statusImage.contentType = "image/png";
     // console.log(status);
     try {
@@ -58,7 +60,7 @@ router.get("/status", cors(), async (req, res) => {
         const statuses = await Status.find();
         var statuses_stripped = []
         for(var i = statuses.length - 1; i >= 0; i--) {
-            console.log(statuses[i]);
+            // console.log(statuses[i]);
             statuses_stripped.push({username: statuses[i].username, status: statuses[i].statusContent, statusImage: statuses[i].statusImage, time: statuses[i].timestamp});
         }
         // console.log(statuses_stripped);
