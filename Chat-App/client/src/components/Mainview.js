@@ -16,14 +16,10 @@ export default class Mainview extends React.Component {
       currentUser: "",
       currentUserEmail: "",
       usersCopy: [],
-      messages: {},
-      currentMessages: [],
-      // read: "No New Messages",
-      read: "",
       image: "",
       audio: "",
-      imgerror: "",
-      receivedMessages: [],
+      video: "",
+      messages: [],
     };
     this.contactOpen = this.contactOpen.bind(this);
     this.hideModal = this.hideModal.bind(this);
@@ -39,14 +35,12 @@ export default class Mainview extends React.Component {
       .then(res => {
         const users = res.data;
         var validUsers = [];
-        var map = {};
         for(var i = 0; i < users.length; i++) {
-          if (users[i].username !== this.state.username) {
+          if (users[i].username !== this.state.username && users[i].activeRecord === 0) {
             validUsers.push(users[i]);
-            map[users[i].username] = [];
           }
         }
-        this.setState({ users: validUsers, usersCopy: users, messages: map });
+        this.setState({ users: validUsers, usersCopy: validUsers });
       })
   }
 
@@ -58,11 +52,10 @@ export default class Mainview extends React.Component {
   }
 
   contactOpen(user, email) {
-    var userMessages = this.state.messages[user];
-    this.setState({ currentUser: user, showModal: true, currentUserEmail: email, currentMessages: userMessages });
+    this.setState({ currentUser: user, showModal: true, currentUserEmail: email });
     axios.get(`${urlToUse.url.API_URL}/message?sender=${user}&receiver=${this.state.username}`)
 		  .then(res => {
-			this.setState({ receivedMessages: res.data })
+			this.setState({ messages: res.data })
 		  })
   }
 
@@ -91,6 +84,10 @@ export default class Mainview extends React.Component {
 		await fetch(`${urlToUse.url.API_URL}/message/text?sender=${this.state.username}&receiver=${this.state.currentUser}&text=${msent}`, {
       method: "POST"
     });
+    var temp = this.state.messages;
+    temp.push({sender: this.state.username, receiver: this.state.currentUser, text: msent,
+      image: null, audio: null, video: null});
+    this.setState({messages: temp});
   }
 
   sendImage = async (event) => {
@@ -99,11 +96,16 @@ export default class Mainview extends React.Component {
       const image = file[0];
 			let formData = new FormData();
       formData.append("image", image);
-      console.log(formData);
       fetch(`${urlToUse.url.API_URL}/message/image?sender=${this.state.username}&receiver=${this.state.currentUser}`, {
 				method: "POST",
 				body: formData
-			})
+			}).then((data) => {
+        if (data.status === 200) {
+          this.setState({ image: "Success: Image Sent!" });
+        } else if (data.status === 400) {
+          this.setState({ image: "Failure: Image too Large!" });
+        }
+      })
     }
   }
 
@@ -113,39 +115,36 @@ export default class Mainview extends React.Component {
       const audio = file[0];
 			let formData = new FormData();
       formData.append("audio", audio);
-      console.log(formData);
       fetch(`${urlToUse.url.API_URL}/message/audio?sender=${this.state.username}&receiver=${this.state.currentUser}`, {
 				method: "POST",
 				body: formData
-			})
+			}).then((data) => {
+        if (data.status === 200) {
+          this.setState({ image: "Success: Audio Sent!" });
+        } else if (data.status === 400) {
+          this.setState({ image: "Failure: Audio too Large!" });
+        }
+      })
     }
-    // const file = event.target.files;
-    // if (file && file[0]) {
-    //   this.setState({
-    //     audio: await URL.createObjectURL(file[0])
-    //   });
-    // }
-    // var newMessages = this.state.messages[this.state.currentUser];
-    // newMessages.push({key: this.state.audio, value: "Audio Sent: "});
-    // var map = this.state.messages;
-    // map[this.state.currentUser] = newMessages;
-    // this.setState({ messages: map, currentMessages: newMessages, imgerror: ""});
-    // axios.post(`${urlToUse.url.API_URL}/users/send?sender=${this.state.username}&receiver=${this.state.currentUser}&msg=${this.state.audio}&type=audio`);    
   }
 
   sendVideo = async (event) => {
     const file = event.target.files;
     if (file && file[0]) {
-      this.setState({
-        video: await URL.createObjectURL(file[0])
-      });
-    }
-    var newMessages = this.state.messages[this.state.currentUser];
-    newMessages.push({key: this.state.video, value: "Video Sent: "});
-    var map = this.state.messages;
-    map[this.state.currentUser] = newMessages;
-    this.setState({ messages: map, currentMessages: newMessages, imgerror: ""});
-    axios.post(`${urlToUse.url.API_URL}/users/send?sender=${this.state.username}&receiver=${this.state.currentUser}&msg=${this.state.video}&type=video`);    
+      const video = file[0];
+			let formData = new FormData();
+      formData.append("video", video);
+      fetch(`${urlToUse.url.API_URL}/message/video?sender=${this.state.username}&receiver=${this.state.currentUser}`, {
+				method: "POST",
+				body: formData
+			}).then((data) => {
+        if (data.status === 200) {
+          this.setState({ image: "Success: Video Sent!" });
+        } else if (data.status === 400) {
+          this.setState({ image: "Failure: Video too Large!" });
+        }
+      })
+    }   
   }
 
   render() {
@@ -155,12 +154,11 @@ export default class Mainview extends React.Component {
         <br></br>
         <div className="container">
           <div className="jumbotron">
-            <div className="h5">Contacts</div>
+            <div className="h5">Contact List</div>
 
               {this.state.users.map((value) => {
                 return <div>
                   <button  onClick={() => this.contactOpen(value.username, value.email)} className="user1">{value.username} - {value.email}</button>
-                  <p>{this.state.read}</p>
                   </div>;
               })}
               <Modal show={this.state.showModal} onHide={() => this.hideModal()} >
@@ -169,7 +167,7 @@ export default class Mainview extends React.Component {
                 </Modal.Header>
                 <Modal.Body>
                 <b>Messages: </b>
-                {this.state.receivedMessages.map(value => {
+                {this.state.messages.map(value => {
                   if (Object.keys(value.text).length !== 0) {
                     if (value.sender === this.state.username) {
                       return <div> Sent: {value.text} </div>;
@@ -189,8 +187,8 @@ export default class Mainview extends React.Component {
                       </div>;
                     }
                   } else if (Object.keys(value.audio).length !== 0) {
-                    const audio = new Buffer(value.image.data.data).toString("base64");
-                    const audioLink = "data:image/png;base64," + audio;
+                    const audio = new Buffer(value.audio.data.data).toString("base64");
+                    const audioLink = "data:audio/mp3;base64," + audio;
                     if (value.sender === this.state.username) {
                       return <div>Sent: <audio controls>
                       <source src = {audioLink}/>
@@ -200,15 +198,27 @@ export default class Mainview extends React.Component {
                       <source src = {audioLink}/>
                       </audio></div>;
                     }
+                  } else if (Object.keys(value.video).length !== 0) {
+                    const video= new Buffer(value.video.data.data).toString("base64");
+                    const videoLink = "data:video/mp4;base64," + video;
+                    if (value.sender === this.state.username) {
+                      return <div> Sent: <video width="200" height="160" controls>
+                      <source src = {videoLink}/>
+                      </video></div>;
+                    } else {
+                      return <div> Received: <video width="200" height="160" controls>
+                      <source src = {videoLink}/>
+                      </video></div>;
+                    }
                   }
                 })}
                 </Modal.Body>
                 <Modal.Body>
                 <input type='text' id="msent" size = "48"/>
                 <button id="sendbtn" className="btn" onClick={this.sendMessage}>Send</button>
-                <p>Send Image: <input type="file" onChange={this.sendImage} className="filetype" id="image_inpt"/></p>
-                <p>Send Audio: <input type="file" onChange={this.sendAudio} className="filetype" id="audio_inpt"/></p>
-                <p>Send Video: <input type="file" onChange={this.sendVideo} className="filetype" id="video_inpt"/></p>
+                <p>Send Image: <input type="file" onChange={this.sendImage} className="filetype" id="image_inpt"/> {this.state.image}</p>
+                <p>Send Audio: <input type="file" onChange={this.sendAudio} className="filetype" id="audio_inpt"/> {this.state.audio}</p>
+                <p>Send Video: <input type="file" onChange={this.sendVideo} className="filetype" id="video_inpt"/> {this.state.video}</p>
                 </Modal.Body>
                 <Modal.Footer>
                 </Modal.Footer>
@@ -219,7 +229,6 @@ export default class Mainview extends React.Component {
             <div className="movies-container">
               <div className="movies-header">
                 <input type='text' placeholder="Search Contacts" id="sc" className="inpt" onChange={this.searchContact}/>
-                <button id="sendbtn" className="btn" onClick={this.sendImage}>Test</button>
               </div>
               <div className="results-container" id="results">
               </div>

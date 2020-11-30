@@ -48,6 +48,19 @@ router.post("/message/audio", cors(), upload.single("audio"), async (req, res) =
     }
 });
 
+router.post("/message/video", cors(), upload.single("video"), async (req, res) => {
+    const message = new Message(req.query);
+    await message.save();
+    message.video.data = fs.readFileSync(req.file.path);
+    message.video.contentType = "video/mp4";
+    try {
+        await message.save();
+        res.status(200).send(message);
+    } catch(e) {
+        res.status(400).send(e);
+    }
+});
+
 router.get("/message", cors(), async (req, res) => {
     try {
         const messages = await Message.find({$or:[{sender: req.query.sender, receiver: req.query.receiver},
