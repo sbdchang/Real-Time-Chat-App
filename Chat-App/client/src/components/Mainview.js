@@ -98,9 +98,9 @@ export default class Mainview extends React.Component {
           }
         }
       }
-      for (var j = 0; j < this.state.users.length; j++) {
-        document.getElementById(`add${j}`).checked = false;
-      }
+      // for (var j = 0; j < this.state.users.length; j++) {
+      //   document.getElementById(`add${j}`).checked = false;
+      // }
       this.setState({ users: searchedUsers });
     }
   }
