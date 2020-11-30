@@ -27,7 +27,11 @@ const messageSchema = new mongoose.Schema({
     video: {
         data: Buffer,
         contentType: String
-    }
+    },
+    index: {
+        type: Number,
+        default: 0
+    },
 })
 
 const Message = mongoose.model("Message", messageSchema);
