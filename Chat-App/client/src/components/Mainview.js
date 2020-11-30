@@ -4,7 +4,7 @@ import PageNavbar from './PageNavbar';
 import axios from 'axios';
 import {urlToUse} from "./url";
 import { Modal } from 'react-bootstrap';
-// import $ from 'jquery';
+import _ from 'lodash';
 
 export default class Mainview extends React.Component {
   constructor(props) {
@@ -20,11 +20,15 @@ export default class Mainview extends React.Component {
       audio: "",
       video: "",
       messages: [],
+      buttons: ["Select", "Delete All"],
+      selected: 0,
     };
     this.contactOpen = this.contactOpen.bind(this);
     this.hideModal = this.hideModal.bind(this);
     this.searchContact = this.searchContact.bind(this);
     this.sendMessage = this.sendMessage.bind(this);
+    this.selectMessage = this.selectMessage.bind(this);
+    this.deleteMessage = this.deleteMessage.bind(this);
     this.sendImage = this.sendImage.bind(this);
     this.sendAudio = this.sendAudio.bind(this);
     this.sendVideo = this.sendVideo.bind(this);
@@ -81,13 +85,17 @@ export default class Mainview extends React.Component {
 
   async sendMessage() {
     const msent = document.getElementById("msent").value;
-		await fetch(`${urlToUse.url.API_URL}/message/text?sender=${this.state.username}&receiver=${this.state.currentUser}&text=${msent}`, {
-      method: "POST"
-    });
-    var temp = this.state.messages;
-    temp.push({sender: this.state.username, receiver: this.state.currentUser, text: msent,
-      image: null, audio: null, video: null});
-    this.setState({messages: temp});
+    await fetch(`${urlToUse.url.API_URL}/message/text?sender=${this.state.username}&receiver=${this.state.currentUser}&text=${msent}`, {
+      method: "POST",
+    }).then((response) => {
+      if (response.status === 200) {
+        response.json().then((response) => {
+          var temp = this.state.messages;
+          temp.push(response);
+          this.setState({messages: temp});
+        })
+      }
+    })
   }
 
   sendImage = async (event) => {
@@ -96,14 +104,18 @@ export default class Mainview extends React.Component {
       const image = file[0];
 			let formData = new FormData();
       formData.append("image", image);
-      fetch(`${urlToUse.url.API_URL}/message/image?sender=${this.state.username}&receiver=${this.state.currentUser}`, {
+      await fetch(`${urlToUse.url.API_URL}/message/image?sender=${this.state.username}&receiver=${this.state.currentUser}`, {
 				method: "POST",
 				body: formData
-			}).then((data) => {
-        if (data.status === 200) {
-          this.setState({ image: "Success: Image Sent!" });
-        } else if (data.status === 400) {
-          this.setState({ image: "Failure: Image too Large!" });
+			}).then((response) => {
+        if (response.status === 200) {
+          response.json().then((response) => {
+            var temp = this.state.messages;
+            temp.push(response);
+            this.setState({messages: temp});
+          })
+        } else if (response.status === 400) {
+          this.setState({ image: "Failure: Your Image is too Large!" });
         }
       })
     }
@@ -115,14 +127,18 @@ export default class Mainview extends React.Component {
       const audio = file[0];
 			let formData = new FormData();
       formData.append("audio", audio);
-      fetch(`${urlToUse.url.API_URL}/message/audio?sender=${this.state.username}&receiver=${this.state.currentUser}`, {
+      await fetch(`${urlToUse.url.API_URL}/message/audio?sender=${this.state.username}&receiver=${this.state.currentUser}`, {
 				method: "POST",
 				body: formData
-			}).then((data) => {
-        if (data.status === 200) {
-          this.setState({ image: "Success: Audio Sent!" });
-        } else if (data.status === 400) {
-          this.setState({ image: "Failure: Audio too Large!" });
+			}).then(async (response) => {
+        if (response.status === 200) {
+          await response.json().then((response) => {
+            var temp = this.state.messages;
+            temp.push(response);
+            this.setState({messages: temp});
+          })
+        } else if (response.status === 400) {
+          this.setState({ image: "Failure: Your Audio is too Large!" });
         }
       })
     }
@@ -134,17 +150,58 @@ export default class Mainview extends React.Component {
       const video = file[0];
 			let formData = new FormData();
       formData.append("video", video);
-      fetch(`${urlToUse.url.API_URL}/message/video?sender=${this.state.username}&receiver=${this.state.currentUser}`, {
+      await fetch(`${urlToUse.url.API_URL}/message/video?sender=${this.state.username}&receiver=${this.state.currentUser}`, {
 				method: "POST",
 				body: formData
-			}).then((data) => {
-        if (data.status === 200) {
-          this.setState({ image: "Success: Video Sent!" });
-        } else if (data.status === 400) {
-          this.setState({ image: "Failure: Video too Large!" });
+			}).then((response) => {
+        if (response.status === 200) {
+          response.json().then((response) => {
+            var temp = this.state.messages;
+            temp.push(response);
+            this.setState({messages: temp});
+          })
+        } else if (response.status === 400) {
+          this.setState({ image: "Failure: Your Video is too Large!" });
         }
       })
     }   
+  }
+
+  async selectMessage() {
+    if (this.state.selected === 0) {
+      this.setState({selected: 1, buttons: ["Cancel", "Delete"]});
+    } else {
+      this.setState({selected: 0, buttons: ["Select", "Delete All"]});
+    }
+  }
+
+  async deleteMessage() {
+    // WARNING: You are about to delete all messages. Click again to proceed.
+    if (this.state.selected === 0) {
+      fetch(`${urlToUse.url.API_URL}/message/deleteall?sender=${this.state.username}&receiver=${this.state.currentUser}`, {
+				method: "POST",
+			}).then((data) => {
+        this.setState({messages: []});
+      })
+    } else {
+      var i = 0;
+      var j = 0;
+      var l = this.state.messages.length;
+      while (i !== l) {
+        if (document.getElementById(`check${i}`).checked === true) {
+          axios.post(`${urlToUse.url.API_URL}/message/delete?index=${this.state.messages[j].index}`);
+          var temp = this.state.messages;
+          temp.splice(j, 1);
+          this.setState({messages: temp});
+          j = j-1;
+        }
+        i = i+1;
+        j = j+1;
+      }
+      for (var k = 0; k < this.state.messages.length; k++) {
+        document.getElementById(`check${k}`).checked = false;
+      } 
+    }
   }
 
   render() {
@@ -166,49 +223,82 @@ export default class Mainview extends React.Component {
                   <Modal.Title>{this.state.currentUser} ({this.state.currentUserEmail})</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                <b>Messages: </b>
-                {this.state.messages.map(value => {
-                  if (Object.keys(value.text).length !== 0) {
-                    if (value.sender === this.state.username) {
+                <b>Messages: </b> <button id="selectbtn" className="btn" onClick={this.selectMessage}>{this.state.buttons[0]}</button>
+            <button id="deletebtn" className="btn" onClick={this.deleteMessage}>{this.state.buttons[1]}</button>
+                {this.state.messages.map((value, index) => {
+                  if (!(_.isEmpty(value.text))) {
+                    if (value.sender === this.state.username && this.state.selected === 0) {
                       return <div> Sent: {value.text} </div>;
-                    } else {
+                    } else if (value.sender !== this.state.username && this.state.selected === 0) {
                       return <div> Received: {value.text} </div>;
+                    } else if (value.sender === this.state.username && this.state.selected === 1) {
+                      const checkid = `check${index}`;
+                      return <div> <input type="checkbox" id={checkid} /> Sent: {value.text} </div>;
+                    } else if (value.sender !== this.state.username && this.state.selected === 1) {
+                      const checkid = `check${index}`;
+                      return <div> <input type="checkbox" id={checkid} /> Received: {value.text} </div>;
                     }
-                  } else if (Object.keys(value.image).length !== 0) {
+                  } else if (!(_.isEmpty(value.image))) {
                     const image = new Buffer(value.image.data.data).toString("base64");
                     const imageLink = "data:image/png;base64," + image;
-                    if (value.sender === this.state.username) {
-                      return <div>
-                      Sent: <img src = {imageLink}/>
-                      </div>;
-                    } else {
-                      return <div>
-                      Received: <img src = {imageLink}/>
-                      </div>;
+                    if (value.sender === this.state.username && this.state.selected === 0) {
+                      return <div> Sent: <img src = {imageLink}/> </div>;
+                    } else if (value.sender !== this.state.username && this.state.selected === 0) {
+                      return <div> Received: <img src = {imageLink}/> </div>;
+                    } else if (value.sender === this.state.username && this.state.selected === 1) {
+                      const checkid = `check${index}`;
+                      return <div> <input type="checkbox" id={checkid} /> Sent: <img src = {imageLink}/> </div>;
+                    } else if (value.sender !== this.state.username && this.state.selected === 1) {
+                      const checkid = `check${index}`;
+                      return <div> <input type="checkbox" id={checkid} /> Received: <img src = {imageLink}/> </div>;
                     }
-                  } else if (Object.keys(value.audio).length !== 0) {
+                  } else if (!(_.isEmpty(value.audio))) {
                     const audio = new Buffer(value.audio.data.data).toString("base64");
                     const audioLink = "data:audio/mp3;base64," + audio;
-                    if (value.sender === this.state.username) {
+                    if (value.sender === this.state.username && this.state.selected === 0) {
                       return <div>Sent: <audio controls>
                       <source src = {audioLink}/>
                       </audio></div>;
-                    } else {
+                    } else if (value.sender !== this.state.username && this.state.selected === 0) {
                       return <div>Received: <audio controls>
                       <source src = {audioLink}/>
                       </audio></div>;
+                    } else if (value.sender === this.state.username && this.state.selected === 1) {
+                      const checkid = `check${index}`;
+                      return <div> <input type="checkbox" id={checkid} />
+                      Sent: <audio controls>
+                      <source src = {audioLink}/>
+                      </audio> </div>;
+                    } else if (value.sender !== this.state.username && this.state.selected === 1) {
+                      const checkid = `check${index}`;
+                      return <div> <input type="checkbox" id={checkid} />
+                      Received: <audio controls>
+                      <source src = {audioLink}/>
+                      </audio> </div>;
                     }
-                  } else if (Object.keys(value.video).length !== 0) {
+                  } else if (!(_.isEmpty(value.video))) {
                     const video= new Buffer(value.video.data.data).toString("base64");
                     const videoLink = "data:video/mp4;base64," + video;
-                    if (value.sender === this.state.username) {
+                    if (value.sender === this.state.username && this.state.selected === 0) {
                       return <div> Sent: <video width="200" height="160" controls>
                       <source src = {videoLink}/>
                       </video></div>;
-                    } else {
+                    } else if (value.sender !== this.state.username && this.state.selected === 0) {
                       return <div> Received: <video width="200" height="160" controls>
                       <source src = {videoLink}/>
                       </video></div>;
+                    } else if (value.sender === this.state.username && this.state.selected === 1) {
+                      const checkid = `check${index}`;
+                      return <div> <input type="checkbox" id={checkid} />
+                      Sent: <video width="200" height="160" controls>
+                      <source src = {videoLink}/>
+                      </video> </div>;
+                    } else if (value.sender !== this.state.username && this.state.selected === 1) {
+                      const checkid = `check${index}`;
+                      return <div> <input type="checkbox" id={checkid} />
+                      Received: <video width="200" height="160" controls>
+                      <source src = {videoLink}/>
+                      </video> </div>;
                     }
                   }
                 })}

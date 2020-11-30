@@ -14,9 +14,13 @@ app.use(cors);
 
 router.post("/message/text", cors(), async (req, res) => {
     const message = new Message(req.query);
+    const messages = await Message.find();
+    if (messages.length > 0) {
+        message.index = messages[messages.length-1].index + 1;
+    }
     try {
         await message.save();
-        res.status(200).send(message);
+        res.status(200).json(message);
     } catch(e) {
         res.status(400).send(e);
     }
@@ -24,6 +28,10 @@ router.post("/message/text", cors(), async (req, res) => {
 
 router.post("/message/image", cors(), upload.single("image"), async (req, res) => {
     const message = new Message(req.query);
+    const messages = await Message.find();
+    if (messages.length > 0) {
+        message.index = messages[messages.length-1].index + 1;
+    }
     await message.save();
     message.image.data = fs.readFileSync(req.file.path);
     message.image.contentType = "image/png";
@@ -37,6 +45,10 @@ router.post("/message/image", cors(), upload.single("image"), async (req, res) =
 
 router.post("/message/audio", cors(), upload.single("audio"), async (req, res) => {
     const message = new Message(req.query);
+    const messages = await Message.find();
+    if (messages.length > 0) {
+        message.index = messages[messages.length-1].index + 1;
+    }
     await message.save();
     message.audio.data = fs.readFileSync(req.file.path);
     message.audio.contentType = "audio/mp3";
@@ -50,12 +62,35 @@ router.post("/message/audio", cors(), upload.single("audio"), async (req, res) =
 
 router.post("/message/video", cors(), upload.single("video"), async (req, res) => {
     const message = new Message(req.query);
+    const messages = await Message.find();
+    if (messages.length > 0) {
+        message.index = messages[messages.length-1].index + 1;
+    }
     await message.save();
     message.video.data = fs.readFileSync(req.file.path);
     message.video.contentType = "video/mp4";
     try {
         await message.save();
         res.status(200).send(message);
+    } catch(e) {
+        res.status(400).send(e);
+    }
+});
+
+router.post("/message/delete", cors(), async (req, res) => {
+    try {
+        await Message.deleteOne({index: req.query.index});
+        res.status(200).send();
+    } catch(e) {
+        res.status(400).send(e);
+    }
+});
+
+router.post("/message/deleteall", cors(), async (req, res) => {
+    try {
+        await Message.deleteMany({$or:[{sender: req.query.sender, receiver: req.query.receiver},
+            {sender: req.query.receiver, receiver: req.query.sender}]});
+        res.status(200).send();
     } catch(e) {
         res.status(400).send(e);
     }
@@ -68,7 +103,7 @@ router.get("/message", cors(), async (req, res) => {
         var messages_stripped = [];
         for(var i = 0; i < messages.length; i++) {
             messages_stripped.push({sender: messages[i].sender, receiver: messages[i].receiver, text: messages[i].text,
-                image: messages[i].image, audio: messages[i].audio, video: messages[i].video});
+                image: messages[i].image, audio: messages[i].audio, video: messages[i].video, index: messages[i].index});
         }
         res.json(messages_stripped);
     } catch(e) {
