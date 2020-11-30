@@ -131,7 +131,8 @@ router.get("/users", cors(), async (req, res) => {
         const users = await User.find();
         var users_stripped = []
         for(var i = 0; i < users.length; i++) {
-          users_stripped.push({username: users[i].username, email: users[i].email, activeRecord: users[i].activeRecord});
+          users_stripped.push({username: users[i].username, email: users[i].email,
+            activeRecord: users[i].activeRecord, contacts: users[i].contacts });
         }
         res.json(users_stripped);
     } catch(e) {
@@ -156,7 +157,6 @@ router.get("/users/date", cors(), async (req, res) => {
 router.post("/users/deactivate", cors(), async (req, res) => {
     try {
         const user = await User.findOne({username: req.query.username});
-        console.log(user.activeRecord);
         user.activeRecord = 1;
         await user.save();
         res.status(200).send();
@@ -187,6 +187,34 @@ router.post("/users/change", cors(), async (req, res) => {
         } else {
             res.status(404).send(e);
         }
+    }
+});
+
+router.post("/users/add", cors(), async (req, res) => {
+    try {
+        const user = await User.findOne({username: req.query.username});
+        user.contacts.push(req.query.contact);
+        await user.save();
+        res.status(200).send();
+    } catch(e) {
+        res.status(500).send();
+    }
+});
+
+router.post("/users/remove", cors(), async (req, res) => {
+    try {
+        const user = await User.findOne({username: req.query.username});
+        for (var i = 0; i < user.contacts.length; i++) {
+            if (req.query.contact === user.contacts[i]) {
+                var temp = user.contacts;
+                temp.splice(i, 1);
+                user.contacts = temp;
+            }
+        }
+        await user.save();
+        res.status(200).send();
+    } catch(e) {
+        res.status(500).send();
     }
 });
 

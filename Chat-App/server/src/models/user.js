@@ -77,6 +77,10 @@ const userSchema = new mongoose.Schema({
     activeRecord: {
         type: Number,
         default: 0
+    },
+    contacts: {
+        type: Array,
+        default: []
     }
 });
 
