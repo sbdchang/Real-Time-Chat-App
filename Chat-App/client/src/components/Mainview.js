@@ -107,12 +107,20 @@ export default class Mainview extends React.Component {
       this.setState({ messages: res.data });
       var tempPage = [];
       const messages = res.data;
-      for (var l = 0; 5*l < messages.length; l++) {
-        tempPage.push(l+1);
+      for (var i = 0; 5*i < messages.length; i++) {
+        tempPage.push(i+1);
       }
       this.setState({ page: tempPage });
       });
     await axios.post(`${urlToUse.url.API_URL}/message/read?sender=${user}&receiver=${this.state.username}`);
+    for (var j = 0; j < this.state.contacts.length; j++) {
+      console.log(this.state.contacts[j].username);
+      if (this.state.contacts[j].username === user) {
+        var temp = this.state.num;
+        temp[j] = 0;
+        await this.setState({num: temp});
+      }
+    }
   }
 
   hideModal() {
