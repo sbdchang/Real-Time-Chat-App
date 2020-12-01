@@ -287,9 +287,9 @@ export default class Mainview extends React.Component {
         }
         i = i-1;
       }
-      for (var k = 0; k < this.state.messages.length; k++) {
-        if (document.getElementById(`check${k}`)) {
-          document.getElementById(`check${k}`).checked = false;
+      for (var j = 0; j < this.state.messages.length; j++) {
+        if (document.getElementById(`check${j}`)) {
+          document.getElementById(`check${j}`).checked = false;
         } 
       }
     }
@@ -340,7 +340,7 @@ export default class Mainview extends React.Component {
       var i = 0;
       var j = 0;
       var l = this.state.contacts.length;
-      const removedContacts = [];
+      var removedContacts = [];
       while (i !== l) {
         if (document.getElementById(`remove${i}`).checked === true) {
           removedContacts.push(this.state.contacts[j]);
