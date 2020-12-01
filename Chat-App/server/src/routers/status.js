@@ -55,13 +55,34 @@ router.post("/status/postImageStatus", cors(), upload.single("image"), async (re
     
 });
 
+// router.get("/status", cors(), async (req, res) => {
+//     try {
+//         const statuses = await Status.find();
+//         var statuses_stripped = []
+//         for(var i = statuses.length - 1; i >= 0; i--) {
+//             // console.log(statuses[i]);
+//             statuses_stripped.push({username: statuses[i].username, status: statuses[i].statusContent, statusImage: statuses[i].statusImage, time: statuses[i].timestamp});
+//         }
+//         // console.log(statuses_stripped);
+//         res.json(statuses_stripped);
+//     } catch(e) {
+//         res.status(500).send();
+//     }
+// });
+
 router.get("/status", cors(), async (req, res) => {
     try {
-        const statuses = await Status.find();
+        const thisUser = await User.findOne( {username: req.query.username} );
+        // console.log(thisUser);
+        const statuses = await Status.find( {$and: [ {username: {$in: thisUser.contacts}}, {viewed: {$nin: req.query.username}}]} );
+        // console.log(statuses);
         var statuses_stripped = []
         for(var i = statuses.length - 1; i >= 0; i--) {
-            // console.log(statuses[i]);
+            
             statuses_stripped.push({username: statuses[i].username, status: statuses[i].statusContent, statusImage: statuses[i].statusImage, time: statuses[i].timestamp});
+            statuses[i].viewed.push(req.query.username);
+            await statuses[i].save();
+            console.log(statuses[i]);
         }
         // console.log(statuses_stripped);
         res.json(statuses_stripped);

@@ -19,6 +19,10 @@ const statusSchema = new mongoose.Schema({
     timestamp: {
         type: Date,
         default: Date.now
+    },
+    viewed: {
+        type: Array,
+        default: []
     }
 
 })

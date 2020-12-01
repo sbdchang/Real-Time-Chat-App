@@ -16,7 +16,7 @@ export default class UserProfile extends React.Component {
 	}
 
 	pullStatuses() {
-		axios.get(`${urlToUse.url.API_URL}/status`)
+		axios.get(`${urlToUse.url.API_URL}/status?username=${this.state.username}`)
 		  .then(res => {
 			  
 			const statuses = res.data;
