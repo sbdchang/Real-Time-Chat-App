@@ -119,8 +119,15 @@ export default class UserProfile extends React.Component {
 		if (this.state.active === "Deactivated") {
 			messageOne.textContent = "The account is already deactivated";
 		} else {
-			axios.post(`${urlToUse.url.API_URL}/users/deactivate?username=${this.state.username}`);
-			messageOne.textContent = "Account Deactivated";
+			fetch(`${urlToUse.url.API_URL}/users/deactivate?username=${this.state.username}`, {
+				method: "POST" 
+			}).then((response) => {
+				if (response.status === 200) {
+					messageOne.textContent = "Account Deactivated";
+				} else {
+					messageOne.textContent = "Deactivation Failed";
+				}
+			})
 		}
 	}
 
