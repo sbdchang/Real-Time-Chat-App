@@ -27,7 +27,8 @@ export default class Mainview extends React.Component {
       selected: 0,
       addselected: 0,
       removeselected: 0,
-      contacts: []
+      contacts: [],
+      num: []
     };
     this.contactOpen = this.contactOpen.bind(this);
     this.hideModal = this.hideModal.bind(this);
@@ -42,6 +43,7 @@ export default class Mainview extends React.Component {
     this.addContact = this.addContact.bind(this);
     this.selectMyContact = this.selectMyContact.bind(this);
     this.removeContact = this.removeContact.bind(this);
+    this.getNumReceived = this.getNumReceived.bind(this);
   }
 
   pullContacts() {
@@ -71,15 +73,38 @@ export default class Mainview extends React.Component {
     this.setState({
 			username: await window.location.href.split('=').pop()
 		});
-    this.pullContacts();
+    await this.pullContacts();
+    await axios.post(`${urlToUse.url.API_URL}/message/deliver?receiver=${this.state.username}`);
+    for (var i = 0; i < this.state.contacts.length; i++) {
+      for (var j = 0; j < this.state.users.length; j++) {
+        if (this.state.contacts[i].username === this.state.users[j].username) {
+          // this.setState({num: 1});
+          await fetch(`${urlToUse.url.API_URL}/message?sender=${this.state.users[j].username}&receiver=${this.state.username}`, {
+            method: "GET",
+          }).then(response => response.json()).then(async (response) => {
+            var count = 0;
+            var temp = this.state.num;
+            const messages = response;
+            for (var k = 0; k < messages.length; k++) {
+              if ((messages[k].receipt === 0 || messages[k].receipt === 1) && messages[k].sender !== this.state.username) {
+                count = count+1;
+              }
+            }
+            temp.push(count);
+            await this.setState({num: temp});
+          })
+        }
+      }
+    }
   }
 
   contactOpen(user, email) {
-    this.setState({ currentUser: user, showModal: true, currentUserEmail: email });
+    this.setState({ currentUser: user, showModal: true, currentUserEmail: email, image: "", audio: "", video: "" });
     axios.get(`${urlToUse.url.API_URL}/message?sender=${user}&receiver=${this.state.username}`)
 		  .then(res => {
 			this.setState({ messages: res.data })
-		  })
+      });
+    axios.post(`${urlToUse.url.API_URL}/message/read?sender=${user}&receiver=${this.state.username}`);
   }
 
   hideModal() {
@@ -160,7 +185,7 @@ export default class Mainview extends React.Component {
             this.setState({messages: temp});
           })
         } else if (response.status === 400) {
-          this.setState({ image: "Failure: Your Audio is too Large!" });
+          this.setState({ audio: "Failure: Your Audio is too Large!" });
         }
       })
     }
@@ -183,7 +208,7 @@ export default class Mainview extends React.Component {
             this.setState({messages: temp});
           })
         } else if (response.status === 400) {
-          this.setState({ image: "Failure: Your Video is too Large!" });
+          this.setState({ video: "Failure: Your Video is too Large!" });
         }
       })
     }   
@@ -297,6 +322,32 @@ export default class Mainview extends React.Component {
     }
   }
 
+  async getNumReceived() {
+    var temp = [];
+    console.log("!");
+    for (var i = 0; i < this.state.contacts.length; i++) {
+      for (var j = 0; j < this.state.users.length; j++) {
+        if (this.state.contacts[i].username === this.state.users[j].username) {
+          await fetch(`${urlToUse.url.API_URL}/message?sender=${this.state.users[j].username}&receiver=${this.state.username}`, {
+            method: "GET",
+          }).then(response => response.json()).then((response) => {
+            const messages = response;
+            var count = 0;
+            for (var k = 0; k < messages.length; k++) {
+              if (messages[k].receipt === 0 || messages[k].receipt === 1) {
+                count = count+1;
+              }
+            }
+            temp.push(1);
+            console.log(temp);
+          })
+        }
+      }
+    }
+    // await this.setState({ num: temp })
+    console.log(this.state.num);
+  }
+
   render() {
     return (
       <div className="Mainview">
@@ -307,17 +358,41 @@ export default class Mainview extends React.Component {
             <div className="h5">My Contacts <button id="removeselectbtn" className="btn" onClick={this.selectMyContact}>{this.state.removebtn[0]}</button>
             <button id="removebtn" className="btn" onClick={this.removeContact}>{this.state.removebtn[1]}</button> </div>
             {this.state.contacts.map((value, index) => {
-              if (this.state.removeselected === 0) {
+              if (this.state.removeselected === 0 && this.state.num[index] === 0) {
                 return <div>
                   <button  onClick={() => this.contactOpen(value.username, value.email)} className="user1">{value.username} - {value.email}</button>
-                  <br></br>
+                  <p> No New Messages</p>
                   </div>;
-              } else {
+              } else if (this.state.removeselected === 0 && this.state.num[index] === 1) {
+                return <div>
+                  <button  onClick={() => this.contactOpen(value.username, value.email)} className="user1">{value.username} - {value.email}</button>
+                  <p style={{color: "red",}}> A New Message!</p>
+                  </div>;
+              } else if (this.state.removeselected === 0 && this.state.num[index] > 1) {
+                return <div>
+                  <button  onClick={() => this.contactOpen(value.username, value.email)} className="user1">{value.username} - {value.email}</button>
+                  <p style={{color: "red",}}> {this.state.num[index]} New Messages!</p>
+                  </div>;
+              } else if (this.state.removeselected === 1 && this.state.num[index] === 0) {
                 const removeid = `remove${index}`;
                 return <div>
                   <input type="checkbox" id={removeid} />
                   <b> {value.username} - {value.email}</b>
-                  <br></br>
+                  <p> No New Messages</p>
+                  </div>;
+              } else if (this.state.removeselected === 1 && this.state.num[index] === 1) {
+                const removeid = `remove${index}`;
+                return <div>
+                  <input type="checkbox" id={removeid} />
+                  <b> {value.username} - {value.email}</b>
+                  <p style={{color: "red",}}> A New Message!</p>
+                  </div>;
+              } else if (this.state.removeselected === 1 && this.state.num[index] > 1) {
+                const removeid = `remove${index}`;
+                return <div>
+                  <input type="checkbox" id={removeid} />
+                  <b> {value.username} - {value.email}</b>
+                  <p style={{color: "red",}}> {this.state.num[index]} New Messages!</p>
                   </div>;
               }
               })}
@@ -330,8 +405,12 @@ export default class Mainview extends React.Component {
             <button id="deletebtn" className="btn" onClick={this.deleteMessage}>{this.state.msgbtn[1]}</button>
                 {this.state.messages.map((value, index) => {
                   if (!(_.isEmpty(value.text))) {
-                    if (value.sender === this.state.username && this.state.selected === 0) {
+                    if (value.sender === this.state.username && this.state.selected === 0 && value.receipt === 0) {
                       return <div> Sent: {value.text} </div>;
+                    } else if (value.sender === this.state.username && this.state.selected === 0 && value.receipt === 1) {
+                      return <div> Delivered: {value.text} </div>;
+                    } else if (value.sender === this.state.username && this.state.selected === 0 && value.receipt === 2) {
+                      return <div> Read: {value.text} </div>;
                     } else if (value.sender !== this.state.username && this.state.selected === 0) {
                       return <div> Received: {value.text} </div>;
                     } else if (value.sender === this.state.username && this.state.selected === 1) {
@@ -344,8 +423,12 @@ export default class Mainview extends React.Component {
                   } else if (!(_.isEmpty(value.image))) {
                     const image = new Buffer(value.image.data.data).toString("base64");
                     const imageLink = "data:image/png;base64," + image;
-                    if (value.sender === this.state.username && this.state.selected === 0) {
+                    if (value.sender === this.state.username && this.state.selected === 0 && value.receipt === 0) {
                       return <div> Sent: <img src = {imageLink}/> </div>;
+                    } else if (value.sender === this.state.username && this.state.selected === 0 && value.receipt === 1) {
+                      return <div> Delivered: <img src = {imageLink}/> </div>;
+                    } else if (value.sender === this.state.username && this.state.selected === 0 && value.receipt === 2) {
+                      return <div> Read: <img src = {imageLink}/> </div>;
                     } else if (value.sender !== this.state.username && this.state.selected === 0) {
                       return <div> Received: <img src = {imageLink}/> </div>;
                     } else if (value.sender === this.state.username && this.state.selected === 1) {
@@ -358,8 +441,16 @@ export default class Mainview extends React.Component {
                   } else if (!(_.isEmpty(value.audio))) {
                     const audio = new Buffer(value.audio.data.data).toString("base64");
                     const audioLink = "data:audio/mp3;base64," + audio;
-                    if (value.sender === this.state.username && this.state.selected === 0) {
+                    if (value.sender === this.state.username && this.state.selected === 0 && value.receipt === 0) {
                       return <div>Sent: <audio controls>
+                      <source src = {audioLink}/>
+                      </audio></div>;
+                    } else if (value.sender === this.state.username && this.state.selected === 0 && value.receipt === 1) {
+                      return <div>Delivered: <audio controls>
+                      <source src = {audioLink}/>
+                      </audio></div>;
+                    } else if (value.sender === this.state.username && this.state.selected === 0 && value.receipt === 2) {
+                      return <div>Read: <audio controls>
                       <source src = {audioLink}/>
                       </audio></div>;
                     } else if (value.sender !== this.state.username && this.state.selected === 0) {
@@ -382,8 +473,16 @@ export default class Mainview extends React.Component {
                   } else if (!(_.isEmpty(value.video))) {
                     const video= new Buffer(value.video.data.data).toString("base64");
                     const videoLink = "data:video/mp4;base64," + video;
-                    if (value.sender === this.state.username && this.state.selected === 0) {
+                    if (value.sender === this.state.username && this.state.selected === 0 && value.receipt === 0 ) {
                       return <div> Sent: <video width="200" height="160" controls>
+                      <source src = {videoLink}/>
+                      </video></div>;
+                    } else if (value.sender === this.state.username && this.state.selected === 0 && value.receipt === 1) {
+                      return <div> Delivered: <video width="200" height="160" controls>
+                      <source src = {videoLink}/>
+                      </video></div>;
+                    } else if (value.sender === this.state.username && this.state.selected === 0 && value.receipt === 2) {
+                      return <div> Read: <video width="200" height="160" controls>
                       <source src = {videoLink}/>
                       </video></div>;
                     } else if (value.sender !== this.state.username && this.state.selected === 0) {

@@ -32,6 +32,10 @@ const messageSchema = new mongoose.Schema({
         type: Number,
         default: 0
     },
+    receipt: {
+        type: Number,
+        default: 0
+    }
 })
 
 const Message = mongoose.model("Message", messageSchema);
