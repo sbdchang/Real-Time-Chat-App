@@ -134,10 +134,10 @@ export default class UserProfile extends React.Component {
 				<PageNavbar active="userprofile" />
 				<div className="container bestgenres-container">
 			      <div className="jumbotron">
+				    <img src={avatar} width = "50" height = "50"/>
 		            <div>{`Username: ${this.state.username}`}</div>
 					<div>{`Status: ${this.state.active}`}</div>
 					<div>{`Regestration Time: ${this.state.date}`}</div>
-					<img src={avatar}/>
 			      </div>
 
 				  <div className="jumbotron">
@@ -151,7 +151,7 @@ export default class UserProfile extends React.Component {
 			      </div>
 
 			      <div className="jumbotron">
-				     <b style={{fontSize: "30px",}}> User Settings </b>
+				     <b style={{fontSize: "30px"}}> User Settings </b>
 					 <br></br>
 					 <br></br>
 				  	<input type='text' placeholder="Current Password" id="cpw" className="input"/>

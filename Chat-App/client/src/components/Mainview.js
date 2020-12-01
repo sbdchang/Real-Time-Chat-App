@@ -4,7 +4,6 @@ import PageNavbar from './PageNavbar';
 import axios from 'axios';
 import {urlToUse} from "./url";
 import { Modal } from 'react-bootstrap';
-import GenreButton from './GenreButton';
 import _ from 'lodash';
 
 export default class Mainview extends React.Component {
@@ -28,7 +27,9 @@ export default class Mainview extends React.Component {
       addselected: 0,
       removeselected: 0,
       contacts: [],
-      num: []
+      num: [],
+      page: [],
+      curr: 1
     };
     this.contactOpen = this.contactOpen.bind(this);
     this.hideModal = this.hideModal.bind(this);
@@ -43,7 +44,9 @@ export default class Mainview extends React.Component {
     this.addContact = this.addContact.bind(this);
     this.selectMyContact = this.selectMyContact.bind(this);
     this.removeContact = this.removeContact.bind(this);
-    this.getNumReceived = this.getNumReceived.bind(this);
+    this.setCurrentPage = this.setCurrentPage.bind(this);
+    this.setPreviousPage = this.setPreviousPage.bind(this);
+    this.setNextPage = this.setNextPage.bind(this);
   }
 
   pullContacts() {
@@ -78,33 +81,38 @@ export default class Mainview extends React.Component {
     for (var i = 0; i < this.state.contacts.length; i++) {
       for (var j = 0; j < this.state.users.length; j++) {
         if (this.state.contacts[i].username === this.state.users[j].username) {
-          // this.setState({num: 1});
           await fetch(`${urlToUse.url.API_URL}/message?sender=${this.state.users[j].username}&receiver=${this.state.username}`, {
             method: "GET",
           }).then(response => response.json()).then(async (response) => {
             var count = 0;
-            var temp = this.state.num;
+            var tempNum = this.state.num;
             const messages = response;
             for (var k = 0; k < messages.length; k++) {
               if ((messages[k].receipt === 0 || messages[k].receipt === 1) && messages[k].sender !== this.state.username) {
                 count = count+1;
               }
             }
-            temp.push(count);
-            await this.setState({num: temp});
+            tempNum.push(count);
+            await this.setState({num: tempNum});
           })
         }
       }
     }
   }
 
-  contactOpen(user, email) {
+  async contactOpen(user, email) {
     this.setState({ currentUser: user, showModal: true, currentUserEmail: email, image: "", audio: "", video: "" });
-    axios.get(`${urlToUse.url.API_URL}/message?sender=${user}&receiver=${this.state.username}`)
+    await axios.get(`${urlToUse.url.API_URL}/message?sender=${user}&receiver=${this.state.username}`)
 		  .then(res => {
-			this.setState({ messages: res.data })
+      this.setState({ messages: res.data });
+      var tempPage = [];
+      const messages = res.data;
+      for (var l = 0; 5*l < messages.length; l++) {
+        tempPage.push(l+1);
+      }
+      this.setState({ page: tempPage });
       });
-    axios.post(`${urlToUse.url.API_URL}/message/read?sender=${user}&receiver=${this.state.username}`);
+    await axios.post(`${urlToUse.url.API_URL}/message/read?sender=${user}&receiver=${this.state.username}`);
   }
 
   hideModal() {
@@ -123,9 +131,11 @@ export default class Mainview extends React.Component {
           }
         }
       }
-      // for (var j = 0; j < this.state.users.length; j++) {
-      //   document.getElementById(`add${j}`).checked = false;
-      // }
+      for (var j = 0; j < this.state.users.length; j++) {
+        if (document.getElementById(`add${j}`)) {
+          document.getElementById(`add${j}`).checked = false;
+        }
+      }
       this.setState({ users: searchedUsers });
     }
   }
@@ -137,6 +147,12 @@ export default class Mainview extends React.Component {
     }).then((response) => {
       if (response.status === 200) {
         response.json().then((response) => {
+          if (this.state.messages.length % 5 === 0) {
+            var tempPage = this.state.page;
+            const newPage = this.state.messages.length/5+1;
+            tempPage.push(newPage);
+            this.setState({ page: tempPage });
+          }
           var temp = this.state.messages;
           temp.push(response);
           this.setState({messages: temp});
@@ -157,6 +173,12 @@ export default class Mainview extends React.Component {
 			}).then((response) => {
         if (response.status === 200) {
           response.json().then((response) => {
+            if (this.state.messages.length % 5 === 0) {
+              var tempPage = this.state.page;
+              const newPage = this.state.messages.length/5+1;
+              tempPage.push(newPage);
+              this.setState({ page: tempPage });
+            }
             var temp = this.state.messages;
             temp.push(response);
             this.setState({messages: temp});
@@ -180,6 +202,12 @@ export default class Mainview extends React.Component {
 			}).then((response) => {
         if (response.status === 200) {
           response.json().then((response) => {
+            if (this.state.messages.length % 5 === 0) {
+              var tempPage = this.state.page;
+              const newPage = this.state.messages.length/5+1;
+              tempPage.push(newPage);
+              this.setState({ page: tempPage });
+            }
             var temp = this.state.messages;
             temp.push(response);
             this.setState({messages: temp});
@@ -203,6 +231,12 @@ export default class Mainview extends React.Component {
 			}).then((response) => {
         if (response.status === 200) {
           response.json().then((response) => {
+            if (this.state.messages.length % 5 === 0) {
+              var tempPage = this.state.page;
+              const newPage = this.state.messages.length/5+1;
+              tempPage.push(newPage);
+              this.setState({ page: tempPage });
+            }
             var temp = this.state.messages;
             temp.push(response);
             this.setState({messages: temp});
@@ -215,38 +249,48 @@ export default class Mainview extends React.Component {
   }
 
   selectMessage() {
-    if (this.state.selected === 0) {
+    if (this.state.selected === 0 && this.state.messages.length > 0) {
       this.setState({selected: 1, msgbtn: ["Cancel", "Delete"]});
     } else {
       this.setState({selected: 0, msgbtn: ["Select", "Delete All"]});
     }
   }
 
-  deleteMessage() {
+  async deleteMessage() {
     // WARNING: You are about to delete all messages. Click again to proceed.
     if (this.state.selected === 0) {
       fetch(`${urlToUse.url.API_URL}/message/deleteall?sender=${this.state.username}&receiver=${this.state.currentUser}`, {
 				method: "POST",
 			}).then((data) => {
-        this.setState({messages: []});
+        this.setState({messages: [], page: []});
       })
     } else {
-      var i = 0;
-      var j = 0;
-      var l = this.state.messages.length;
+      var i = this.state.messages.length-(this.state.curr-1)*5-1;
+      var l = Math.max(this.state.messages.length-this.state.curr*5, 0)-1;
       while (i !== l) {
-        if (document.getElementById(`check${i}`).checked === true) {
-          axios.post(`${urlToUse.url.API_URL}/message/delete?index=${this.state.messages[j].index}`);
-          var temp = this.state.messages;
-          temp.splice(j, 1);
-          this.setState({messages: temp});
-          j = j-1;
+        if (document.getElementById(`check${i}`)) {
+          if (document.getElementById(`check${i}`).checked === true) {
+            await axios.post(`${urlToUse.url.API_URL}/message/delete?index=${this.state.messages[i].index}`);
+            if ((this.state.messages.length-1) % 5 === 0) {
+              var tempPage = this.state.page;
+              tempPage.pop();
+              this.setState({ page: tempPage});
+              if (this.state.curr > 1) {
+                var tempCurr = this.state.curr;
+                this.setState({ curr: tempCurr-1 });
+              }
+            }
+            var temp = this.state.messages;
+            temp.splice(i, 1);
+            this.setState({messages: temp});
+          }
         }
-        i = i+1;
-        j = j+1;
+        i = i-1;
       }
       for (var k = 0; k < this.state.messages.length; k++) {
-        document.getElementById(`check${k}`).checked = false;
+        if (document.getElementById(`check${k}`)) {
+          document.getElementById(`check${k}`).checked = false;
+        } 
       }
     }
   }
@@ -256,9 +300,6 @@ export default class Mainview extends React.Component {
       this.setState({addselected: 1, addbtn: ["Cancel", "Add"]});
     } else {
       this.setState({addselected: 0, addbtn: ["Select", "Add"]});
-      // for (var i = 0; i < this.state.users.length; i++) {
-      //   document.getElementById(`add${i}`).checked = false;
-      // }
     }
   }
 
@@ -322,30 +363,22 @@ export default class Mainview extends React.Component {
     }
   }
 
-  async getNumReceived() {
-    var temp = [];
-    console.log("!");
-    for (var i = 0; i < this.state.contacts.length; i++) {
-      for (var j = 0; j < this.state.users.length; j++) {
-        if (this.state.contacts[i].username === this.state.users[j].username) {
-          await fetch(`${urlToUse.url.API_URL}/message?sender=${this.state.users[j].username}&receiver=${this.state.username}`, {
-            method: "GET",
-          }).then(response => response.json()).then((response) => {
-            const messages = response;
-            var count = 0;
-            for (var k = 0; k < messages.length; k++) {
-              if (messages[k].receipt === 0 || messages[k].receipt === 1) {
-                count = count+1;
-              }
-            }
-            temp.push(1);
-            console.log(temp);
-          })
-        }
-      }
+  setCurrentPage(value) {
+    this.setState({ curr: value });
+  }
+
+  setPreviousPage() {
+    if (this.state.curr > 1) {
+      const temp = this.state.curr-1;
+      this.setState({ curr: temp });
     }
-    // await this.setState({ num: temp })
-    console.log(this.state.num);
+  }
+
+  setNextPage() {
+    if (this.state.curr < this.state.page.length) {
+      const temp = this.state.curr+1;
+      this.setState({ curr: temp });
+    }
   }
 
   render() {
@@ -355,9 +388,10 @@ export default class Mainview extends React.Component {
         <br></br>
         <div className="container">
           <div className="jumbotron">
-            <div className="h5">My Contacts <button id="removeselectbtn" className="btn" onClick={this.selectMyContact}>{this.state.removebtn[0]}</button>
+            <div className="h5">My Contacts<button id="removeselectbtn" className="btn" onClick={this.selectMyContact}>{this.state.removebtn[0]}</button>
             <button id="removebtn" className="btn" onClick={this.removeContact}>{this.state.removebtn[1]}</button> </div>
             {this.state.contacts.map((value, index) => {
+              // console.log(this.state.num[index]);
               if (this.state.removeselected === 0 && this.state.num[index] === 0) {
                 return <div>
                   <button  onClick={() => this.contactOpen(value.username, value.email)} className="user1">{value.username} - {value.email}</button>
@@ -394,6 +428,18 @@ export default class Mainview extends React.Component {
                   <b> {value.username} - {value.email}</b>
                   <p style={{color: "red",}}> {this.state.num[index]} New Messages!</p>
                   </div>;
+              } else if (this.state.removeselected === 0) {
+                return <div>
+                  <button  onClick={() => this.contactOpen(value.username, value.email)} className="user1">{value.username} - {value.email}</button>
+                  <p> No New Messages</p>
+                  </div>;
+              } else if (this.state.removeselected === 1) {
+                const removeid = `remove${index}`;
+                return <div>
+                  <input type="checkbox" id={removeid} />
+                  <b> {value.username} - {value.email}</b>
+                  <p> No New Messages</p>
+                  </div>;
               }
               })}
               <Modal show={this.state.showModal} onHide={() => this.hideModal()} >
@@ -404,106 +450,123 @@ export default class Mainview extends React.Component {
                 <b>Messages: </b> <button id="selectbtn" className="btn" onClick={this.selectMessage}>{this.state.msgbtn[0]}</button>
             <button id="deletebtn" className="btn" onClick={this.deleteMessage}>{this.state.msgbtn[1]}</button>
                 {this.state.messages.map((value, index) => {
-                  if (!(_.isEmpty(value.text))) {
-                    if (value.sender === this.state.username && this.state.selected === 0 && value.receipt === 0) {
-                      return <div> Sent: {value.text} </div>;
-                    } else if (value.sender === this.state.username && this.state.selected === 0 && value.receipt === 1) {
-                      return <div> Delivered: {value.text} </div>;
-                    } else if (value.sender === this.state.username && this.state.selected === 0 && value.receipt === 2) {
-                      return <div> Read: {value.text} </div>;
-                    } else if (value.sender !== this.state.username && this.state.selected === 0) {
-                      return <div> Received: {value.text} </div>;
-                    } else if (value.sender === this.state.username && this.state.selected === 1) {
-                      const checkid = `check${index}`;
-                      return <div> <input type="checkbox" id={checkid} /> Sent: {value.text} </div>;
-                    } else if (value.sender !== this.state.username && this.state.selected === 1) {
-                      const checkid = `check${index}`;
-                      return <div> <input type="checkbox" id={checkid} /> Received: {value.text} </div>;
-                    }
-                  } else if (!(_.isEmpty(value.image))) {
-                    const image = new Buffer(value.image.data.data).toString("base64");
-                    const imageLink = "data:image/png;base64," + image;
-                    if (value.sender === this.state.username && this.state.selected === 0 && value.receipt === 0) {
-                      return <div> Sent: <img src = {imageLink}/> </div>;
-                    } else if (value.sender === this.state.username && this.state.selected === 0 && value.receipt === 1) {
-                      return <div> Delivered: <img src = {imageLink}/> </div>;
-                    } else if (value.sender === this.state.username && this.state.selected === 0 && value.receipt === 2) {
-                      return <div> Read: <img src = {imageLink}/> </div>;
-                    } else if (value.sender !== this.state.username && this.state.selected === 0) {
-                      return <div> Received: <img src = {imageLink}/> </div>;
-                    } else if (value.sender === this.state.username && this.state.selected === 1) {
-                      const checkid = `check${index}`;
-                      return <div> <input type="checkbox" id={checkid} /> Sent: <img src = {imageLink}/> </div>;
-                    } else if (value.sender !== this.state.username && this.state.selected === 1) {
-                      const checkid = `check${index}`;
-                      return <div> <input type="checkbox" id={checkid} /> Received: <img src = {imageLink}/> </div>;
-                    }
-                  } else if (!(_.isEmpty(value.audio))) {
-                    const audio = new Buffer(value.audio.data.data).toString("base64");
-                    const audioLink = "data:audio/mp3;base64," + audio;
-                    if (value.sender === this.state.username && this.state.selected === 0 && value.receipt === 0) {
-                      return <div>Sent: <audio controls>
-                      <source src = {audioLink}/>
-                      </audio></div>;
-                    } else if (value.sender === this.state.username && this.state.selected === 0 && value.receipt === 1) {
-                      return <div>Delivered: <audio controls>
-                      <source src = {audioLink}/>
-                      </audio></div>;
-                    } else if (value.sender === this.state.username && this.state.selected === 0 && value.receipt === 2) {
-                      return <div>Read: <audio controls>
-                      <source src = {audioLink}/>
-                      </audio></div>;
-                    } else if (value.sender !== this.state.username && this.state.selected === 0) {
-                      return <div>Received: <audio controls>
-                      <source src = {audioLink}/>
-                      </audio></div>;
-                    } else if (value.sender === this.state.username && this.state.selected === 1) {
-                      const checkid = `check${index}`;
-                      return <div> <input type="checkbox" id={checkid} />
-                      Sent: <audio controls>
-                      <source src = {audioLink}/>
-                      </audio> </div>;
-                    } else if (value.sender !== this.state.username && this.state.selected === 1) {
-                      const checkid = `check${index}`;
-                      return <div> <input type="checkbox" id={checkid} />
-                      Received: <audio controls>
-                      <source src = {audioLink}/>
-                      </audio> </div>;
-                    }
-                  } else if (!(_.isEmpty(value.video))) {
-                    const video= new Buffer(value.video.data.data).toString("base64");
-                    const videoLink = "data:video/mp4;base64," + video;
-                    if (value.sender === this.state.username && this.state.selected === 0 && value.receipt === 0 ) {
-                      return <div> Sent: <video width="200" height="160" controls>
-                      <source src = {videoLink}/>
-                      </video></div>;
-                    } else if (value.sender === this.state.username && this.state.selected === 0 && value.receipt === 1) {
-                      return <div> Delivered: <video width="200" height="160" controls>
-                      <source src = {videoLink}/>
-                      </video></div>;
-                    } else if (value.sender === this.state.username && this.state.selected === 0 && value.receipt === 2) {
-                      return <div> Read: <video width="200" height="160" controls>
-                      <source src = {videoLink}/>
-                      </video></div>;
-                    } else if (value.sender !== this.state.username && this.state.selected === 0) {
-                      return <div> Received: <video width="200" height="160" controls>
-                      <source src = {videoLink}/>
-                      </video></div>;
-                    } else if (value.sender === this.state.username && this.state.selected === 1) {
-                      const checkid = `check${index}`;
-                      return <div> <input type="checkbox" id={checkid} />
-                      Sent: <video width="200" height="160" controls>
-                      <source src = {videoLink}/>
-                      </video> </div>;
-                    } else if (value.sender !== this.state.username && this.state.selected === 1) {
-                      const checkid = `check${index}`;
-                      return <div> <input type="checkbox" id={checkid} />
-                      Received: <video width="200" height="160" controls>
-                      <source src = {videoLink}/>
-                      </video> </div>;
+                  if (index >= this.state.messages.length-this.state.curr*5 && index < this.state.messages.length-(this.state.curr-1)*5) {
+                    if (!(_.isEmpty(value.text))) {
+                      if (value.sender === this.state.username && this.state.selected === 0 && value.receipt === 0) {
+                        return <div> Sent: {value.text} </div>;
+                      } else if (value.sender === this.state.username && this.state.selected === 0 && value.receipt === 1) {
+                        return <div> Delivered: {value.text} </div>;
+                      } else if (value.sender === this.state.username && this.state.selected === 0 && value.receipt === 2) {
+                        return <div> Read: {value.text} </div>;
+                      } else if (value.sender !== this.state.username && this.state.selected === 0) {
+                        return <div> Received: {value.text} </div>;
+                      } else if (value.sender === this.state.username && this.state.selected === 1) {
+                        const checkid = `check${index}`;
+                        return <div> <input type="checkbox" id={checkid} /> Sent: {value.text} </div>;
+                      } else if (value.sender !== this.state.username && this.state.selected === 1) {
+                        const checkid = `check${index}`;
+                        return <div> <input type="checkbox" id={checkid} /> Received: {value.text} </div>;
+                      }
+                    } else if (!(_.isEmpty(value.image))) {
+                      const image = new Buffer(value.image.data.data).toString("base64");
+                      const imageLink = "data:image/png;base64," + image;
+                      if (value.sender === this.state.username && this.state.selected === 0 && value.receipt === 0) {
+                        return <div> Sent: <img src = {imageLink}/> </div>;
+                      } else if (value.sender === this.state.username && this.state.selected === 0 && value.receipt === 1) {
+                        return <div> Delivered: <img src = {imageLink}/> </div>;
+                      } else if (value.sender === this.state.username && this.state.selected === 0 && value.receipt === 2) {
+                        return <div> Read: <img src = {imageLink}/> </div>;
+                      } else if (value.sender !== this.state.username && this.state.selected === 0) {
+                        return <div> Received: <img src = {imageLink}/> </div>;
+                      } else if (value.sender === this.state.username && this.state.selected === 1) {
+                        const checkid = `check${index}`;
+                        return <div> <input type="checkbox" id={checkid} /> Sent: <img src = {imageLink}/> </div>;
+                      } else if (value.sender !== this.state.username && this.state.selected === 1) {
+                        const checkid = `check${index}`;
+                        return <div> <input type="checkbox" id={checkid} /> Received: <img src = {imageLink}/> </div>;
+                      }
+                    } else if (!(_.isEmpty(value.audio))) {
+                      const audio = new Buffer(value.audio.data.data).toString("base64");
+                      const audioLink = "data:audio/mp3;base64," + audio;
+                      if (value.sender === this.state.username && this.state.selected === 0 && value.receipt === 0) {
+                        return <div>Sent: <audio controls>
+                        <source src = {audioLink}/>
+                        </audio></div>;
+                      } else if (value.sender === this.state.username && this.state.selected === 0 && value.receipt === 1) {
+                        return <div>Delivered: <audio controls>
+                        <source src = {audioLink}/>
+                        </audio></div>;
+                      } else if (value.sender === this.state.username && this.state.selected === 0 && value.receipt === 2) {
+                        return <div>Read: <audio controls>
+                        <source src = {audioLink}/>
+                        </audio></div>;
+                      } else if (value.sender !== this.state.username && this.state.selected === 0) {
+                        return <div>Received: <audio controls>
+                        <source src = {audioLink}/>
+                        </audio></div>;
+                      } else if (value.sender === this.state.username && this.state.selected === 1) {
+                        const checkid = `check${index}`;
+                        return <div> <input type="checkbox" id={checkid} />
+                        Sent: <audio controls>
+                        <source src = {audioLink}/>
+                        </audio> </div>;
+                      } else if (value.sender !== this.state.username && this.state.selected === 1) {
+                        const checkid = `check${index}`;
+                        return <div> <input type="checkbox" id={checkid} />
+                        Received: <audio controls>
+                        <source src = {audioLink}/>
+                        </audio> </div>;
+                      }
+                    } else if (!(_.isEmpty(value.video))) {
+                      const video= new Buffer(value.video.data.data).toString("base64");
+                      const videoLink = "data:video/mp4;base64," + video;
+                      if (value.sender === this.state.username && this.state.selected === 0 && value.receipt === 0 ) {
+                        return <div> Sent: <video width="200" height="160" controls>
+                        <source src = {videoLink}/>
+                        </video></div>;
+                      } else if (value.sender === this.state.username && this.state.selected === 0 && value.receipt === 1) {
+                        return <div> Delivered: <video width="200" height="160" controls>
+                        <source src = {videoLink}/>
+                        </video></div>;
+                      } else if (value.sender === this.state.username && this.state.selected === 0 && value.receipt === 2) {
+                        return <div> Read: <video width="200" height="160" controls>
+                        <source src = {videoLink}/>
+                        </video></div>;
+                      } else if (value.sender !== this.state.username && this.state.selected === 0) {
+                        return <div> Received: <video width="200" height="160" controls>
+                        <source src = {videoLink}/>
+                        </video></div>;
+                      } else if (value.sender === this.state.username && this.state.selected === 1) {
+                        const checkid = `check${index}`;
+                        return <div> <input type="checkbox" id={checkid} />
+                        Sent: <video width="200" height="160" controls>
+                        <source src = {videoLink}/>
+                        </video> </div>;
+                      } else if (value.sender !== this.state.username && this.state.selected === 1) {
+                        const checkid = `check${index}`;
+                        return <div> <input type="checkbox" id={checkid} />
+                        Received: <video width="200" height="160" controls>
+                        <source src = {videoLink}/>
+                        </video> </div>;
+                      }
                     }
                   }
                 })}
+                  <div class="pagination">
+                  <button onClick={this.setPreviousPage}>&laquo;</button>
+                  {this.state.page.map((value, index) => {
+                    if (value === this.state.curr) {
+                      return <div class="pagination">
+                      <button style={{color: "red"}}>{value}</button>
+                      </div>;
+                    } else {
+                      return <div class="pagination">
+                      <button onClick={() => this.setCurrentPage(value)}>{value}</button>
+                      </div>;
+                    }
+                  })}
+                  <button onClick={this.setNextPage}>&raquo;</button>
+                  </div>
                 </Modal.Body>
                 <Modal.Body>
                 <input type='text' id="msent" size = "48"/>
