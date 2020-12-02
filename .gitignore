@@ -1,1 +1,3 @@
 node_modules/
+package-lock.json
+Chat-App/client/package-lock.json
