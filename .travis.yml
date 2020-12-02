@@ -7,5 +7,5 @@ install:
   - npm i jest-fetch-mock
 before_script: cd Chat-App/client
 script:
-  - npm i
+  - npm install babel-jest
   - react-scripts test
