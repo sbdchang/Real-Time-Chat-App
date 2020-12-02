@@ -1,11 +1,8 @@
 language: node_js
 install:
-  - nvm install node
-  - node -v
-  - npm install --save-dev jest
-  - npm install fetch-mock
-  - npm i jest-fetch-mock
-before_script: cd Chat-App/client
+  - npm i
+before_script: 
+  - cd Chat-App/client
+  - npm i
 script:
-  - npm install babel-jest
-  - react-scripts test
+  - npm run test
