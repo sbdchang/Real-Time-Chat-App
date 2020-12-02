@@ -1,6 +1,9 @@
 language: node_js
-before_script: 
+node_js: 
+- "14.15.1"
+before_install: 
   - cd Chat-App/client
+install:
   - npm i
 script:
   - npm run test
