@@ -1,6 +1,4 @@
 language: node_js
-install:
-  - npm i
 before_script: 
   - cd Chat-App/client
   - npm i
