@@ -7,6 +7,7 @@ import {
 import Mainview from './Mainview';
 import UserProfile from './UserProfile';
 import CreateAccount from './CreateAccount';
+import Statuses from './Statuses';
 
 export default class App extends React.Component {
 	constructor(props) {
@@ -43,6 +44,12 @@ export default class App extends React.Component {
 							exact path="/mainview"
 							render={() => (
 								<Mainview />
+							)}
+						/>
+						<Route
+							exact path="/statuses"
+							render={() => (
+								<Statuses />
 							)}
 						/>
 					</Switch>
