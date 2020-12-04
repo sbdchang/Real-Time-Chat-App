@@ -164,9 +164,12 @@ export default class Mainview extends React.Component {
           var temp = this.state.messages;
           temp.push(response);
           this.setState({messages: temp});
-        })
+        });
+        fetch(`${urlToUse.url.API_URL}/users/shuffle?sender=${this.state.username}&receiver=${this.state.currentUser}`, {
+          method: "POST",
+        });
       }
-    })
+    });
   }
 
   sendImage = async (event) => {
@@ -190,7 +193,10 @@ export default class Mainview extends React.Component {
             var temp = this.state.messages;
             temp.push(response);
             this.setState({messages: temp});
-          })
+          });
+          fetch(`${urlToUse.url.API_URL}/users/shuffle?sender=${this.state.username}&receiver=${this.state.currentUser}`, {
+            method: "POST",
+          });
         } else if (response.status === 400) {
           this.setState({ image: "Failure: Your Image is too Large!" });
         }
@@ -219,7 +225,10 @@ export default class Mainview extends React.Component {
             var temp = this.state.messages;
             temp.push(response);
             this.setState({messages: temp});
-          })
+          });
+          fetch(`${urlToUse.url.API_URL}/users/shuffle?sender=${this.state.username}&receiver=${this.state.currentUser}`, {
+            method: "POST",
+          });
         } else if (response.status === 400) {
           this.setState({ audio: "Failure: Your Audio is too Large!" });
         }
@@ -248,7 +257,10 @@ export default class Mainview extends React.Component {
             var temp = this.state.messages;
             temp.push(response);
             this.setState({messages: temp});
-          })
+          });
+          fetch(`${urlToUse.url.API_URL}/users/shuffle?sender=${this.state.username}&receiver=${this.state.currentUser}`, {
+            method: "POST",
+          });
         } else if (response.status === 400) {
           this.setState({ video: "Failure: Your Video is too Large!" });
         }

@@ -218,6 +218,28 @@ router.post("/users/remove", cors(), async (req, res) => {
     }
 });
 
+router.post("/users/shuffle", cors(), async (req, res) => {
+    try {
+        const user = await User.findOne({username: req.query.receiver});
+        for (var i = 0; i < user.contacts.length; i++) {
+            if (req.query.sender === user.contacts[i]) {
+                var final = [];
+                var temp = user.contacts;
+                temp.splice(i, 1);
+                final.push(req.query.sender);
+                for (var j = 0; j < temp.length; j++) {
+                    final.push(temp[j]);
+                }
+                user.contacts = final;
+            }
+        }
+        await user.save();
+        res.status(200).send();
+    } catch(e) {
+        res.status(500).send();
+    }
+});
+
 //get particular user, using dynamically forming URL's
 router.get("/users/:id", cors(), async (req, res) => {
     //req.params stores the user that is being requested
