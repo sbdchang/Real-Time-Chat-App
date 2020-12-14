@@ -10,7 +10,9 @@ const {MongoClient} = require('mongodb');
 const ObjectId = require('mongodb').ObjectID;
 
 
-//url of the db in the cloud
+//url of the TEST db in the cloud
+const url = 'mongodb+srv://cis557:cis557_fa20@cluster0.lp2ui.mongodb.net/hw5_game?retryWrites=true&w=majority';
+
 
 
 //wait to connect to the db
