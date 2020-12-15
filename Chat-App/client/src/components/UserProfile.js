@@ -158,7 +158,7 @@ export default class UserProfile extends React.Component {
 			      </div>
 
 			      <div className="jumbotron">
-				     <b style={{fontSize: "30px"}}> User Settings </b>
+				     <b style={{fontSize: "25px"}}> Account Settings </b>
 					 <br></br>
 					 <br></br>
 				  	<input type='text' placeholder="Current Password" id="cpw" className="input"/>
