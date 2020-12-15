@@ -8,8 +8,16 @@ const { connect } = require("mongoose");
 const ObjectId = require('mongodb').ObjectID;
 
 // URL of test db on the cloud TODO how do I get this to connect to my personal test server on the cloud?
-const url = 'mongodb+srv://cis557:cis557_fa20@cluster0.lp2ui.mongodb.net/hw5_game?retryWrites=true&w=majority';
+const url = 'mongodb+srv://jroypeterson@gmail.com:3du6tKXST4zU@cluster0.n47tz.mongodb.net/CHAT-APP-TEST-SERVER?retryWrites=true&w=majority';
 
+
+//test that tests here work
+it('Testing to see if Jest works', () => {
+  expect(1).toBe(1);
+});
+
+
+/*
 // Connect to our db on the cloud using mongoose.js file
 mongoose.connect(url, {
     useNewUrlParser: true,
@@ -52,6 +60,14 @@ const clearDatabase = async () => {
 // id of inserted user
 let id;
 
+// test get
+
+describe('Test GET', () => {
+  test('Endpoint response', () => request(webapp).get('/status').send()
+    .expect(200))
+});
+
+
 describe('Register user endpoint integration test', () => {
     // expected response
     const testPlayer = {
@@ -77,6 +93,8 @@ describe('Register user endpoint integration test', () => {
     });
   });
 
+*/
+
 // Test Register
 
 // Test login
@@ -95,7 +113,6 @@ describe('Register user endpoint integration test', () => {
 
 
 //logout all
-
 
 
 //post Status
