@@ -1,5 +1,4 @@
 // Tests
-
 const time = require('./time');
 const sinon = require('sinon');
 sinon.stub(time, 'setTimeout');
@@ -14,21 +13,29 @@ const request = require('supertest');
 //const ObjectId = require('mongodb').ObjectID;
 
 // URL of test db on the cloud TODO how do I get this to connect to my personal test server on the cloud?
+//const url = "mongodb+srv://stevenc61500@gmail.com:WYFmYZ)Bx[%3Aqt5ZT4Kmp@557-chat-app-cluster.jbh5s.mongodb.net/557-Chat-App?retryWrites=true&w=majority";
+
 const url = "mongodb+srv://test_user:test_user@557-chat-app-cluster.jbh5s.mongodb.net/test?retryWrites=true&w=majority";
 
-//const url = 'mongodb+srv://jroypeterson@gmail.com:3du6tKXST4zU@cluster0.n47tz.mongodb.net/CHAT-APP-TEST-SERVER?retryWrites=true&w=majority';
+
+// const url = 'mongodb+srv://jroypeterson@gmail.com:3du6tKXST4zU@cluster0.n47tz.mongodb.net/CHAT-APP-TEST-SERVER?retryWrites=true&w=majority';
+beforeAll(async () => {
+  try{
+    await mongoose.connect(url, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true, 
+      useCreateIndex: true,
+      useFindAndModify: false
+  });
+  console.log("Mongo Atlas connected.")
+  } catch (err){
+    console.log(err);
+  }
+});
+
 
 // Connect to our db on the cloud using mongoose.js file
-mongoose.connect(url, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true, 
-    useCreateIndex: true,
-    useFindAndModify: false
-}).then(() => {
-    console.log("Mongo Atlas connected.")
-}).catch(error => {
-    console.log(error);
-});
+
 
 
 describe('Tests backend', () => {
@@ -40,11 +47,6 @@ it('Testing to see if Jest works', () => {
 
 /*
 const webapp = require('./index'); // TODO correct? using webapp in the index.js file
-
-let db;
-beforeAll(async () => {
-  db = await connect();
-});
 
 const clearDatabase = async () => {
     try {
@@ -121,9 +123,7 @@ describe('Register user endpoint integration test', () => {
 
 //log out
 
-
 //logout all
-
 
 //post Status
 
