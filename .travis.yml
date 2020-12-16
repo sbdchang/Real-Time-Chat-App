@@ -1,9 +1,9 @@
 language: node_js
 node_js: 
 - "14.15.1"
-before_install: 
-  - cd Chat-App/client
-install:
-  - npm i
+- "14.15.1"
+env:
+  - TEST_DIR=Chat-App/client
+  - TEST_DIR=Chat-App/server
 script:
-  - npm run test
+  - cd $TEST_DIR && npm i && npm run test
