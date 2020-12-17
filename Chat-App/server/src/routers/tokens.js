@@ -1,12 +1,13 @@
 const twilio = require('twilio');
 const AccessToken = twilio.jwt.AccessToken;
 const { VideoGrant } = AccessToken;
+const config = require('./config');
 
 const generateToken = config => {
   return new AccessToken(
-    config.twilio.accountSid,
-    config.twilio.apiKey,
-    config.twilio.apiSecret
+    "ACa8db994fcc2c57720388517c01116478",
+    "SK9c6ad8c71505c91c93cab20f2e961e99",
+    "AOdbPSvyIOAhEfKBTNPAgH2pHoudv9qN"
   );
 };
 
