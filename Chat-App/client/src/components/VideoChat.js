@@ -1,4 +1,5 @@
 import React, { useState, useCallback } from 'react';
+import {urlToUse} from "./url";
 import Lobby from './Lobby';
 import Room from './Room';
 
@@ -18,7 +19,7 @@ const VideoChat = () => {
   const handleSubmit = useCallback(
     async event => {
       event.preventDefault();
-      const data = await fetch('/video/token', {
+      const data = await fetch(`${urlToUse.url.API_URL}/video/token`, {
         method: 'POST',
         body: JSON.stringify({
           identity: username,

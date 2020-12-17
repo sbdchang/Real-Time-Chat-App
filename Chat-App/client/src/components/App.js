@@ -8,6 +8,7 @@ import Mainview from './Mainview';
 import UserProfile from './UserProfile';
 import CreateAccount from './CreateAccount';
 import Statuses from './Statuses';
+import VideoChat from './VideoChat';
 
 export default class App extends React.Component {
 	constructor(props) {
@@ -22,7 +23,7 @@ export default class App extends React.Component {
 			temp: u
 		});
 	}
-	
+
 	render() {
 		return (
 			<div className="App">
@@ -50,6 +51,12 @@ export default class App extends React.Component {
 							exact path="/statuses"
 							render={() => (
 								<Statuses />
+							)}
+						/>
+						<Route
+							exact path="/videochat"
+							render={() => (
+								<VideoChat />
 							)}
 						/>
 					</Switch>

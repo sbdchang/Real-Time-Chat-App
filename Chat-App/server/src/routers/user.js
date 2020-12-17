@@ -10,6 +10,7 @@ const upload = multer({
 });
 const fs = require("fs");
 const { EWOULDBLOCK } = require("constants");
+const config = require('./config');
 
 const app = express();
 app.use(cors);
@@ -346,14 +347,14 @@ const sendTokenResponse = (token, res) => {
     );
 };
 
-app.get('/video/token', (req, res) => {
+router.get('/video/token', (req, res) => {
     const identity = req.query.identity;
     const room = req.query.room;
     const token = videoToken(identity, room, config);
     sendTokenResponse(token, res);
 
 });
-app.post('/video/token', (req, res) => {
+router.post('/video/token', (req, res) => {
     const identity = req.body.identity;
     const room = req.body.room;
     const token = videoToken(identity, room, config);

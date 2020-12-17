@@ -16,7 +16,8 @@
     "react-router-dom": "^5.1.2",
     "react-scripts": "^3.4.0",
     "selenium-webdriver": "^4.0.0-alpha.5",
-    "serve": "^11.3.2"
+    "serve": "^11.3.2",
+    "twilio-video": "^2.10.0"
   },
   "scripts": {
     "dev": "react-scripts start",
