@@ -3,6 +3,13 @@
 //const sinon = require('sinon');
 //sinon.stub(time, 'setTimeout');
 
+const mongoose = require("mongoose"); // import mongoose module
+/*
+MongoDB access
+64Lt0KiQaU4m2DLR
+test_jp_user
+*/
+
 //imported from user.js and index.js
 const express = require("express");
 const cors = require("cors");
@@ -24,22 +31,17 @@ const { EWOULDBLOCK } = require("constants");
 const app = express();
 app.use(cors);
 
-const mongoose = require("mongoose"); // import mongoose module
 const request = require('supertest'); //import testing framework
 
 // Import ObjectID constructor
-//const ObjectId = require('mongodb').ObjectID;
+const ObjectId = require('mongodb').ObjectID;
 
 // URL of test db on the cloud TODO how do I get this to connect to my personal test server on the cloud?
 //const url = "mongodb+srv://stevenc61500@gmail.com:WYFmYZ)Bx[%3Aqt5ZT4Kmp@557-chat-app-cluster.jbh5s.mongodb.net/557-Chat-App?retryWrites=true&w=majority";
-
-//wMVN5Zsz6BM9
-//stevenc61500@gmail.com
-const url = "mongodb+srv://stevenc61500@gmail.com:wMVN5Zsz6BM9@557-chat-app-cluster.jbh5s.mongodb.net/557-Chat-App?retryWrites=true&w=majority"
-//const url = "mongodb+srv://test_user:test_user@557-chat-app-cluster.jbh5s.mongodb.net/test?retryWrites=true&w=majority";
-
-
+//const url = "mongodb+srv://test_jp_user:64Lt0KiQaU4m2DLR@557-chat-app-cluster.jbh5s.mongodb.net/557-chat-app?retryWrites=true&w=majority"
+const url = "mongodb+srv://test_user:test_user@557-chat-app-cluster.jbh5s.mongodb.net/test?retryWrites=true&w=majority";
 // const url = 'mongodb+srv://jroypeterson@gmail.com:3du6tKXST4zU@cluster0.n47tz.mongodb.net/CHAT-APP-TEST-SERVER?retryWrites=true&w=majority';
+
 beforeAll(async () => {
   try{
     await mongoose.connect(url, {
@@ -54,18 +56,46 @@ beforeAll(async () => {
   }
 });
 
-
-// Connect to our db on the cloud using mongoose.js file
-
 //are the tests working
-describe('Tests backend', () => {
   it('Testing to see if Jest works', () => {
     expect(1).toBe(1);
   });
-});
+
+
+  it('Should save user to database', async done => {
+    const res = await router.post("/users/register")
+    .send({
+        name: 'Zell',
+        email: 'Zelltest@gmail.com',
+        password: 'Zellpwordpword'
+      })
+  
+    // Searches the user in the database
+    const user = await User.findOne({ email: 'Zelltest@gmail.com' })
+    console.log(User)
+    expect(User.name).toBeTruthy()
+    expect(User.email).toBeTruthy()
+
+    done()
+  })
+
+  describe('Post Endpoints', () => {
+    it('should create a new post', async () => {
+      const res = await request(app)
+        .post('/users/register')
+        .send({
+          name: 'ZellZell',
+          email: 'Zelltesttest@gmail.com',
+          password: 'Zellpwordpwordpword'
+        })
+      expect(res.statusCode).toEqual(200)
+    })
+  })
+
+
 
 describe('Test GET', () => {
-  test('Endpoint response', () => request(app).get('/status').send()
+  test('Endpoint response', async () => await request(app).get('/status').send()
     .expect(200))
 });
 
@@ -99,7 +129,6 @@ const clearDatabase = async () => {
 let id;
 
 // test get
-
 
 
 */
