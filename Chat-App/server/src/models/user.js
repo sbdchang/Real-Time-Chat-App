@@ -28,7 +28,7 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true,
         validate(value) {
-            if (!validator.isLength(value, {min: 8, max: undefined})) {
+            if (!validator.isLength(value, { min: 8, max: undefined })) {
                 throw new Error("Password must be at least 8 characters long.");
             }
 
@@ -46,7 +46,7 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true,
         validate(value) {
-            if (!validator.isLength(value, {min: 8, max: undefined})) {
+            if (!validator.isLength(value, { min: 8, max: undefined })) {
                 throw new Error("Password must be at least 8 characters long.");
             }
 
@@ -93,7 +93,7 @@ const userSchema = new mongoose.Schema({
 });
 
 //instance method, accessible on the instance of User created (user)
-userSchema.methods.generateAuthToken = async function() {
+userSchema.methods.generateAuthToken = async function () {
     const user = this;
 
     //generate a token for this user using jwt.sign() method
@@ -111,13 +111,13 @@ userSchema.methods.generateAuthToken = async function() {
     return token;
 }
 
-userSchema.statics.resetPassword = async(username, cpw, npw) => {
+userSchema.statics.resetPassword = async (username, cpw, npw) => {
     const user = await User.findOne({ username: username });
     const isMatch = await bcrypt.compare(cpw, user.password);
     if (!isMatch) {
         throw new Error("Incorrect corrent password.");
     }
-    if (!validator.isLength(npw, {min: 8, max: undefined})) {
+    if (!validator.isLength(npw, { min: 8, max: undefined })) {
         throw new Error("Password must be at least 8 characters long.");
     }
     if (npw.toLowerCase().includes("password")) {
@@ -127,11 +127,11 @@ userSchema.statics.resetPassword = async(username, cpw, npw) => {
     if (letters.test(npw)) {
         throw new Error("Password must contain at least one special character.");
     }
-    await User.update({username: username}, {$set: {password: await bcrypt.hash(npw, 8)}});
+    await User.update({ username: username }, { $set: { password: await bcrypt.hash(npw, 8) } });
     return user;
 }
 
-userSchema.statics.findByCredentials = async(username, password) => {
+userSchema.statics.findByCredentials = async (username, password) => {
     const user = await User.findOne({ username: username });
     const currentTime = new Date();
     if (currentTime.getTime() < user.dateNextAvailLoginAttempt) {
@@ -146,7 +146,7 @@ userSchema.statics.findByCredentials = async(username, password) => {
     if (user.incorrectAttempts >= 3) {
         user.incorrectAttempts = 2;
 
-        const afterLockout = new Date(currentTime.getTime() + 3*60000);
+        const afterLockout = new Date(currentTime.getTime() + 3 * 60000);
         user.dateNextAvailLoginAttempt = afterLockout;
         await user.save();
         throw new Error("Too many incorrect attempts. Account locked down for XXX.");
@@ -168,7 +168,7 @@ userSchema.statics.findByCredentials = async(username, password) => {
     return user;
 }
 
-userSchema.statics.findByCredentialsResetPass = async(username, pin) => {
+userSchema.statics.findByCredentialsResetPass = async (username, pin) => {
     const user = await User.findOne({ username: username });
     const currentTime = new Date();
     if (currentTime.getTime() < user.dateNextAvailLoginAttempt) {
@@ -183,7 +183,7 @@ userSchema.statics.findByCredentialsResetPass = async(username, pin) => {
     if (user.incorrectAttempts >= 3) {
         user.incorrectAttempts = 2;
 
-        const afterLockout = new Date(currentTime.getTime() + 3*60000);
+        const afterLockout = new Date(currentTime.getTime() + 3 * 60000);
         user.dateNextAvailLoginAttempt = afterLockout;
         await user.save();
         throw new Error("Too many incorrect attempts. Account locked down for XXX.");

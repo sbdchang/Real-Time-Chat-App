@@ -1,0 +1,173 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`CreateAccount Snapshot   1`] = `
+<div
+  className="CreateAccount"
+>
+  <div
+    className="container recommendations-container"
+  >
+    <div
+      className="jumbotron"
+    >
+      <div
+        className="h5"
+      >
+        Create An Account
+      </div>
+      <br />
+      <div
+        className="input-container"
+      >
+        <input
+          className="username-input"
+          id="username"
+          onChange={[Function]}
+          placeholder="Username"
+          type="text"
+          value=""
+        />
+        <input
+          className="email-input"
+          id="email"
+          onChange={[Function]}
+          placeholder="Email"
+          type="text"
+          value=""
+        />
+        <input
+          className="password-input"
+          id="password"
+          onChange={[Function]}
+          placeholder="Password"
+          type="text"
+          value=""
+        />
+        <input
+          className="pin-input"
+          id="pin"
+          onChange={[Function]}
+          placeholder="Reset PIN"
+          type="text"
+          value=""
+        />
+        <button
+          className="createAcct-btn"
+          id="createAccounttBtn"
+          onClick={[Function]}
+        >
+          Create Account
+        </button>
+      </div>
+      <div
+        className="results-container"
+        id="results"
+      >
+        <p
+          id="message-1"
+        >
+            
+        </p>
+      </div>
+      <br />
+      <br />
+      <div
+        className="h5"
+      >
+        Log In
+      </div>
+      <br />
+      <div
+        className="input-container-login"
+      >
+        <input
+          className="lusername-input"
+          id="lusername"
+          onChange={[Function]}
+          placeholder="Username"
+          type="text"
+          value=""
+        />
+        <input
+          className="lpassword-input"
+          id="lpassword"
+          onChange={[Function]}
+          placeholder="Password"
+          type="text"
+          value=""
+        />
+        <button
+          className="login-btn"
+          id="loginBtn"
+          onClick={[Function]}
+        >
+          Log In
+        </button>
+      </div>
+      <div
+        className="results-container"
+        id="results"
+      >
+        <p
+          id="message-2"
+        >
+            
+        </p>
+      </div>
+      <br />
+      <br />
+      <div
+        className="h5"
+      >
+        Reset Password
+      </div>
+      <br />
+      <div
+        className="input-container-resetpassword"
+      >
+        <input
+          className="rusername-input"
+          id="rusername"
+          onChange={[Function]}
+          placeholder="Username"
+          type="text"
+          value=""
+        />
+        <input
+          className="rpin-input"
+          id="rpin"
+          onChange={[Function]}
+          placeholder="Reset PIN"
+          type="text"
+          value=""
+        />
+        <input
+          className="rpassword-input"
+          id="rpassword"
+          onChange={[Function]}
+          placeholder="New Password"
+          type="text"
+          value=""
+        />
+        <button
+          className="reset-btn"
+          id="resetBtn"
+          onClick={[Function]}
+        >
+          Reset Password
+        </button>
+      </div>
+      <div
+        className="results-container"
+        id="results"
+      >
+        <p
+          id="message-3"
+        >
+            
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+`;

@@ -1,24 +1,47 @@
-// Tests
-const time = require('./time');
-const sinon = require('sinon');
-sinon.stub(time, 'setTimeout');
+// POtential test dependencies when using mongoose
+//const time = require('./time');
+//const sinon = require('sinon');
+//sinon.stub(time, 'setTimeout');
 
-// import mongoose module
-const mongoose = require("mongoose");
+const mongoose = require("mongoose"); // import mongoose module
+/*
+MongoDB access
+64Lt0KiQaU4m2DLR
+test_jp_user
+*/
 
-//import testing framework
-const request = require('supertest');
+//imported from user.js and index.js
+const express = require("express");
+const cors = require("cors");
+const jwt = require("jsonwebtoken");
+//following line ensures mongoose.js runs and mongoose connects to the database
+const userRouter = require("./src/routers/user.js");
+const statusRouter = require("./src/routers/status");
+const messageRouter = require("./src/routers/message");
+const User = require("./src/models/user");
+const auth = require("./src/middleware/auth");
+const router = new express.Router();
+const { videoToken } = require('./src/routers/tokens');
+const multer = require("multer");
+const upload = multer({
+    dest: "uploads/",
+});
+const fs = require("fs");
+const { EWOULDBLOCK } = require("constants");
+const app = express();
+app.use(cors);
+
+const request = require('supertest'); //import testing framework
 
 // Import ObjectID constructor
-//const ObjectId = require('mongodb').ObjectID;
+const ObjectId = require('mongodb').ObjectID;
 
 // URL of test db on the cloud TODO how do I get this to connect to my personal test server on the cloud?
 //const url = "mongodb+srv://stevenc61500@gmail.com:WYFmYZ)Bx[%3Aqt5ZT4Kmp@557-chat-app-cluster.jbh5s.mongodb.net/557-Chat-App?retryWrites=true&w=majority";
-
+//const url = "mongodb+srv://test_jp_user:64Lt0KiQaU4m2DLR@557-chat-app-cluster.jbh5s.mongodb.net/557-chat-app?retryWrites=true&w=majority"
 const url = "mongodb+srv://test_user:test_user@557-chat-app-cluster.jbh5s.mongodb.net/test?retryWrites=true&w=majority";
-
-
 // const url = 'mongodb+srv://jroypeterson@gmail.com:3du6tKXST4zU@cluster0.n47tz.mongodb.net/CHAT-APP-TEST-SERVER?retryWrites=true&w=majority';
+
 beforeAll(async () => {
   try{
     await mongoose.connect(url, {
@@ -34,18 +57,53 @@ beforeAll(async () => {
 });
 
 
-// Connect to our db on the cloud using mongoose.js file
+//are the tests working
+  it('Testing to see if Jest works', () => {
+    expect(1).toBe(1);
+  });
+
+
+  it('Should save user to database', async done => {
+    const res = await router.post("/users/register")
+    .send({
+        name: 'Zell',
+        email: 'Zelltest@gmail.com',
+        password: 'Zellpwordpword'
+      })
+  
+    // Searches the user in the database
+    const user = await User.findOne({ email: 'Zelltest@gmail.com' })
+    console.log(User)
+    expect(User.name).toBeTruthy()
+    expect(User.email).toBeTruthy()
+
+    done()
+  })
+
+  describe('Post Endpoints', () => {
+    it('should create a new post', async () => {
+      const res = await request(app)
+        .post('/users/register')
+        .send({
+          name: 'ZellZell',
+          email: 'Zelltesttest@gmail.com',
+          password: 'Zellpwordpwordpword'
+        })
+      expect(res.statusCode).toEqual(200)
+    })
+  })
 
 
 
-describe('Tests backend', () => {
-
-it('Testing to see if Jest works', () => {
-  expect(1).toBe(1);
+describe('Test GET', () => {
+  test('Endpoint response', async () => await request(app).get('/status').send()
+    .expect(200))
 });
-});
+
+
 
 /*
+//this seems to cause error when used. Maybe index is already imported so don't need
 const webapp = require('./index'); // TODO correct? using webapp in the index.js file
 
 const clearDatabase = async () => {
@@ -73,10 +131,6 @@ let id;
 
 // test get
 
-describe('Test GET', () => {
-  test('Endpoint response', () => request(webapp).get('/status').send()
-    .expect(200))
-});
 
 */
 /*

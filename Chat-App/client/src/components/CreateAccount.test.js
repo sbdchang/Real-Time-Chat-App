@@ -1,17 +1,18 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { render, screen } from '@testing-library/react';
-import Mainview from './Mainview';
+import CreateAccount from './CreateAccount';
 import renderer from 'react-test-renderer';
 
+it('CreateAccount Snapshot  ', () => {
+    const tree = renderer.create(<CreateAccount />).toJSON();
+    expect(tree).toMatchSnapshot();
+  });
 
 it('renders without crashing', () => {
   const div = document.createElement('div');
-  ReactDOM.render(<Mainview />, div);
+  ReactDOM.render(<CreateAccount />, div);
 });
 
-it('Mainview renders correctly  ', () => {
-  const tree = renderer.create(<Mainview />).toJSON();
-  expect(tree).toMatchSnapshot();
-});
+
 

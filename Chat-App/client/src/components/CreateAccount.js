@@ -1,6 +1,7 @@
 import React from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import {urlToUse} from "./url";
+import { urlToUse } from "./url";
+import './CreateAccount.css';
 
 export default class CreateAccount extends React.Component {
 	constructor(props) {
@@ -181,22 +182,22 @@ export default class CreateAccount extends React.Component {
 	render() {
 		return (
 			<div className="CreateAccount">
-			    <div className="container recommendations-container">
-			    	<div className="jumbotron">
-			    		<div className="h5">Create An Account</div>
-			    		<br></br>
-			    		<div className="input-container">
-							<input type='text' placeholder="Username" value={this.state.username} onChange={this.handleUsernameChange} id="username" className="username-input"/>
-							<input type='text' placeholder="Email" value={this.state.email} onChange={this.handleEmailChange} id="email" className="email-input"/>
-							<input type='text' placeholder="Password" value={this.state.password} onChange={this.handlePasswordChange} id="password" className="password-input"/>
-							<input type='text' placeholder="Reset PIN" value={this.state.pin} onChange={this.handlePinChange} id="pin" className="pin-input"/>
-			    			<button id="createAccounttBtn" className="createAcct-btn" onClick={this.createAcct}>Create Account</button>
-			    		</div>
+				<div className="container recommendations-container">
+					<div className="jumbotron">
+						<div className="h5">Create An Account</div>
+						<br></br>
+						<div className="input-container">
+							<input type='text' placeholder="Username" value={this.state.username} onChange={this.handleUsernameChange} id="username" className="username-input" />
+							<input type='text' placeholder="Email" value={this.state.email} onChange={this.handleEmailChange} id="email" className="email-input" />
+							<input type='text' placeholder="Password" value={this.state.password} onChange={this.handlePasswordChange} id="password" className="password-input" />
+							<input type='text' placeholder="Reset PIN" value={this.state.pin} onChange={this.handlePinChange} id="pin" className="pin-input" />
+							<button id="createAccounttBtn" className="createAcct-btn" onClick={this.createAcct}>Create Account</button>
+						</div>
 
-			    		<div className="results-container" id="results">
-			    			{/* {this.state.recMovies} */}
-							<p id = "message-1">  </p>
-			    		</div>
+						<div className="results-container" id="results">
+							{/* {this.state.recMovies} */}
+							<p id="message-1">  </p>
+						</div>
 
 						<br></br>
 						<br></br>
@@ -205,16 +206,16 @@ export default class CreateAccount extends React.Component {
 						<br></br>
 
 						<div className="input-container-login">
-			    			{/* <input type='text' placeholder="Enter movie" value={this.state.movieName} onChange={this.handleMovieNameChange} id="movieName" className="movie-input"/> */}
-							<input type='text' placeholder="Username" value={this.state.lusername} onChange={this.handleLoginUsernameChange} id="lusername" className="lusername-input"/>
-							<input type='text' placeholder="Password" value={this.state.lpassword} onChange={this.handleLoginPasswordChange} id="lpassword" className="lpassword-input"/>
+							{/* <input type='text' placeholder="Enter movie" value={this.state.movieName} onChange={this.handleMovieNameChange} id="movieName" className="movie-input"/> */}
+							<input type='text' placeholder="Username" value={this.state.lusername} onChange={this.handleLoginUsernameChange} id="lusername" className="lusername-input" />
+							<input type='text' placeholder="Password" value={this.state.lpassword} onChange={this.handleLoginPasswordChange} id="lpassword" className="lpassword-input" />
 							<button id="loginBtn" className="login-btn" onClick={this.loginAcct.bind(this)}>Log In</button>
-			    		</div>
+						</div>
 
 						<div className="results-container" id="results">
-			    			{/* {this.state.recMovies} */}
-							<p id = "message-2">  </p>
-			    		</div>
+							{/* {this.state.recMovies} */}
+							<p id="message-2">  </p>
+						</div>
 
 						<br></br>
 						<br></br>
@@ -223,21 +224,21 @@ export default class CreateAccount extends React.Component {
 						<br></br>
 
 						<div className="input-container-resetpassword">
-			    			{/* <input type='text' placeholder="Enter movie" value={this.state.movieName} onChange={this.handleMovieNameChange} id="movieName" className="movie-input"/> */}
-							<input type='text' placeholder="Username" value={this.state.rusername} onChange={this.handleResetPasswordUsernameChange} id="rusername" className="rusername-input"/>
-							<input type='text' placeholder="Reset PIN" value={this.state.rpin} onChange={this.handleResetPinChange} id="rpin" className="rpin-input"/>
-							<input type='text' placeholder="New Password" value={this.state.rpassword} onChange={this.handleResetPasswordChange} id="rpassword" className="rpassword-input"/>
-			    			<button id="resetBtn" className="reset-btn" onClick={this.resetPassword}>Reset Password</button>
-			    		</div>
+							{/* <input type='text' placeholder="Enter movie" value={this.state.movieName} onChange={this.handleMovieNameChange} id="movieName" className="movie-input"/> */}
+							<input type='text' placeholder="Username" value={this.state.rusername} onChange={this.handleResetPasswordUsernameChange} id="rusername" className="rusername-input" />
+							<input type='text' placeholder="Reset PIN" value={this.state.rpin} onChange={this.handleResetPinChange} id="rpin" className="rpin-input" />
+							<input type='text' placeholder="New Password" value={this.state.rpassword} onChange={this.handleResetPasswordChange} id="rpassword" className="rpassword-input" />
+							<button id="resetBtn" className="reset-btn" onClick={this.resetPassword}>Reset Password</button>
+						</div>
 
 						<div className="results-container" id="results">
-			    			{/* {this.state.recMovies} */}
-							<p id = "message-3">  </p>
-			    		</div>
+							{/* {this.state.recMovies} */}
+							<p id="message-3">  </p>
+						</div>
 
-			    	</div>
-			    </div>
-		    </div>
+					</div>
+				</div>
+			</div>
 		);
 	}
 }
