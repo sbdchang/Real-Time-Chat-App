@@ -3,40 +3,25 @@ const User = require("../models/user");
 const auth = require("../middleware/auth");
 const cors = require("cors");
 const router = new express.Router();
+const { videoToken } = require('./tokens');
+const multer = require("multer");
+const upload = multer({
+    dest: "uploads/",
+});
+const fs = require("fs");
+const { EWOULDBLOCK } = require("constants");
+const config = require('./config');
 
 const app = express();
 app.use(cors);
 
-router.get("/", function(req, res) {
-    res.send("Hello world");
-})
-
 router.post("/users/register", cors(), async (req, res) => {
     //create new user using information parsed from incoming JSON
     const user = new User(req.query);
-    await user.initMessage();
-
-    // await user.save().then((res) => {
-    //     return res.status(200).send(user);
-    // }).catch((e) => {
-        // if (e.code === 11000) {
-        //     res.status(460).send(e);
-        // } else if (e.errors.email) {
-        //     console.log("email");
-        //     res.status(461).send(e);
-        // } else if (e.errors.password) {
-        //     console.log("password");
-        //     res.status(462).send(e);
-        // } else {
-        //     res.status(463).send(e);
-        // }
-    // })
-
     try {
         await user.save();
-        // await user.init();
         res.status(200).send(user);
-    } catch(e) {
+    } catch (e) {
         if (e.code === 11000) {
             res.status(460).send(e);
         } else if (e.errors.email) {
@@ -52,24 +37,16 @@ router.post("/users/register", cors(), async (req, res) => {
             res.status(464).send(e);
         }
     }
-
-    // user.save().then(() => {
-    //     res.send(user)
-    // }).catch((e) => {
-    //     //set status code to the most accurate for this particular error situation. httpstatuses.com for list of all status codes
-    //     res.status(400).send(e);
-    // });
 });
 
 //log in to existing account
-router.post("/users/login", cors(), async(req, res) => {
+router.post("/users/login", cors(), async (req, res) => {
     console.log(req.query);
     try {
         const user = await User.findByCredentials(req.query.username, req.query.password);
         // const user = await User.findByCredentials(req.body.username, req.body.password);
 
         const token = await user.generateAuthToken();
-
         res.json({
             user: user,
             token: token
@@ -90,7 +67,7 @@ router.post("/users/login", cors(), async(req, res) => {
     }
 })
 
-router.post("/users/login/reset", cors(), async(req, res) => {
+router.post("/users/login/reset", cors(), async (req, res) => {
     console.log(req.query);
     try {
 
@@ -116,7 +93,7 @@ router.post("/users/login/reset", cors(), async(req, res) => {
     }
 })
 
-router.post("/users/logout", auth, async (req, res) => {
+router.post("/users/logout", cors(), auth, async (req, res) => {
     try {
         //filter out and remove the token from the session that the user is logging out from
         req.user.tokens = req.user.tokens.filter((token) => {
@@ -154,11 +131,14 @@ router.get("/users", cors(), async (req, res) => {
     try {
         const users = await User.find();
         var users_stripped = []
-        for(var i = 0; i < users.length; i++) {
-          users_stripped.push({username: users[i].username, email: users[i].email});
+        for (var i = 0; i < users.length; i++) {
+            users_stripped.push({
+                username: users[i].username, email: users[i].email,
+                activeRecord: users[i].activeRecord, contacts: users[i].contacts
+            });
         }
         res.json(users_stripped);
-    } catch(e) {
+    } catch (e) {
         res.status(500).send();
     }
 });
@@ -166,42 +146,110 @@ router.get("/users", cors(), async (req, res) => {
 router.get("/users/date", cors(), async (req, res) => {
     try {
         const users = await User.find();
-        res.status(200).json(users[0]);
         // search a particular user in the user array
-        // for(var i = 0; i < users.length; i++) {
-        //     if(users[i].username == req.query.username) {
-        //         res.status(200).json(users[i]);
-        //     }
-        // }
-    } catch(e) {
+        for (var i = 0; i < users.length; i++) {
+            if (users[i].username == req.query.username) {
+                res.status(200).json(users[i]);
+            }
+        }
+    } catch (e) {
         res.status(500).send();
     }
 });
 
-router.post("/users/send", cors(), async (req, res) => {
+router.post("/users/deactivate", cors(), async (req, res) => {
     try {
-        await User.updateMessage(req.query.sender, req.query.receiver, req.query.msg, req.query.type);
-        console.log(req.query.msg);
+        const user = await User.findOne({ username: req.query.username });
+        user.activeRecord = 1;
+        await user.save();
         res.status(200).send();
-    } catch(e) {
+    } catch (e) {
         res.status(500).send();
     }
 });
 
-router.get("/users/receive", cors(), async (req, res) => {
+router.post("/users/change", cors(), async (req, res) => {
     try {
-        const user = await User.findOne({username: req.query.receiver});
-        res.status(200).json(user.messages);
-    } catch(e) {
-        res.status(500).send();
+        const users = await User.find();
+        await User.resetPassword(req.query.username, req.query.cpw, req.query.npw);
+        for (var i = 0; i < users.length; i++) {
+            if (users[i].username == req.query.username) {
+                res.status(200).send();
+            }
+        }
+    } catch (e) {
+        const errorMessage = e.toString();
+        if (errorMessage.includes("Incorrect corrent password.")) {
+            res.status(400).send(e);
+        } else if (errorMessage.includes("Password must be at least 8 characters long.")) {
+            res.status(401).send(e);
+        } else if (errorMessage.includes("Password cannot contain 'password'.")) {
+            res.status(402).send(e);
+        } else if (errorMessage.includes("Password must contain at least one special character.")) {
+            res.status(403).send(e);
+        } else {
+            res.status(404).send(e);
+        }
     }
 });
 
-router.post("/users/read", cors(), async (req, res) => {
+router.post("/users/add", cors(), async (req, res) => {
     try {
-        await User.clearMessage(req.query.sender, req.query.receiver);
+        const user = await User.findOne({ username: req.query.username });
+        user.contacts.push(req.query.contact);
+        await user.save();
         res.status(200).send();
-    } catch(e) {
+    } catch (e) {
+        res.status(500).send();
+    }
+});
+
+router.post("/users/addRec", cors(), async (req, res) => {
+    try {
+        const user = await User.findOne({ username: req.query.username });
+        user.contacts.push(req.query.contact);
+        await user.save();
+        res.status(200).send();
+    } catch (e) {
+        res.status(500).send();
+    }
+});
+
+router.post("/users/remove", cors(), async (req, res) => {
+    try {
+        const user = await User.findOne({ username: req.query.username });
+        for (var i = 0; i < user.contacts.length; i++) {
+            if (req.query.contact === user.contacts[i]) {
+                var temp = user.contacts;
+                temp.splice(i, 1);
+                user.contacts = temp;
+            }
+        }
+        await user.save();
+        res.status(200).send();
+    } catch (e) {
+        res.status(500).send();
+    }
+});
+
+router.post("/users/shuffle", cors(), async (req, res) => {
+    try {
+        const user = await User.findOne({ username: req.query.receiver });
+        for (var i = 0; i < user.contacts.length; i++) {
+            if (req.query.sender === user.contacts[i]) {
+                var final = [];
+                var temp = user.contacts;
+                temp.splice(i, 1);
+                final.push(req.query.sender);
+                for (var j = 0; j < temp.length; j++) {
+                    final.push(temp[j]);
+                }
+                user.contacts = final;
+            }
+        }
+        await user.save();
+        res.status(200).send();
+    } catch (e) {
         res.status(500).send();
     }
 });
@@ -248,7 +296,7 @@ router.patch("/users/update/:id", cors(), async (req, res) => {
     });
 
     if (!isValidUpdateOperation) {
-        return res.status(400).send({error: "Invalid updates."});
+        return res.status(400).send({ error: "Invalid updates." });
     };
 
     try {
@@ -275,7 +323,7 @@ router.patch("/users/update/:id", cors(), async (req, res) => {
     };
 });
 
-router.delete("/users/delete/:id", async(req, res) => {
+router.delete("/users/delete/:id", cors(), async (req, res) => {
     try {
         const user = await User.findByIdAndDelete(req.params.id);
 
@@ -290,47 +338,52 @@ router.delete("/users/delete/:id", async(req, res) => {
     }
 });
 
-router.post("/users/change", cors(), async (req, res) => {
+const sendTokenResponse = (token, res) => {
+    res.set('Content-Type', 'application/json');
+    res.send(
+        JSON.stringify({
+            token: token.toJwt()
+        })
+    );
+};
+
+router.get('/video/token', (req, res) => {
+    const identity = req.query.identity;
+    const room = req.query.room;
+    const token = videoToken(identity, room, config);
+    sendTokenResponse(token, res);
+
+});
+router.post('/video/token', (req, res) => {
+    const identity = req.body.identity;
+    const room = req.body.room;
+    const token = videoToken(identity, room, config);
+    sendTokenResponse(token, res);
+});
+
+
+router.post('/videochat', async (req, res) => {
+    const callee = req.body.callee;
+    const caller = req.body.caller;
     try {
-        const users = await User.find();
-        const result = await User.resetPassword(req.query.username, req.query.cpw, req.query.npw);
-        // search a particular user in the user array
-        if (result === 0) {
-            res.status(300).send();
-        } else {
-            for(var i = 0; i < users.length; i++) {
-                if(users[i].username == req.query.username) {
-                    res.status(200).send();
-                }
-            }
-        }
-        // res.status(200).send("!");
-    } catch(e) {
+        const user = await User.findOne({ username: callee });
+        user.caller = caller;
+        await user.save();
+        res.status(200).send();
+    } catch (e) {
         res.status(500).send();
     }
-    // try {
-    //     const users = await User.find();
-    //     const result = await User.resetPassword(req.query.username, req.query.cpw, req.query.npw);
-    //     // search a particular user in the user array
-    //     for(var i = 0; i < users.length; i++) {
-    //         if(users[i].username == req.query.username) {
-    //             res.status(200).send(result);
-    //         }
-    //     }
-    // } catch(e) {
-    //     const errorMessage = e.toString();
-    //     if (errorMessage.includes("Password must be at least 8 characters long.")) {
-    //         res.status(401).send(e);
-    //     } else if (errorMessage.includes("Password cannot contain 'password'.")) {
-    //         res.status(402).send(e);
-    //     } else if (errorMessage.includes("Password must contain at least one special character.")) {
-    //         res.status(403).send(e);
-    //     } else if (errorMessage.includes("Incorrect corrent password.")) {
-    //         res.status(400).send(e);
-    //     } else {
-    //         res.status(470).send(e);
-    //     }
-    // }
+});
+
+router.get('/getting_video_chat', async (req, res) => {
+    const callee = req.query.callee;
+    const user = await User.findOne({ username: callee });
+    res.set('Content-Type', 'application/json');
+    res.send(
+        JSON.stringify({
+            caller: user.caller
+        })
+    );
 });
 
 module.exports = router;

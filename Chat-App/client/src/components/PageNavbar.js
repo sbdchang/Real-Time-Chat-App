@@ -15,7 +15,7 @@ export default class PageNavbar extends React.Component {
 		this.setState({
 			username: await window.location.href.split('=').pop()
 		});
-		const pageList = ['mainview', 'userprofile'];
+		const pageList = ['mainview', 'userprofile', 'statuses'];
 
 		let navbarDivs = pageList.map((page, i) => {
 			if (this.props.active === page) {
