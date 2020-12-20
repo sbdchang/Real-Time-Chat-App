@@ -361,4 +361,29 @@ router.post('/video/token', (req, res) => {
     sendTokenResponse(token, res);
 });
 
+
+router.post('/videochat', async (req, res) => {
+    const callee = req.body.callee;
+    const caller = req.body.caller;
+    try {
+        const user = await User.findOne({ username: callee });
+        user.caller = caller;
+        await user.save();
+        res.status(200).send();
+    } catch (e) {
+        res.status(500).send();
+    }
+});
+
+router.get('/getting_video_chat', async (req, res) => {
+    const callee = req.query.callee;
+    const user = await User.findOne({ username: callee });
+    res.set('Content-Type', 'application/json');
+    res.send(
+        JSON.stringify({
+            caller: user.caller
+        })
+    );
+});
+
 module.exports = router;

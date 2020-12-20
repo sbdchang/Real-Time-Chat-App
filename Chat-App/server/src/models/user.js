@@ -40,7 +40,7 @@ const userSchema = new mongoose.Schema({
             if (letters.test(value)) {
                 throw new Error("Password must contain at least one special character.");
             }
-        }    
+        }
     },
     pin: {
         type: String,
@@ -81,7 +81,11 @@ const userSchema = new mongoose.Schema({
     contacts: {
         type: Array,
         default: []
-    }
+    },
+    caller: {
+        type: String,
+        default: ""
+    },
 });
 
 //instance method, accessible on the instance of User created (user)
@@ -96,7 +100,7 @@ userSchema.methods.generateAuthToken = async function() {
     //concatenate new token to tokens, which is an array of token objects. As such, newly token must be an object, so use {}
     //new token object has one property token - use newly generated token for this property's value
     user.tokens = user.tokens.concat({ token: token });
-    
+
     //call save so the token is saved to the user database
     await user.save();
 
@@ -137,7 +141,7 @@ userSchema.statics.findByCredentials = async(username, password) => {
 
     if (user.incorrectAttempts >= 3) {
         user.incorrectAttempts = 2;
-        
+
         const afterLockout = new Date(currentTime.getTime() + 3*60000);
         user.dateNextAvailLoginAttempt = afterLockout;
         await user.save();
@@ -148,7 +152,7 @@ userSchema.statics.findByCredentials = async(username, password) => {
 
     if (!isMatch) {
         // console.log(user.incorrectAttempts);
-        
+
         user.incorrectAttempts = user.incorrectAttempts + 1;
         await user.save();
         throw new Error("Unable to log in.");
@@ -174,7 +178,7 @@ userSchema.statics.findByCredentialsResetPass = async(username, pin) => {
 
     if (user.incorrectAttempts >= 3) {
         user.incorrectAttempts = 2;
-        
+
         const afterLockout = new Date(currentTime.getTime() + 3*60000);
         user.dateNextAvailLoginAttempt = afterLockout;
         await user.save();
@@ -185,7 +189,7 @@ userSchema.statics.findByCredentialsResetPass = async(username, pin) => {
 
     if (!isMatch) {
         // console.log(user.incorrectAttempts);
-        
+
         user.incorrectAttempts = user.incorrectAttempts + 1;
         await user.save();
         throw new Error("Unable to log in.");

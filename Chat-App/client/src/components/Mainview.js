@@ -106,6 +106,22 @@ export default class Mainview extends React.Component {
                 }
             }
         }
+        window.setInterval(async () => {
+          console.log("adsfasdf")
+          const data = await fetch(`${urlToUse.url.API_URL}/getting_video_chat?callee=${this.state.username}`, {
+            method: 'GET'
+          }).then((res) => {
+            return res.json();
+          });
+          if (data.caller !== "") {
+            let result = window.confirm(`${data.caller} is calling you. Would you like to answer?`);
+            if (result) {
+              const url = `${document.location.origin}/videochat?room_name=${data.caller}${this.state.username}&user_name=${this.state.username}`;
+              window.location.replace(url);
+            }
+          }
+        }, 3000);
+
     }
 
     async contactOpen(user, email) {
@@ -341,6 +357,20 @@ export default class Mainview extends React.Component {
                 }
             }
         }
+    }
+
+    async videoCall() {
+      await fetch(`${urlToUse.url.API_URL}/videochat`, {
+        method: 'POST',
+        body: JSON.stringify({
+          callee: this.state.currentUser
+        }),
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+      const url = `${document.location.origin}/videochat?room_name=${this.state.username}${this.state.currentUser}&user_name=${this.state.username}`
+      window.location.replace(url);
     }
 
     selectContact() {
@@ -671,6 +701,7 @@ export default class Mainview extends React.Component {
                                 <p>Send Image: <input type="file" onChange={this.sendImage} className="filetype" id="image_inpt" /> {this.state.image}</p>
                                 <p>Send Audio: <input type="file" onChange={this.sendAudio} className="filetype" id="audio_inpt" /> {this.state.audio}</p>
                                 <p>Send Video: <input type="file" onChange={this.sendVideo} className="filetype" id="video_inpt" /> {this.state.video}</p>
+                                <button id="sendbtn2" onClick={this.videoCall.bind(this)}>Video call: {this.state.currentUser}</button>
                             </Modal.Body>
                             <Modal.Footer>
                             </Modal.Footer>

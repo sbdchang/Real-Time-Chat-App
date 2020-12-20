@@ -17,6 +17,26 @@ const Room = ({ roomName, token, handleLogout }) => {
       );
     };
 
+    var minutesLabel = document.getElementById("minutes");
+    var secondsLabel = document.getElementById("seconds");
+    var totalSeconds = 0;
+    setInterval(setTime, 1000);
+
+    function setTime() {
+      ++totalSeconds;
+      secondsLabel.innerHTML = pad(totalSeconds % 60);
+      minutesLabel.innerHTML = pad(parseInt(totalSeconds / 60));
+    }
+
+    function pad(val) {
+      var valString = val + "";
+      if (valString.length < 2) {
+        return "0" + valString;
+      } else {
+        return valString;
+      }
+    }
+
     Video.connect(token, {
       name: roomName
     }).then(room => {
@@ -48,7 +68,9 @@ const Room = ({ roomName, token, handleLogout }) => {
   return (
     <div className="room">
       <h2>Room: {roomName}</h2>
-      <button onClick={handleLogout}>Log out</button>
+      <button onClick={handleLogout}>End call</button> <br /> <br />
+      <div style={{ color: 'white'}}>Time elapsed <label id="minutes">00</label>:<label id="seconds">00</label></div>
+
       <div className="local-participant">
         {room ? (
           <Participant

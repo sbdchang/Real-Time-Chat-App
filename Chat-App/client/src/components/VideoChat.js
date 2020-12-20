@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import {urlToUse} from "./url";
 import Lobby from './Lobby';
 import Room from './Room';
@@ -8,17 +8,42 @@ const VideoChat = () => {
   const [roomName, setRoomName] = useState('');
   const [token, setToken] = useState(null);
 
+
+
+  // useEffect(() => {
+  //   const queryString = window.location.search;
+  //   const urlParams = new URLSearchParams(queryString);
+  //   const room_name = urlParams.get('room_name');
+  //   const user_name = urlParams.get('user_name');
+  //   setUsername(user_name);
+  //   setRoomName(room_name);
+  //   const data = fetch(`${urlToUse.url.API_URL}/video/token`, {
+  //     method: 'POST',
+  //     body: JSON.stringify({
+  //       identity: username,
+  //       room: roomName
+  //     }),
+  //     headers: {
+  //       'Content-Type': 'application/json'
+  //     }
+  //   }).then(res => {
+  //     const data = res.json();
+  //     console.log(data.token);
+  //     setToken(data.token);
+  //   });
+  // }, []);
+
   const handleUsernameChange = useCallback(event => {
-    setUsername(event.target.value);
+    setUsername(event);
   }, []);
 
   const handleRoomNameChange = useCallback(event => {
-    setRoomName(event.target.value);
+    setRoomName(event);
   }, []);
 
   const handleSubmit = useCallback(
-    async event => {
-      event.preventDefault();
+    async () => {
+      // event.preventDefault();
       const data = await fetch(`${urlToUse.url.API_URL}/video/token`, {
         method: 'POST',
         body: JSON.stringify({
@@ -35,8 +60,8 @@ const VideoChat = () => {
   );
 
   const handleLogout = useCallback(event => {
-    setToken(null);
-  }, []);
+    window.location.replace(`${document.location.origin}/mainview?username=${username}`);
+  }, [username]);
 
   let render;
   if (token) {
