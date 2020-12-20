@@ -5,6 +5,7 @@ import axios from 'axios';
 import { urlToUse } from "./url";
 import { Modal } from 'react-bootstrap';
 import _ from 'lodash';
+import 'Mainview.css';
 
 export default class Mainview extends React.Component {
     constructor(props) {
@@ -107,29 +108,29 @@ export default class Mainview extends React.Component {
             }
         }
         window.setInterval(async () => {
-          const data = await fetch(`${urlToUse.url.API_URL}/getting_video_chat?callee=${this.state.username}`, {
-            method: 'GET'
-          }).then((res) => {
-            return res.json();
-          });
-          if (data.caller !== "") {
-            let result = window.confirm(`${data.caller} is calling you. Would you like to answer?`);
-            if (result) {
-              const url = `${document.location.origin}/videochat?room_name=${data.caller}${this.state.username}&user_name=${this.state.username}`;
-              window.location.replace(url);
-            } else {
-              await fetch(`${urlToUse.url.API_URL}/videochat`, {
-                method: 'POST',
-                body: JSON.stringify({
-                  callee: this.state.username,
-                  caller: ""
-                }),
-                headers: {
-                  'Content-Type': 'application/json'
+            const data = await fetch(`${urlToUse.url.API_URL}/getting_video_chat?callee=${this.state.username}`, {
+                method: 'GET'
+            }).then((res) => {
+                return res.json();
+            });
+            if (data.caller !== "") {
+                let result = window.confirm(`${data.caller} is calling you. Would you like to answer?`);
+                if (result) {
+                    const url = `${document.location.origin}/videochat?room_name=${data.caller}${this.state.username}&user_name=${this.state.username}`;
+                    window.location.replace(url);
+                } else {
+                    await fetch(`${urlToUse.url.API_URL}/videochat`, {
+                        method: 'POST',
+                        body: JSON.stringify({
+                            callee: this.state.username,
+                            caller: ""
+                        }),
+                        headers: {
+                            'Content-Type': 'application/json'
+                        }
+                    });
                 }
-              });
             }
-          }
         }, 3000);
 
     }
@@ -370,34 +371,34 @@ export default class Mainview extends React.Component {
     }
 
     async videoCall() {
-      await fetch(`${urlToUse.url.API_URL}/videochat`, {
-        method: 'POST',
-        body: JSON.stringify({
-          callee: this.state.currentUser,
-          caller: this.state.username
-        }),
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      }).then( response => {
-        console.log(response.status);
-        if (response.status == 201) {
-          alert(`${this.state.currentUser} isn't online right now!`);
-          return
-        }
-        window.setTimeout(async () => {
-          const data = await fetch(`${urlToUse.url.API_URL}/getting_video_chat?callee=${this.state.currentUser}`, {
-            method: 'GET'
-          }).then((res) => {
-            return res.json();
-          });
-          if (data.caller === "") {
-            alert(`${this.state.currentUser} doesn't want to talk right now!`);
-          }
-        }, 3000);
-        const url = `${document.location.origin}/videochat?room_name=${this.state.username}${this.state.currentUser}&user_name=${this.state.username}`
-        window.location.replace(url);
-      })
+        await fetch(`${urlToUse.url.API_URL}/videochat`, {
+            method: 'POST',
+            body: JSON.stringify({
+                callee: this.state.currentUser,
+                caller: this.state.username
+            }),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }).then(response => {
+            console.log(response.status);
+            if (response.status == 201) {
+                alert(`${this.state.currentUser} isn't online right now!`);
+                return
+            }
+            window.setTimeout(async () => {
+                const data = await fetch(`${urlToUse.url.API_URL}/getting_video_chat?callee=${this.state.currentUser}`, {
+                    method: 'GET'
+                }).then((res) => {
+                    return res.json();
+                });
+                if (data.caller === "") {
+                    alert(`${this.state.currentUser} doesn't want to talk right now!`);
+                }
+            }, 3000);
+            const url = `${document.location.origin}/videochat?room_name=${this.state.username}${this.state.currentUser}&user_name=${this.state.username}`
+            window.location.replace(url);
+        })
     }
 
     selectContact() {
@@ -525,16 +526,16 @@ export default class Mainview extends React.Component {
     }
 
     async logout_one() {
-      await fetch(`${urlToUse.url.API_URL}/logout_one`, {
-        method: 'POST',
-        body: JSON.stringify({
-          username: this.state.username,
-        }),
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      });
-      window.location.replace(document.location.origin);
+        await fetch(`${urlToUse.url.API_URL}/logout_one`, {
+            method: 'POST',
+            body: JSON.stringify({
+                username: this.state.username,
+            }),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+        window.location.replace(document.location.origin);
     }
 
     render() {
@@ -544,7 +545,7 @@ export default class Mainview extends React.Component {
                 <br></br>
                 <div className="container">
                     <div className="jumbotron">
-                      <button onClick={() => this.logout_one()} className="user1">Logout</button>
+                        <button onClick={() => this.logout_one()} className="user1">Logout</button>
                         <div className="h5">My Contacts<button id="removeselectbtn" className="btn" onClick={this.selectMyContact}>{this.state.removebtn[0]}</button>
                             <button id="removebtn" className="btn" onClick={this.removeContact}>{this.state.removebtn[1]}</button> </div>
                         {this.state.contacts.map((value, index) => {
