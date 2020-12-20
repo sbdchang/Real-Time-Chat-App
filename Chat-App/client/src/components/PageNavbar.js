@@ -1,5 +1,6 @@
 import React from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import './Navbar.css';
 
 export default class PageNavbar extends React.Component {
 	constructor(props) {
@@ -43,14 +44,14 @@ export default class PageNavbar extends React.Component {
 		return (
 			<div className="PageNavbar">
 				<nav className="navbar navbar-expand-lg navbar-light bg-light">
-			      <span className="navbar-brand center">CIS557</span>
-			      <div className="collapse navbar-collapse" id="navbarNavAltMarkup">
-			        <div className="navbar-nav">
-			        {this.state.navDivs}
-			        </div>
-			      </div>
-			    </nav>
+					<span className="navbar-brand center">CIS557</span>
+					<div className="collapse navbar-collapse" id="navbarNavAltMarkup">
+						<div className="navbar-nav">
+							{this.state.navDivs}
+						</div>
+					</div>
+				</nav>
 			</div>
-  	);
+		);
 	}
 }
