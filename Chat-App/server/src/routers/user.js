@@ -47,6 +47,8 @@ router.post("/users/login", cors(), async (req, res) => {
         // const user = await User.findByCredentials(req.body.username, req.body.password);
 
         const token = await user.generateAuthToken();
+        user.online = true;
+        await user.save();
         res.json({
             user: user,
             token: token
@@ -367,9 +369,14 @@ router.post('/videochat', async (req, res) => {
     const caller = req.body.caller;
     try {
         const user = await User.findOne({ username: callee });
-        user.caller = caller;
-        await user.save();
-        res.status(200).send();
+        if (user.online) {
+          user.caller = caller;
+          await user.save();
+          res.status(200).send();
+        } else {
+          res.status(201).send();
+        }
+
     } catch (e) {
         res.status(500).send();
     }
@@ -385,5 +392,18 @@ router.get('/getting_video_chat', async (req, res) => {
         })
     );
 });
+
+router.post('/logout_one', async (req, res) => {
+    const username = req.body.username;
+    try {
+        const user = await User.findOne({ username: username });
+        user.online = false;
+        await user.save();
+        res.status(200).send();
+    } catch (e) {
+        res.status(500).send();
+    }
+});
+
 
 module.exports = router;

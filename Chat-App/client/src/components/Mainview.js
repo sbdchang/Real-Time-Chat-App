@@ -379,9 +379,25 @@ export default class Mainview extends React.Component {
         headers: {
           'Content-Type': 'application/json'
         }
-      });
-      const url = `${document.location.origin}/videochat?room_name=${this.state.username}${this.state.currentUser}&user_name=${this.state.username}`
-      window.location.replace(url);
+      }).then( response => {
+        console.log(response.status);
+        if (response.status == 201) {
+          alert(`${this.state.currentUser} isn't online right now!`);
+          return
+        }
+        window.setTimeout(async () => {
+          const data = await fetch(`${urlToUse.url.API_URL}/getting_video_chat?callee=${this.state.currentUser}`, {
+            method: 'GET'
+          }).then((res) => {
+            return res.json();
+          });
+          if (data.caller === "") {
+            alert(`${this.state.currentUser} doesn't want to talk right now!`);
+          }
+        }, 3000);
+        const url = `${document.location.origin}/videochat?room_name=${this.state.username}${this.state.currentUser}&user_name=${this.state.username}`
+        window.location.replace(url);
+      })
     }
 
     selectContact() {
@@ -508,6 +524,19 @@ export default class Mainview extends React.Component {
         }
     }
 
+    async logout_one() {
+      await fetch(`${urlToUse.url.API_URL}/logout_one`, {
+        method: 'POST',
+        body: JSON.stringify({
+          username: this.state.username,
+        }),
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+      window.location.replace(document.location.origin);
+    }
+
     render() {
         return (
             <div className="Mainview">
@@ -515,6 +544,7 @@ export default class Mainview extends React.Component {
                 <br></br>
                 <div className="container">
                     <div className="jumbotron">
+                      <button onClick={() => this.logout_one()} className="user1">Logout</button>
                         <div className="h5">My Contacts<button id="removeselectbtn" className="btn" onClick={this.selectMyContact}>{this.state.removebtn[0]}</button>
                             <button id="removebtn" className="btn" onClick={this.removeContact}>{this.state.removebtn[1]}</button> </div>
                         {this.state.contacts.map((value, index) => {
