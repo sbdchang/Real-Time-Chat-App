@@ -21,6 +21,11 @@ To run the app locally:
 - Open command prompt in the folder: /Chat-App/client
 - run in terminal `npm run test`
 
+4. Run back end test:
+
+- Open command prompt in the folder: /Chat-App/server
+- run in terminal `npm run test`
+
 Swagger API Documentation: _Will be Here_
 
 ## This document describes the project requirements for the Fall 2020 CIS557 Group Project.
