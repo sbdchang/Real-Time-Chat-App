@@ -5,11 +5,13 @@ import axios from 'axios';
 import { urlToUse } from "./url";
 import { Modal } from 'react-bootstrap';
 import _ from 'lodash';
+import { ReactMic } from 'react-mic';
 
 export default class Mainview extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            record: false,
             username: "",
             users: [],
             showModal: false,
@@ -263,6 +265,7 @@ export default class Mainview extends React.Component {
         if (file && file[0]) {
             const audio = file[0];
             let formData = new FormData();
+            console.log(audio);
             formData.append("audio", audio);
             await fetch(`${urlToUse.url.API_URL}/message/audio?sender=${this.state.username}&receiver=${this.state.currentUser}`, {
                 method: "POST",
@@ -290,11 +293,39 @@ export default class Mainview extends React.Component {
         }
     }
 
+    sendAudioFile = async (audio) => {
+        let formData = new FormData();
+        formData.append("audio", audio);
+        await fetch(`${urlToUse.url.API_URL}/message/audio1?sender=${this.state.username}&receiver=${this.state.currentUser}`, {
+            method: "POST",
+            body: formData
+        }).then((response) => {
+            if (response.status === 200) {
+                response.json().then((response) => {
+                    if (this.state.messages.length % 5 === 0) {
+                        var tempPage = this.state.page;
+                        const newPage = this.state.messages.length / 5 + 1;
+                        tempPage.push(newPage);
+                        this.setState({ page: tempPage });
+                    }
+                    var temp = this.state.messages;
+                    temp.push(response);
+                    this.setState({ messages: temp });
+                });
+                fetch(`${urlToUse.url.API_URL}/users/shuffle?sender=${this.state.username}&receiver=${this.state.currentUser}`, {
+                    method: "POST",
+                });
+            } else if (response.status === 400) {
+                this.setState({ audio: "Failure: Your Audio is too Large!" });
+            }
+        })
+    }
+
     sendVideo = async (event) => {
         const file = event.target.files;
         if (file && file[0]) {
             const video = file[0];
-            let formData = new FormData();
+            let formData = new FormData
             formData.append("video", video);
             await fetch(`${urlToUse.url.API_URL}/message/video?sender=${this.state.username}&receiver=${this.state.currentUser}`, {
                 method: "POST",
@@ -537,6 +568,30 @@ export default class Mainview extends React.Component {
       window.location.replace(document.location.origin);
     }
 
+
+    startRecording = () => {
+      this.setState({ record: true });
+    }
+
+    stopRecording = () => {
+      this.setState({ record: false });
+    }
+
+    onData(recordedBlob) {
+      console.log('chunk of real-time data is: ', recordedBlob);
+    }
+
+    onStop(recordedBlob) {
+      console.log('recordedBlob is: ', recordedBlob);
+      // var file = new File([recordedBlob], "new_audio.mp3");
+      // window.URL.createObjectURL(recordedBlob);
+      // const file = new File([recordedBlob], 'new_audio.mp3', { type: recordedBlob.type })
+      // console.log(file);
+      this.sendAudioFile(recordedBlob);
+      // var blobUrl = window.URL.createObjectURL(recordedBlob);
+      // console.log(blobUrl);
+    }
+
     render() {
         return (
             <div className="Mainview">
@@ -544,7 +599,7 @@ export default class Mainview extends React.Component {
                 <br></br>
                 <div className="container">
                     <div className="jumbotron">
-                      <button onClick={() => this.logout_one()} className="user1">Logout</button>
+                        <button onClick={() => this.logout_one()} className="user1">Logout</button>
                         <div className="h5">My Contacts<button id="removeselectbtn" className="btn" onClick={this.selectMyContact}>{this.state.removebtn[0]}</button>
                             <button id="removebtn" className="btn" onClick={this.removeContact}>{this.state.removebtn[1]}</button> </div>
                         {this.state.contacts.map((value, index) => {
@@ -742,6 +797,19 @@ export default class Mainview extends React.Component {
                                 <p>Send Image: <input type="file" onChange={this.sendImage} className="filetype" id="image_inpt" /> {this.state.image}</p>
                                 <p>Send Audio: <input type="file" onChange={this.sendAudio} className="filetype" id="audio_inpt" /> {this.state.audio}</p>
                                 <p>Send Video: <input type="file" onChange={this.sendVideo} className="filetype" id="video_inpt" /> {this.state.video}</p>
+                                <p style={{ width: "20px"}}>
+                                  <ReactMic
+                                    style={{ width: "20px"}}
+                                    record={this.state.record}
+                                    className="sound-wave"
+                                    onStop={this.onStop.bind(this)}
+                                    onData={this.onData}
+                                    strokeColor="#000000"
+                                    mimeType="audio/mp3"
+                                    backgroundColor="#FF4081" />
+                                  <button onClick={this.startRecording} type="button">Start</button>
+                                  <button onClick={this.stopRecording} type="button">Send</button>
+                                </p>
                                 <button id="sendbtn2" onClick={this.videoCall.bind(this)}>Video call: {this.state.currentUser}</button>
                             </Modal.Body>
                             <Modal.Footer>
