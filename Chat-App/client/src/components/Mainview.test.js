@@ -1,7 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { render, screen } from '@testing-library/react';
+import { fireEvent, render } from '@testing-library/react';
 import Mainview from './Mainview';
+import { queryByAttribute } from '@testing-library/react';
+
 
 
 it('renders without crashing', () => {
@@ -9,10 +11,17 @@ it('renders without crashing', () => {
   ReactDOM.render(<Mainview />, div);
 });
 
-/*
-it('renders contacts', () => {
-  render(<Mainview />);
-  expect(screen.getByText('Contacts')).toBeInTheDocument();
-});
+// describe('Testing postStatus function', () => {
+//   test('random test', () => {
+//     const { container } = render(<Mainview />);
 
-*/
+//     const getById = queryByAttribute.bind(null, 'id');
+
+//     const sc = getById(container, 'sc');
+
+//     fireEvent.change(sc, 'what');
+
+//     expect(sc.value).toEqual('');
+
+//   })
+// })

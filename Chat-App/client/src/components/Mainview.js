@@ -5,6 +5,7 @@ import axios from 'axios';
 import { urlToUse } from "./url";
 import { Modal } from 'react-bootstrap';
 import _ from 'lodash';
+import './Mainview.css';
 
 export default class Mainview extends React.Component {
     constructor(props) {
@@ -107,29 +108,29 @@ export default class Mainview extends React.Component {
             }
         }
         window.setInterval(async () => {
-          const data = await fetch(`${urlToUse.url.API_URL}/getting_video_chat?callee=${this.state.username}`, {
-            method: 'GET'
-          }).then((res) => {
-            return res.json();
-          });
-          if (data.caller !== "") {
-            let result = window.confirm(`${data.caller} is calling you. Would you like to answer?`);
-            if (result) {
-              const url = `${document.location.origin}/videochat?room_name=${data.caller}${this.state.username}&user_name=${this.state.username}`;
-              window.location.replace(url);
-            } else {
-              await fetch(`${urlToUse.url.API_URL}/videochat`, {
-                method: 'POST',
-                body: JSON.stringify({
-                  callee: this.state.username,
-                  caller: ""
-                }),
-                headers: {
-                  'Content-Type': 'application/json'
+            const data = await fetch(`${urlToUse.url.API_URL}/getting_video_chat?callee=${this.state.username}`, {
+                method: 'GET'
+            }).then((res) => {
+                return res.json();
+            });
+            if (data.caller !== "") {
+                let result = window.confirm(`${data.caller} is calling you. Would you like to answer?`);
+                if (result) {
+                    const url = `${document.location.origin}/videochat?room_name=${data.caller}${this.state.username}&user_name=${this.state.username}`;
+                    window.location.replace(url);
+                } else {
+                    await fetch(`${urlToUse.url.API_URL}/videochat`, {
+                        method: 'POST',
+                        body: JSON.stringify({
+                            callee: this.state.username,
+                            caller: ""
+                        }),
+                        headers: {
+                            'Content-Type': 'application/json'
+                        }
+                    });
                 }
-              });
             }
-          }
         }, 3000);
 
     }
@@ -370,18 +371,18 @@ export default class Mainview extends React.Component {
     }
 
     async videoCall() {
-      await fetch(`${urlToUse.url.API_URL}/videochat`, {
-        method: 'POST',
-        body: JSON.stringify({
-          callee: this.state.currentUser,
-          caller: this.state.username
-        }),
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      });
-      const url = `${document.location.origin}/videochat?room_name=${this.state.username}${this.state.currentUser}&user_name=${this.state.username}`
-      window.location.replace(url);
+        await fetch(`${urlToUse.url.API_URL}/videochat`, {
+            method: 'POST',
+            body: JSON.stringify({
+                callee: this.state.currentUser,
+                caller: this.state.username
+            }),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+        const url = `${document.location.origin}/videochat?room_name=${this.state.username}${this.state.currentUser}&user_name=${this.state.username}`
+        window.location.replace(url);
     }
 
     selectContact() {

@@ -10,4 +10,14 @@ it('renders without crashing', () => {
   ReactDOM.render(<UserProfile />, div);
 });
 
-//add test for text elements
+//Following are tests for UserProfile page
+
+
+// import { render, queryByAttribute } from 'react-testing-library';
+
+// const getById = queryByAttribute.bind(null, 'id');
+
+// const dom = render(<UserProfile />);
+// const table = getById(dom.container, 'directory-table');
+
+
