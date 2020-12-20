@@ -4,25 +4,26 @@
 const {
     Builder, By, Key, until,
   } = require('selenium-webdriver');
-  
-  // declare the -web- driver
-  let driver;
-  
-    // initialize the driver before running the tests
-  beforeAll(async () => {
-    driver = await new Builder().forBrowser('firefox').build();
-  });
 
+  // // declare the -web- driver
+  // let driver;
+  //
+  //   // initialize the driver before running the tests
+  // beforeAll(async () => {
+  //   driver = await new Builder().forBrowser('firefox').build();
+  // });
+  let driver;
+  beforeAll(async () => { driver = await new Builder().forBrowser('chrome').build(); });
     // close the driver after running the tests
-  afterAll(async () => {
-    await driver.quit();
-  });
-  
+  // afterAll(async () => {
+  //   await driver.quit();
+  // });
+
   // use the driver to mock user's actions
   async function mockUserAction() {
     // open the URL
-    driver.wait(until.urlIs('http://localhost:8090'));
-    await driver.get('http://localhost:8090');
+    driver.wait(until.urlIs('http://localhost:3000/'));
+    await driver.get('http://localhost:3000/');
 
     // locate the username box, provide a timeout
     const usernamebox = await driver.wait(until.elementLocated(By.id('username')), 10000);

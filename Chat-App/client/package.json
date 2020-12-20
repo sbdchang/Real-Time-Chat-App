@@ -8,6 +8,7 @@
     "@testing-library/user-event": "^7.1.2",
     "axios": "^0.21.0",
     "bootstrap": "^4.5.3",
+    "chromedriver": "^87.0.4",
     "geckodriver": "^1.21.1",
     "mocha": "^7.2.0",
     "react": "^16.12.0",
