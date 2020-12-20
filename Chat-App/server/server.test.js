@@ -100,7 +100,11 @@ describe('Test GET', () => {
     .expect(200))
 });
 
+//get all users
 
+it('Async test', async done =>{
+  done()
+})
 
 /*
 //this seems to cause error when used. Maybe index is already imported so don't need
@@ -129,7 +133,6 @@ const clearDatabase = async () => {
 // id of inserted user
 let id;
 
-// test get
 
 
 */
