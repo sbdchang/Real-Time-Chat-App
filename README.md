@@ -9,7 +9,7 @@ To run the app locally:
 1. Run backend
 
 - Open command prompt in the folder: /Chat-App/server
-- run in terminal `node index.js`
+- run in terminal `node run dev`
 
 2. Run front end:
 
