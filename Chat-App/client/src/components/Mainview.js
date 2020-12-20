@@ -5,7 +5,7 @@ import axios from 'axios';
 import { urlToUse } from "./url";
 import { Modal } from 'react-bootstrap';
 import _ from 'lodash';
-import 'Mainview.css';
+import './Mainview.css';
 
 export default class Mainview extends React.Component {
     constructor(props) {
