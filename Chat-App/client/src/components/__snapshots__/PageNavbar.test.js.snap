@@ -1,0 +1,25 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`PageNavBar Snapshot   1`] = `
+<div
+  className="PageNavbar"
+>
+  <nav
+    className="navbar navbar-expand-lg navbar-light bg-light"
+  >
+    <span
+      className="navbar-brand center"
+    >
+      CIS557
+    </span>
+    <div
+      className="collapse navbar-collapse"
+      id="navbarNavAltMarkup"
+    >
+      <div
+        className="navbar-nav"
+      />
+    </div>
+  </nav>
+</div>
+`;

@@ -1,0 +1,153 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`UserProfile Snapshot   1`] = `
+<div
+  className="UserProfile"
+>
+  <div
+    className="PageNavbar"
+  >
+    <nav
+      className="navbar navbar-expand-lg navbar-light bg-light"
+    >
+      <span
+        className="navbar-brand center"
+      >
+        CIS557
+      </span>
+      <div
+        className="collapse navbar-collapse"
+        id="navbarNavAltMarkup"
+      >
+        <div
+          className="navbar-nav"
+        />
+      </div>
+    </nav>
+  </div>
+  <div
+    className="container bestgenres-container"
+  >
+    <div
+      className="jumbotron"
+    >
+      <img
+        height="50"
+        src="avatar.png"
+        width="50"
+      />
+      <div>
+        Username: N/A
+      </div>
+      <div>
+        Status: N/A
+      </div>
+      <div>
+        Regestration Time: N/A
+      </div>
+    </div>
+    <div
+      className="jumbotron"
+    >
+      <input
+        className="input"
+        id="postStatus"
+        placeholder="What's up?"
+        type="text"
+      />
+      <button
+        className="btn"
+        id="cp"
+        onClick={[Function]}
+      >
+        Post Status
+      </button>
+      <br />
+      <input
+        className="filetype"
+        id="image_inpt"
+        onChange={[Function]}
+        type="file"
+      />
+      <div
+        className="results-container"
+        id="results"
+      >
+        <p
+          id="message-3"
+        >
+            
+        </p>
+      </div>
+    </div>
+    <div
+      className="jumbotron"
+    >
+      <b
+        style={
+          Object {
+            "fontSize": "25px",
+          }
+        }
+      >
+         Account Settings 
+      </b>
+      <br />
+      <br />
+      <input
+        className="input"
+        id="cpw"
+        placeholder="Current Password"
+        type="text"
+      />
+      <input
+        className="input"
+        id="npw"
+        placeholder="New Password"
+        type="text"
+      />
+      <button
+        className="btn"
+        id="cp"
+        onClick={[Function]}
+      >
+        Change Password
+      </button>
+      <div
+        className="results-container"
+        id="results"
+      >
+        <p
+          id="message-1"
+        >
+            
+        </p>
+      </div>
+      <button
+        className="btn"
+        id="da"
+        onClick={[Function]}
+      >
+        Deactivate Account
+      </button>
+      <div
+        className="results-container"
+        id="results"
+      >
+        <p
+          id="message-2"
+        >
+            
+        </p>
+      </div>
+      <button
+        className="btn"
+        id="lo"
+        onClick={[Function]}
+      >
+        Log Out
+      </button>
+    </div>
+  </div>
+</div>
+`;
