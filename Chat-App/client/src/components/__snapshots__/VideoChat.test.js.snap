@@ -1,0 +1,44 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Videochat Snapshot   1`] = `
+<form
+  onSubmit={[Function]}
+>
+  <h2>
+    Enter a room
+  </h2>
+  <div>
+    <label
+      htmlFor="name"
+    >
+      Name:
+    </label>
+    <input
+      id="field"
+      onChange={[Function]}
+      required={true}
+      type="text"
+      value={null}
+    />
+  </div>
+  <div>
+    <label
+      htmlFor="room"
+    >
+      Room name:
+    </label>
+    <input
+      id="room"
+      onChange={[Function]}
+      required={true}
+      type="text"
+      value={null}
+    />
+  </div>
+  <button
+    type="submit"
+  >
+    Submit
+  </button>
+</form>
+`;

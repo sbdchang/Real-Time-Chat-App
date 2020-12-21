@@ -3,14 +3,15 @@
 <html lang="en">
 
 <head>
-    <title>Code coverage report for src/components/Lobby.js</title>
+    <title>Code coverage report for models/message.js</title>
     <meta charset="utf-8" />
-    <link rel="stylesheet" href="../../prettify.css" />
-    <link rel="stylesheet" href="../../base.css" />
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="../prettify.css" />
+    <link rel="stylesheet" href="../base.css" />
+    <link rel="shortcut icon" type="image/x-icon" href="../favicon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <style type='text/css'>
         .coverage-summary .sorter {
-            background-image: url(../../sort-arrow-sprite.png);
+            background-image: url(../sort-arrow-sprite.png);
         }
     </style>
 </head>
@@ -18,13 +19,13 @@
 <body>
 <div class='wrapper'>
     <div class='pad1'>
-        <h1><a href="../../index.html">All files</a> / <a href="index.html">src/components</a> Lobby.js</h1>
+        <h1><a href="../index.html">All files</a> / <a href="index.html">models</a> message.js</h1>
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>11/11</span>
+                <span class='fraction'>7/7</span>
             </div>
         
             
@@ -38,14 +39,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>1/1</span>
+                <span class='fraction'>0/0</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>11/11</span>
+                <span class='fraction'>7/7</span>
             </div>
         
             
@@ -99,31 +100,12 @@
 <a name='L41'></a><a href='#L41'>41</a>
 <a name='L42'></a><a href='#L42'>42</a>
 <a name='L43'></a><a href='#L43'>43</a>
-<a name='L44'></a><a href='#L44'>44</a>
-<a name='L45'></a><a href='#L45'>45</a>
-<a name='L46'></a><a href='#L46'>46</a>
-<a name='L47'></a><a href='#L47'>47</a>
-<a name='L48'></a><a href='#L48'>48</a>
-<a name='L49'></a><a href='#L49'>49</a>
-<a name='L50'></a><a href='#L50'>50</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L44'></a><a href='#L44'>44</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">5x</span>
-<span class="cline-any cline-yes">5x</span>
-<span class="cline-any cline-yes">5x</span>
-<span class="cline-any cline-yes">5x</span>
-<span class="cline-any cline-yes">5x</span>
-<span class="cline-any cline-yes">5x</span>
-<span class="cline-any cline-yes">5x</span>
-<span class="cline-any cline-yes">4x</span>
-<span class="cline-any cline-yes">4x</span>
-<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -154,55 +136,56 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React from 'react';
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">const mongoose = require("mongoose");
+const validator = require("validator");
+const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
 &nbsp;
-const Lobby = ({
-  username,
-  handleUsernameChange,
-  roomName,
-  handleRoomNameChange,
-  handleSubmit
-}) =&gt; {
-  const queryString = window.location.search;
-  console.log(queryString);
-  const urlParams = new URLSearchParams(queryString);
-  const room_name = urlParams.get('room_name');
-  const user_name = urlParams.get('user_name');
-  console.log(user_name);
-  handleUsernameChange(user_name);
-  handleRoomNameChange(room_name);
-  handleSubmit();
-  return (
-    &lt;form onSubmit={handleSubmit}&gt;
-      &lt;h2&gt;Enter a room&lt;/h2&gt;
-      &lt;div&gt;
-        &lt;label htmlFor="name"&gt;Name:&lt;/label&gt;
-        &lt;input
-          type="text"
-          id="field"
-          value={username}
-          onChange={handleUsernameChange}
-          required
-        /&gt;
-      &lt;/div&gt;
+const messageSchema = new mongoose.Schema({
+    sender: {
+        type: String,
+        required: true
+    },
+    receiver: {
+        type: String,
+        required: true
+    },
+    text: {
+        type: String,
+        default: ""
+    },
+    image: {
+        data: Buffer,
+        contentType: String
+    },
+    audio: {
+        data: Buffer,
+        contentType: String
+    },
+    video: {
+        data: Buffer,
+        contentType: String
+    },
+    index: {
+        type: Number,
+        default: 0
+    },
+    receipt: {
+        type: Number,
+        default: 0
+    }
+})
 &nbsp;
-      &lt;div&gt;
-        &lt;label htmlFor="room"&gt;Room name:&lt;/label&gt;
-        &lt;input
-          type="text"
-          id="room"
-          value={roomName}
-          onChange={handleRoomNameChange}
-          required
-        /&gt;
-      &lt;/div&gt;
+const Message = mongoose.model("Message", messageSchema);
 &nbsp;
-      &lt;button type="submit"&gt;Submit&lt;/button&gt;
-    &lt;/form&gt;
-  );
-};
-&nbsp;
-export default Lobby;
+module.exports = Message;
 &nbsp;</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
@@ -210,17 +193,17 @@ export default Lobby;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Mon Dec 21 2020 17:12:52 GMT-0500 (Eastern Standard Time)
+                at Mon Dec 21 2020 17:33:19 GMT-0500 (Eastern Standard Time)
             </div>
         </div>
-        <script src="../../prettify.js"></script>
+        <script src="../prettify.js"></script>
         <script>
             window.onload = function () {
                 prettyPrint();
             };
         </script>
-        <script src="../../sorter.js"></script>
-        <script src="../../block-navigation.js"></script>
+        <script src="../sorter.js"></script>
+        <script src="../block-navigation.js"></script>
     </body>
 </html>
     
