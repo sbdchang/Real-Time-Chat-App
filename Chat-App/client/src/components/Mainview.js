@@ -220,7 +220,8 @@ export default class Mainview extends React.Component {
                     this.setState({ messages: temp });
                     // maggie
                     var select = document.getElementById("atSelectId").value;
-                    document.getElementById("atLink").innerHTML = "Userprofile: " + select.link("http://localhost:3000/userprofile?username=" + select)
+                    //document.getElementById("atLink").innerHTML = "Userprofile: " + select.link("http://localhost:3000/userprofile?username=" + select)
+                    document.getElementById("atLink").innerHTML = "Userprofile: " + select.link("http://chat-app-557-client.herokuapp.com/userprofile?username=" + select)
                 });
                 fetch(`${urlToUse.url.API_URL}/users/shuffle?sender=${this.state.username}&receiver=${this.state.currentUser}`, {
                     method: "POST",
@@ -571,26 +572,26 @@ export default class Mainview extends React.Component {
 
 
     startRecording = () => {
-      this.setState({ record: true });
+        this.setState({ record: true });
     }
 
     stopRecording = () => {
-      this.setState({ record: false });
+        this.setState({ record: false });
     }
 
     onData(recordedBlob) {
-      console.log('chunk of real-time data is: ', recordedBlob);
+        console.log('chunk of real-time data is: ', recordedBlob);
     }
 
     onStop(recordedBlob) {
-      console.log('recordedBlob is: ', recordedBlob);
-      // var file = new File([recordedBlob], "new_audio.mp3");
-      // window.URL.createObjectURL(recordedBlob);
-      // const file = new File([recordedBlob], 'new_audio.mp3', { type: recordedBlob.type })
-      // console.log(file);
-      this.sendAudioFile(recordedBlob);
-      // var blobUrl = window.URL.createObjectURL(recordedBlob);
-      // console.log(blobUrl);
+        console.log('recordedBlob is: ', recordedBlob);
+        // var file = new File([recordedBlob], "new_audio.mp3");
+        // window.URL.createObjectURL(recordedBlob);
+        // const file = new File([recordedBlob], 'new_audio.mp3', { type: recordedBlob.type })
+        // console.log(file);
+        this.sendAudioFile(recordedBlob);
+        // var blobUrl = window.URL.createObjectURL(recordedBlob);
+        // console.log(blobUrl);
     }
 
     render() {
@@ -798,18 +799,18 @@ export default class Mainview extends React.Component {
                                 <p>Send Image: <input type="file" onChange={this.sendImage} className="filetype" id="image_inpt" /> {this.state.image}</p>
                                 <p>Send Audio: <input type="file" onChange={this.sendAudio} className="filetype" id="audio_inpt" /> {this.state.audio}</p>
                                 <p>Send Video: <input type="file" onChange={this.sendVideo} className="filetype" id="video_inpt" /> {this.state.video}</p>
-                                <p style={{ width: "20px"}}>
-                                  <ReactMic
-                                    style={{ width: "20px"}}
-                                    record={this.state.record}
-                                    className="sound-wave"
-                                    onStop={this.onStop.bind(this)}
-                                    onData={this.onData}
-                                    strokeColor="#000000"
-                                    mimeType="audio/mp3"
-                                    backgroundColor="#FF4081" />
-                                  <button onClick={this.startRecording} type="button">Start</button>
-                                  <button onClick={this.stopRecording} type="button">Send</button>
+                                <p style={{ width: "20px" }}>
+                                    <ReactMic
+                                        style={{ width: "20px" }}
+                                        record={this.state.record}
+                                        className="sound-wave"
+                                        onStop={this.onStop.bind(this)}
+                                        onData={this.onData}
+                                        strokeColor="#000000"
+                                        mimeType="audio/mp3"
+                                        backgroundColor="#FF4081" />
+                                    <button onClick={this.startRecording} type="button">Start</button>
+                                    <button onClick={this.stopRecording} type="button">Send</button>
                                 </p>
                                 <button id="sendbtn2" onClick={this.videoCall.bind(this)}>Video call: {this.state.currentUser}</button>
                             </Modal.Body>
