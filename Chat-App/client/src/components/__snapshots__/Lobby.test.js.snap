@@ -1,0 +1,38 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Lobby snapshot 1`] = `
+<form>
+  <h2>
+    Enter a room
+  </h2>
+  <div>
+    <label
+      htmlFor="name"
+    >
+      Name:
+    </label>
+    <input
+      id="field"
+      required={true}
+      type="text"
+    />
+  </div>
+  <div>
+    <label
+      htmlFor="room"
+    >
+      Room name:
+    </label>
+    <input
+      id="room"
+      required={true}
+      type="text"
+    />
+  </div>
+  <button
+    type="submit"
+  >
+    Submit
+  </button>
+</form>
+`;

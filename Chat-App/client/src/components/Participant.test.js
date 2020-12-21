@@ -2,8 +2,8 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { render, screen } from '@testing-library/react';
 import Participant from './Participant';
+import renderer from 'react-test-renderer';
 
-import ReactTestUtils from 'react-dom/test-utils';
 
 //This function fails TODO
 /*
@@ -14,18 +14,9 @@ test('renders participant', () => {
   });
 */
 
-it('Testing here', () => {
-    expect(1).toBe(1);
-  });
-     
-let div;
-
-beforeEach(() => {
-  div = document.createElement("div");
+it('Participant snapshot   ', () => {
+  const tree = renderer.create(<Participant />).toJSON();
+  expect(tree).toMatchSnapshot();
 });
-
-afterEach(() => {
-    ReactDOM.unmountComponentAtNode(div);
-  });
 
 
