@@ -112,6 +112,7 @@ export default class Mainview extends React.Component {
           }).then((res) => {
             return res.json();
           });
+          console.log(data);
           if (data.caller !== "") {
             let result = window.confirm(`${data.caller} is calling you. Would you like to answer?`);
             if (result) {

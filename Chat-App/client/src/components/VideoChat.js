@@ -47,7 +47,7 @@ const VideoChat = () => {
       const data = await fetch(`${urlToUse.url.API_URL}/video/token`, {
         method: 'POST',
         body: JSON.stringify({
-          identity: username,
+          identity: username + "asdfvew",
           room: roomName
         }),
         headers: {
