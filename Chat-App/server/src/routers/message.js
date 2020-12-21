@@ -4,8 +4,8 @@ const Message = require("../models/message");
 const auth = require("../middleware/auth");
 const multer = require("multer");
 const fs = require("fs");
-const upload = multer({ 
-    dest: "uploads/",     
+const upload = multer({
+    dest: "uploads/",
 });
 const cors = require("cors");
 const router = new express.Router();
@@ -27,6 +27,7 @@ router.post("/message/text", cors(), async (req, res) => {
 });
 
 router.post("/message/image", cors(), upload.single("image"), async (req, res) => {
+    try {
     const message = new Message(req.query);
     const messages = await Message.find();
     if (messages.length > 0) {
@@ -34,7 +35,6 @@ router.post("/message/image", cors(), upload.single("image"), async (req, res) =
     }
     message.image.data = fs.readFileSync(req.file.path);
     message.image.contentType = "image/png";
-    try {
         await message.save();
         res.status(200).send(message);
     } catch(e) {
@@ -43,6 +43,7 @@ router.post("/message/image", cors(), upload.single("image"), async (req, res) =
 });
 
 router.post("/message/audio", cors(), upload.single("audio"), async (req, res) => {
+    try {
     const message = new Message(req.query);
     const messages = await Message.find();
     if (messages.length > 0) {
@@ -50,7 +51,7 @@ router.post("/message/audio", cors(), upload.single("audio"), async (req, res) =
     }
     message.audio.data = fs.readFileSync(req.file.path);
     message.audio.contentType = "audio/mp3";
-    try {
+
         await message.save();
         res.status(200).send(message);
     } catch(e) {
@@ -59,6 +60,7 @@ router.post("/message/audio", cors(), upload.single("audio"), async (req, res) =
 });
 
 router.post("/message/video", cors(), upload.single("video"), async (req, res) => {
+    try {
     const message = new Message(req.query);
     const messages = await Message.find();
     if (messages.length > 0) {
@@ -66,7 +68,6 @@ router.post("/message/video", cors(), upload.single("video"), async (req, res) =
     }
     message.video.data = fs.readFileSync(req.file.path);
     message.video.contentType = "video/mp4";
-    try {
         await message.save();
         res.status(200).send(message);
     } catch(e) {
