@@ -220,10 +220,14 @@ export default class Mainview extends React.Component {
                     this.setState({ messages: temp });
                     // maggie
                     var select = document.getElementById("atSelectId").value;
+                    //commented is for local link redirection
                     //document.getElementById("atLink").innerHTML = "Userprofile: " + select.link("http://localhost:3000/userprofile?username=" + select)
                     document.getElementById("atLink").innerHTML = "Userprofile: " + select.link("http://chat-app-557-client.herokuapp.com/userprofile?username=" + select)
                 });
                 fetch(`${urlToUse.url.API_URL}/users/shuffle?sender=${this.state.username}&receiver=${this.state.currentUser}`, {
+                    method: "POST",
+                });
+                fetch(`${urlToUse.url.API_URL}/users/shuffle?sender=${this.state.currentUser}&receiver=${this.state.username}`, {
                     method: "POST",
                 });
             }
@@ -253,6 +257,9 @@ export default class Mainview extends React.Component {
                         this.setState({ messages: temp });
                     });
                     fetch(`${urlToUse.url.API_URL}/users/shuffle?sender=${this.state.username}&receiver=${this.state.currentUser}`, {
+                        method: "POST",
+                    });
+                    fetch(`${urlToUse.url.API_URL}/users/shuffle?sender=${this.state.currentUser}&receiver=${this.state.username}`, {
                         method: "POST",
                     });
                 } else if (response.status === 400) {
@@ -288,6 +295,9 @@ export default class Mainview extends React.Component {
                     fetch(`${urlToUse.url.API_URL}/users/shuffle?sender=${this.state.username}&receiver=${this.state.currentUser}`, {
                         method: "POST",
                     });
+                    fetch(`${urlToUse.url.API_URL}/users/shuffle?sender=${this.state.currentUser}&receiver=${this.state.username}`, {
+                        method: "POST",
+                    });
                 } else if (response.status === 400) {
                     this.setState({ audio: "Failure: Your Audio is too Large!" });
                 }
@@ -315,6 +325,9 @@ export default class Mainview extends React.Component {
                     this.setState({ messages: temp });
                 });
                 fetch(`${urlToUse.url.API_URL}/users/shuffle?sender=${this.state.username}&receiver=${this.state.currentUser}`, {
+                    method: "POST",
+                });
+                fetch(`${urlToUse.url.API_URL}/users/shuffle?sender=${this.state.currentUser}&receiver=${this.state.username}`, {
                     method: "POST",
                 });
             } else if (response.status === 400) {
@@ -346,6 +359,9 @@ export default class Mainview extends React.Component {
                         this.setState({ messages: temp });
                     });
                     fetch(`${urlToUse.url.API_URL}/users/shuffle?sender=${this.state.username}&receiver=${this.state.currentUser}`, {
+                        method: "POST",
+                    });
+                    fetch(`${urlToUse.url.API_URL}/users/shuffle?sender=${this.state.currentUser}&receiver=${this.state.username}`, {
                         method: "POST",
                     });
                 } else if (response.status === 400) {

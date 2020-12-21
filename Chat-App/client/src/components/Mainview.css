@@ -7,25 +7,25 @@ body {
     -moz-osx-font-smoothing: grayscale;
   }
 
-  .container {
+  /* .container {
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    height: 100vh;
+    height: 50vh;
     width: 100vw;
-  }
+  } */
 
-  .jumbotron {
+  /* .jumbotron {
     background: rgba(255, 255, 255, 0.863);
     width: 800px;
-    height: 40%;
+    height: 20%;
     border-radius: 10px;
     top: 50px;
     position: relative;
     justify-content: center;
     box-shadow: 1px 1px 12px rgba(0, 0, 0, 0.1);
-  }
+  } */
 
   .btn {
     color: black;
