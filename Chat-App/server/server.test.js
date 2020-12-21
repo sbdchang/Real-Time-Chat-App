@@ -294,7 +294,7 @@ describe('Tests backend /message/text', () => {
     const res = await request(app)
       .post("/message/text?sender=ewr&receiver=vvvv&text=muchlove")
       .expect(200);
-      // We expect this to not work! It's fine because we don't have video
+      // We expect this to work because the message matches what we expect
   });
 });
 
