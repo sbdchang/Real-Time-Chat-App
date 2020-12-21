@@ -14,34 +14,37 @@ test_jp_user
 const express = require("express");
 const cors = require("cors");
 const jwt = require("jsonwebtoken");
-//following line ensures mongoose.js runs and mongoose connects to the database
-const userRouter = require("./src/routers/user.js");
-const statusRouter = require("./src/routers/status");
-const messageRouter = require("./src/routers/message");
-const User = require("./src/models/user");
-const auth = require("./src/middleware/auth");
-const router = new express.Router();
-const { videoToken } = require('./src/routers/tokens');
 const multer = require("multer");
 const upload = multer({
     dest: "uploads/",
 });
 const fs = require("fs");
 const { EWOULDBLOCK } = require("constants");
-const app = express();
-app.use(cors);
+const supertest = require('supertest');
 
-const request = require('supertest'); //import testing framework
+//Import custom modules
+const app = require('./src/index.js'); //original file
 
-// Import ObjectID constructor
-const ObjectId = require('mongodb').ObjectID;
+const userRouter = require("./src/routers/user.js");
+const statusRouter = require("./src/routers/status");
+const messageRouter = require("./src/routers/message");
+const User = require("./src/models/user");
+const auth = require("./src/middleware/auth");
+const { videoToken } = require('./src/routers/tokens');
+// const app = express(); imported from user.js
 
-// URL of test db on the cloud TODO how do I get this to connect to my personal test server on the cloud?
+const ObjectId = require('mongodb').ObjectID; // Import ObjectID constructor
+const API_URL = "http://localhost:8081";
+const request = supertest(app)
+
+
+//mongoDB url connections
 //const url = "mongodb+srv://stevenc61500@gmail.com:WYFmYZ)Bx[%3Aqt5ZT4Kmp@557-chat-app-cluster.jbh5s.mongodb.net/557-Chat-App?retryWrites=true&w=majority";
 //const url = "mongodb+srv://test_jp_user:64Lt0KiQaU4m2DLR@557-chat-app-cluster.jbh5s.mongodb.net/557-chat-app?retryWrites=true&w=majority"
 const url = "mongodb+srv://test_user:test_user@557-chat-app-cluster.jbh5s.mongodb.net/test?retryWrites=true&w=majority";
 // const url = 'mongodb+srv://jroypeterson@gmail.com:3du6tKXST4zU@cluster0.n47tz.mongodb.net/CHAT-APP-TEST-SERVER?retryWrites=true&w=majority';
 
+//connec to DB
 beforeAll(async () => {
   try{
     await mongoose.connect(url, {
@@ -56,134 +59,104 @@ beforeAll(async () => {
   }
 });
 
-
-//are the tests working
+//Tests that tests are working generally
   it('Testing to see if Jest works', () => {
     expect(1).toBe(1);
   });
 
-
-  it('Should save user to database', async done => {
-    const res = await router.post("/users/register")
-    .send({
-        name: 'Zell',
-        email: 'Zelltest@gmail.com',
-        password: 'Zellpwordpword'
-      })
-  
-    // Searches the user in the database
-    const user = await User.findOne({ email: 'Zelltest@gmail.com' })
-    console.log(User)
-    expect(User.name).toBeTruthy()
-    expect(User.email).toBeTruthy()
-
-    done()
-  })
-
-  describe('Post Endpoints', () => {
-    it('should create a new post', async () => {
-      const res = await request(app)
-        .post('/users/register')
-        .send({
-          name: 'ZellZell',
-          email: 'Zelltesttest@gmail.com',
-          password: 'Zellpwordpwordpword'
-        })
-      expect(res.statusCode).toEqual(200)
-    })
-  })
-
-
-
-describe('Test GET', () => {
-  test('Endpoint response', async () => await request(app).get('/status').send()
-    .expect(200))
-});
-
-//get all users
-
-it('Async test', async done =>{
+//Test get all users function
+it('Gets the test endpoint', async done => {
+    // Sends GET Request to /test endpoint
+  const res = await request.get('/users')
   done()
 })
 
 /*
-//this seems to cause error when used. Maybe index is already imported so don't need
-const webapp = require('./index'); // TODO correct? using webapp in the index.js file
-
-const clearDatabase = async () => {
-    try {
-      const result = await db.collection('players').deleteOne({ player: 'testuser' });
-      const { deletedCount } = result;
-      if (deletedCount === 1) {
-        console.log('info', 'Successfully deleted player');
-      } else {
-        console.log('warning', 'player was not deleted');
-      }
-    } catch (err) {
-      console.log('error', err.message);
-    }
-  };
-  
-  afterAll(async () => {
-    await clearDatabase();
-  });
-
-//TODO actually create the tests
-
-// id of inserted user
-let id;
-
-
-
+//Test get all users function
+it('Test return all users in db', async () => {
+  const res = await userRouter.get(`${API_URL}/status/users`)
+  console.log(res)
+  expect(res).toBeTruthy();
+  // Searches the user in the database
+  //const user = await User.findOne({ email: 'Zelltest@gmail.com' })    
+  //expect(User.email).toBeTruthy()
+  /*
+  await fetch(`${API_URL}/status/users`, {
+    method: "POST"
+  }).then((response) => {
+    console.log(response);
+    ;
+  })
+ 
+})
 */
+
 /*
-describe('Register user endpoint integration test', () => {
-    // expected response
-    const testPlayer = {
-      username: 'testuser123456',
-      email: 'test123456@gmail.com',
-      password: 'qwertyui!',
-      pin: '123456789',
-      
-    };
-    test('Endpoint status code and response', () => request(webapp).post('/users/add').send('username=testuser')
-      .expect(200)
-      .then((response) => {
-        // toMatchObject check that a JavaScript object matches
-        // a subset of the properties of an object
-        const { player } = JSON.parse(response.text);
-        id = player._id;
-        expect(player).toMatchObject(testPlayer);
-      }));
-  
-    test('The new player is in the database', async () => {
-      const insertedUser = await db.collection('players').findOne({ _id: new ObjectId(id) });
-      expect(insertedUser.player).toEqual('testuser');
-    });
-  });
-
+//Test register user to db
+  it('Should save user to database', async () => {
+    const res = await userRouter.post('/users/register?username=Zell&email=Zelltest@gmail.com&password=Zellpword1!&pin=12345678')
+    console.log(res)
+    expect(res).toBeTruthy();
+    // Searches the user in the database
+    //const user = await User.findOne({ email: 'Zelltest@gmail.com' })
+    
+    expect(res.email).toBeTruthy();
+    //expect(User.email).toBeTruthy()
+  })
 */
 
-// Test Register
+// test login - use already created test user
+  
+//test /users to get all users currently logged in. Should be >0
 
-// Test login
-
-//add 
-
-//remove
-
-//status
-
-//reset
-
-//delete
-
-//log out
-
-//logout all
-
-//post Status
-
-//post image status
+// test change password router.post("/users/change", cors(), async (req, res) => {
+    //use zell original password - Zellpword1!
+    //new password Zellpword10!
 
 
+
+//Test reset password - create router.post("/users/login/reset", cors(), async (req, res) => {
+
+
+
+//test get user by ID. user by id - router.get("/users/:id", cors(), async (req, res) => {
+  //object ID of username't1' = 5fc6efbee9129db0f6bd2b48
+  //email is 't1@gmail.com'
+  
+
+//test logout
+
+//login again
+
+// lougout one router.post('/logout_one', async (req, res) => {
+
+//test logout all
+
+
+//delete by Id - router.delete("/users/delete/:id", cors(), async (req, res) => {
+
+// test remove router.post("/users/remove", cors(), async (req, res) => {
+  //find and expect Null
+
+
+/* DON"T DO 
+//remove sample user from db  - already done with remove above
+const clearDatabase = async () => {
+  try {
+    const result = await db.collection('users').deleteOne({ username: 'Zell' });
+    const { deletedCount } = result;
+    if (deletedCount === 1) {
+      console.log('info', 'Successfully deleted Zell');
+    } else {
+      console.log('warning', 'Zell was not deleted');
+    }
+  } catch (err) {
+    console.log('error', err.message);
+  }
+};
+
+//clear the db of test user
+afterAll(async () => {
+  await clearDatabase();
+});
+*/
