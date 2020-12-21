@@ -22,9 +22,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">30% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/20</span>
+                <span class='fraction'>6/20</span>
             </div>
         
             
@@ -36,16 +36,16 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">66.67% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/6</span>
+                <span class='fraction'>4/6</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">31.58% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/19</span>
+                <span class='fraction'>6/19</span>
             </div>
         
             
@@ -149,6 +149,24 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -159,32 +177,14 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -233,18 +233,18 @@ import axios from 'axios';
 import {urlToUse} from "./url";
 &nbsp;
 export default class UserProfile extends React.Component {
-<span class="fstat-no" title="function not covered" >	co</span>nstructor(props) {
-<span class="cstat-no" title="statement not covered" >		super(props);</span>
+	constructor(props) {
+		super(props);
 &nbsp;
-<span class="cstat-no" title="statement not covered" >		this.state = {</span>
+		this.state = {
 			username: "N/A",
 			date: "N/A",
 			statuses: []
 		};
 	}
 &nbsp;
-<span class="fstat-no" title="function not covered" >	pu</span>llStatuses() {
-<span class="cstat-no" title="statement not covered" >		axios.get(`${urlToUse.url.API_URL}/status?username=${this.state.username}`)</span>
+	pullStatuses() {
+		axios.get(`${urlToUse.url.API_URL}/status?username=${this.state.username}`)
 		  .then(<span class="fstat-no" title="function not covered" >re</span>s =&gt; {
 			  
 			const statuses = <span class="cstat-no" title="statement not covered" >res.data;</span>
@@ -261,15 +261,15 @@ export default class UserProfile extends React.Component {
 		  })
 	  }
 &nbsp;
-<span class="fstat-no" title="function not covered" >	as</span>ync componentDidMount() {
-<span class="cstat-no" title="statement not covered" >		this.setState({</span>
+	async componentDidMount() {
+		this.setState({
 			username: await window.location.href.split('=').pop()
 		});
-<span class="cstat-no" title="statement not covered" >		this.pullStatuses();</span>
+		this.pullStatuses();
 	}
 &nbsp;
-<span class="fstat-no" title="function not covered" >	re</span>nder() {	
-<span class="cstat-no" title="statement not covered" >		return (</span>
+	render() {	
+		return (
 			&lt;div className="UserProfile"&gt;
 				&lt;PageNavbar active="statuses" /&gt;
 				&lt;div className="container bestgenres-container"&gt;
@@ -318,7 +318,7 @@ export default class UserProfile extends React.Component {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Mon Dec 21 2020 17:03:51 GMT-0500 (Eastern Standard Time)
+                at Mon Dec 21 2020 17:12:52 GMT-0500 (Eastern Standard Time)
             </div>
         </div>
         <script src="../../prettify.js"></script>
