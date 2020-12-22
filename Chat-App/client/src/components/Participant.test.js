@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import { render, screen } from '@testing-library/react';
 import Participant from './Participant';
 import renderer from 'react-test-renderer';
+import MainView from './MainView';
 
 
 //This function fails TODO
@@ -15,8 +16,6 @@ test('renders participant', () => {
 */
 
 it('Participant snapshot   ', () => {
-  const tree = renderer.create(<Participant />).toJSON();
+  const tree = renderer.create(<MainView />).toJSON();
   expect(tree).toMatchSnapshot();
 });
-
-

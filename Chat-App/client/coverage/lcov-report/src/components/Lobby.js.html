@@ -22,9 +22,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">9.09% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>11/11</span>
+                <span class='fraction'>1/11</span>
             </div>
         
             
@@ -36,16 +36,16 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>1/1</span>
+                <span class='fraction'>0/1</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">9.09% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>11/11</span>
+                <span class='fraction'>1/11</span>
             </div>
         
             
@@ -54,7 +54,7 @@
             Press <em>n</em> or <em>j</em> to go to the next uncovered block, <em>b</em>, <em>p</em> or <em>k</em> for the previous block.
         </p>
     </div>
-    <div class='status-line high'></div>
+    <div class='status-line low'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -107,23 +107,23 @@
 <a name='L49'></a><a href='#L49'>49</a>
 <a name='L50'></a><a href='#L50'>50</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">5x</span>
-<span class="cline-any cline-yes">5x</span>
-<span class="cline-any cline-yes">5x</span>
-<span class="cline-any cline-yes">5x</span>
-<span class="cline-any cline-yes">5x</span>
-<span class="cline-any cline-yes">5x</span>
-<span class="cline-any cline-yes">5x</span>
-<span class="cline-any cline-yes">4x</span>
-<span class="cline-any cline-yes">4x</span>
-<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -156,23 +156,23 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React from 'react';
 &nbsp;
-const Lobby = ({
+const Lobby = <span class="fstat-no" title="function not covered" >({</span>
   username,
   handleUsernameChange,
   roomName,
   handleRoomNameChange,
   handleSubmit
 }) =&gt; {
-  const queryString = window.location.search;
-  console.log(queryString);
-  const urlParams = new URLSearchParams(queryString);
-  const room_name = urlParams.get('room_name');
-  const user_name = urlParams.get('user_name');
-  console.log(user_name);
-  handleUsernameChange(user_name);
-  handleRoomNameChange(room_name);
-  handleSubmit();
-  return (
+  const queryString = <span class="cstat-no" title="statement not covered" >window.location.search;</span>
+<span class="cstat-no" title="statement not covered" >  console.log(queryString);</span>
+  const urlParams = <span class="cstat-no" title="statement not covered" >new URLSearchParams(queryString);</span>
+  const room_name = <span class="cstat-no" title="statement not covered" >urlParams.get('room_name');</span>
+  const user_name = <span class="cstat-no" title="statement not covered" >urlParams.get('user_name');</span>
+<span class="cstat-no" title="statement not covered" >  console.log(user_name);</span>
+<span class="cstat-no" title="statement not covered" >  handleUsernameChange(user_name);</span>
+<span class="cstat-no" title="statement not covered" >  handleRoomNameChange(room_name);</span>
+<span class="cstat-no" title="statement not covered" >  handleSubmit();</span>
+<span class="cstat-no" title="statement not covered" >  return (</span>
     &lt;form onSubmit={handleSubmit}&gt;
       &lt;h2&gt;Enter a room&lt;/h2&gt;
       &lt;div&gt;
@@ -210,7 +210,7 @@ export default Lobby;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Mon Dec 21 2020 17:12:52 GMT-0500 (Eastern Standard Time)
+                at Tue Dec 22 2020 15:33:22 GMT-0500 (Eastern Standard Time)
             </div>
         </div>
         <script src="../../prettify.js"></script>

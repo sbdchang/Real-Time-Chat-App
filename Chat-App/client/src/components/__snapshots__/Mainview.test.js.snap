@@ -32,6 +32,12 @@ exports[`Mainview renders correctly   1`] = `
     <div
       className="jumbotron"
     >
+      <button
+        className="user1"
+        onClick={[Function]}
+      >
+        Logout
+      </button>
       <div
         className="h5"
       >

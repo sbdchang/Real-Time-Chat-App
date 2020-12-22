@@ -5,7 +5,7 @@ import axios from 'axios';
 import { urlToUse } from "./url";
 import { Modal } from 'react-bootstrap';
 import _ from 'lodash';
-import { ReactMic } from 'react-mic';
+// import { ReactMic } from 'react-mic';
 import './Mainview.css';
 
 export default class Mainview extends React.Component {
@@ -597,6 +597,19 @@ export default class Mainview extends React.Component {
 
     onData(recordedBlob) {
         console.log('chunk of real-time data is: ', recordedBlob);
+        // <p style={{ width: "20px" }}>
+        //     <ReactMic
+        //         style={{ width: "20px" }}
+        //         record={this.state.record}
+        //         className="sound-wave"
+        //         onStop={this.onStop.bind(this)}
+        //         onData={this.onData}
+        //         strokeColor="#000000"
+        //         mimeType="audio/mp3"
+        //         backgroundColor="#FF4081" />
+        //     <button onClick={this.startRecording} type="button">Start</button>
+        //     <button onClick={this.stopRecording} type="button">Send</button>
+        // </p>
     }
 
     onStop(recordedBlob) {
@@ -815,19 +828,6 @@ export default class Mainview extends React.Component {
                                 <p>Send Image: <input type="file" onChange={this.sendImage} className="filetype" id="image_inpt" /> {this.state.image}</p>
                                 <p>Send Audio: <input type="file" onChange={this.sendAudio} className="filetype" id="audio_inpt" /> {this.state.audio}</p>
                                 <p>Send Video: <input type="file" onChange={this.sendVideo} className="filetype" id="video_inpt" /> {this.state.video}</p>
-                                <p style={{ width: "20px" }}>
-                                    <ReactMic
-                                        style={{ width: "20px" }}
-                                        record={this.state.record}
-                                        className="sound-wave"
-                                        onStop={this.onStop.bind(this)}
-                                        onData={this.onData}
-                                        strokeColor="#000000"
-                                        mimeType="audio/mp3"
-                                        backgroundColor="#FF4081" />
-                                    <button onClick={this.startRecording} type="button">Start</button>
-                                    <button onClick={this.stopRecording} type="button">Send</button>
-                                </p>
                                 <button id="sendbtn2" onClick={this.videoCall.bind(this)}>Video call: {this.state.currentUser}</button>
                             </Modal.Body>
                             <Modal.Footer>
