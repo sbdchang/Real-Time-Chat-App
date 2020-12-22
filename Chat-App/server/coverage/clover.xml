@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1608598774659" clover="3.2.0">
-  <project timestamp="1608598774659" name="All files">
-    <metrics statements="488" coveredstatements="333" conditionals="94" coveredconditionals="38" methods="47" coveredmethods="37" elements="629" coveredelements="408" complexity="0" loc="488" ncloc="488" packages="5" files="11" classes="11"/>
+<coverage generated="1608669970547" clover="3.2.0">
+  <project timestamp="1608669970547" name="All files">
+    <metrics statements="488" coveredstatements="350" conditionals="94" coveredconditionals="40" methods="47" coveredmethods="40" elements="629" coveredelements="430" complexity="0" loc="488" ncloc="488" packages="5" files="11" classes="11"/>
     <package name="src">
       <metrics statements="17" coveredstatements="17" conditionals="2" coveredconditionals="2" methods="1" coveredmethods="1"/>
       <file name="index.js" path="/Users/jamesbaker/Desktop/project-video-and-messaging-web-app-steven-chang-hanzhang-wu-xiaoyan-su/Chat-App/server/src/index.js">
@@ -86,7 +86,7 @@
         <line num="3" count="1" type="stmt"/>
         <line num="4" count="1" type="stmt"/>
         <line num="7" count="1" type="stmt"/>
-        <line num="22" count="12" type="cond" truecount="1" falsecount="1"/>
+        <line num="22" count="13" type="cond" truecount="1" falsecount="1"/>
         <line num="23" count="0" type="stmt"/>
         <line num="31" count="11" type="cond" truecount="1" falsecount="1"/>
         <line num="32" count="0" type="stmt"/>
@@ -177,7 +177,7 @@
       </file>
     </package>
     <package name="src.routers">
-      <metrics statements="344" coveredstatements="236" conditionals="50" coveredconditionals="19" methods="35" coveredmethods="26"/>
+      <metrics statements="344" coveredstatements="253" conditionals="50" coveredconditionals="21" methods="35" coveredmethods="29"/>
       <file name="config.js" path="/Users/jamesbaker/Desktop/project-video-and-messaging-web-app-steven-chang-hanzhang-wu-xiaoyan-su/Chat-App/server/src/routers/config.js">
         <metrics statements="1" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
         <line num="1" count="1" type="stmt"/>
@@ -276,7 +276,7 @@
         <line num="143" count="1" type="stmt"/>
       </file>
       <file name="status.js" path="/Users/jamesbaker/Desktop/project-video-and-messaging-web-app-steven-chang-hanzhang-wu-xiaoyan-su/Chat-App/server/src/routers/status.js">
-        <metrics statements="41" coveredstatements="15" conditionals="0" coveredconditionals="0" methods="3" coveredmethods="0"/>
+        <metrics statements="41" coveredstatements="30" conditionals="0" coveredconditionals="0" methods="3" coveredmethods="3"/>
         <line num="1" count="1" type="stmt"/>
         <line num="2" count="1" type="stmt"/>
         <line num="3" count="1" type="stmt"/>
@@ -289,35 +289,35 @@
         <line num="13" count="1" type="stmt"/>
         <line num="14" count="1" type="stmt"/>
         <line num="16" count="1" type="stmt"/>
-        <line num="19" count="0" type="stmt"/>
-        <line num="21" count="0" type="stmt"/>
-        <line num="22" count="0" type="stmt"/>
-        <line num="23" count="0" type="stmt"/>
+        <line num="19" count="1" type="stmt"/>
+        <line num="21" count="1" type="stmt"/>
+        <line num="22" count="1" type="stmt"/>
+        <line num="23" count="1" type="stmt"/>
         <line num="25" count="0" type="stmt"/>
         <line num="29" count="1" type="stmt"/>
-        <line num="33" count="0" type="stmt"/>
-        <line num="35" count="0" type="stmt"/>
-        <line num="38" count="0" type="stmt"/>
-        <line num="39" count="0" type="stmt"/>
+        <line num="30" count="1" type="stmt"/>
+        <line num="34" count="1" type="stmt"/>
+        <line num="36" count="1" type="stmt"/>
+        <line num="39" count="1" type="stmt"/>
         <line num="40" count="0" type="stmt"/>
         <line num="41" count="0" type="stmt"/>
-        <line num="43" count="0" type="stmt"/>
-        <line num="44" count="0" type="stmt"/>
+        <line num="42" count="0" type="stmt"/>
         <line num="45" count="0" type="stmt"/>
-        <line num="47" count="0" type="stmt"/>
-        <line num="73" count="1" type="stmt"/>
-        <line num="74" count="0" type="stmt"/>
-        <line num="75" count="0" type="stmt"/>
-        <line num="77" count="0" type="stmt"/>
-        <line num="79" count="0" type="stmt"/>
-        <line num="80" count="0" type="stmt"/>
-        <line num="82" count="0" type="stmt"/>
+        <line num="46" count="0" type="stmt"/>
+        <line num="48" count="1" type="stmt"/>
+        <line num="74" count="1" type="stmt"/>
+        <line num="75" count="1" type="stmt"/>
+        <line num="76" count="1" type="stmt"/>
+        <line num="78" count="1" type="stmt"/>
+        <line num="80" count="1" type="stmt"/>
+        <line num="81" count="1" type="stmt"/>
         <line num="83" count="0" type="stmt"/>
         <line num="84" count="0" type="stmt"/>
         <line num="85" count="0" type="stmt"/>
-        <line num="88" count="0" type="stmt"/>
-        <line num="90" count="0" type="stmt"/>
-        <line num="94" count="1" type="stmt"/>
+        <line num="86" count="0" type="stmt"/>
+        <line num="89" count="1" type="stmt"/>
+        <line num="91" count="0" type="stmt"/>
+        <line num="95" count="1" type="stmt"/>
       </file>
       <file name="tokens.js" path="/Users/jamesbaker/Desktop/project-video-and-messaging-web-app-steven-chang-hanzhang-wu-xiaoyan-su/Chat-App/server/src/routers/tokens.js">
         <metrics statements="17" coveredstatements="16" conditionals="2" coveredconditionals="1" methods="2" coveredmethods="2"/>
@@ -340,7 +340,7 @@
         <line num="29" count="1" type="stmt"/>
       </file>
       <file name="user.js" path="/Users/jamesbaker/Desktop/project-video-and-messaging-web-app-steven-chang-hanzhang-wu-xiaoyan-su/Chat-App/server/src/routers/user.js">
-        <metrics statements="195" coveredstatements="132" conditionals="36" coveredconditionals="12" methods="21" coveredmethods="15"/>
+        <metrics statements="195" coveredstatements="134" conditionals="36" coveredconditionals="14" methods="21" coveredmethods="15"/>
         <line num="1" count="1" type="stmt"/>
         <line num="2" count="1" type="stmt"/>
         <line num="3" count="1" type="stmt"/>
@@ -355,16 +355,16 @@
         <line num="15" count="1" type="stmt"/>
         <line num="16" count="1" type="stmt"/>
         <line num="18" count="1" type="stmt"/>
-        <line num="20" count="1" type="stmt"/>
-        <line num="21" count="1" type="stmt"/>
-        <line num="22" count="1" type="stmt"/>
+        <line num="20" count="2" type="stmt"/>
+        <line num="21" count="2" type="stmt"/>
+        <line num="22" count="2" type="stmt"/>
         <line num="23" count="0" type="stmt"/>
-        <line num="25" count="1" type="cond" truecount="1" falsecount="1"/>
-        <line num="26" count="1" type="cond" truecount="1" falsecount="1"/>
+        <line num="25" count="2" type="cond" truecount="1" falsecount="1"/>
+        <line num="26" count="2" type="cond" truecount="2" falsecount="0"/>
         <line num="27" count="1" type="stmt"/>
-        <line num="28" count="1" type="cond" truecount="0" falsecount="2"/>
-        <line num="29" count="0" type="stmt"/>
-        <line num="30" count="0" type="stmt"/>
+        <line num="28" count="1" type="cond" truecount="1" falsecount="1"/>
+        <line num="29" count="1" type="stmt"/>
+        <line num="30" count="1" type="stmt"/>
         <line num="31" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="32" count="0" type="stmt"/>
         <line num="33" count="0" type="stmt"/>

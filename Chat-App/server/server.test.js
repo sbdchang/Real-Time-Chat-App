@@ -99,10 +99,36 @@ describe('Tests backend get /video/token', () => {
   });
 });
 
+describe('Tests backend get /status/postStatus', () => {
+
+  it('Testing to get /status/postStatus', async () => {
+    const res = await request(app).post("/status/postStatus?username=ewr&statusContent=jimmy").expect(200);
+    const body = res.body;
+    expect(body).toBeTruthy();
+  });
+});
+
+describe('Tests backend get /status/postImageStatus', () => {
+
+  it('Testing to get /status/postImageStatus', async () => {
+    const res = await request(app).post("/status/postImageStatus?username=ewr&statusContent=jimmy").expect(400);
+    // we don't expect without an image for this to work
+  });
+});
+
 describe('Tests backend get /users/register', () => {
 
   it('Testing to get /users/register', async () => {
     const res = await request(app).post("/users/register?identity=james&room=james").expect(461);
+    // const body = res.body;
+    // expect(body).toBeTruthy();
+  });
+});
+
+describe('Tests backend get /users/register 2', () => {
+
+  it('Testing to get /users/register 2', async () => {
+    const res = await request(app).post("/users/register?email=jame@s.com&passowrd=james").expect(462);
     // const body = res.body;
     // expect(body).toBeTruthy();
   });
@@ -248,6 +274,16 @@ describe('Tests backend /message', () => {
 
   it('Testing to get /message', async () => {
     const res = await request(app).get("/message?username=ewr")
+    .expect(200);
+    const body = res.body;
+    expect(body).toBeTruthy();
+  });
+});
+
+describe('Tests backend /status', () => {
+
+  it('Testing to get /status', async () => {
+    const res = await request(app).get("/status?username=ewr")
     .expect(200);
     const body = res.body;
     expect(body).toBeTruthy();
