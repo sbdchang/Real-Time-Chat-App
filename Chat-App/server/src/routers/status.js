@@ -22,7 +22,7 @@ router.post("/status/postStatus", cors(), async (req, res) => {
         await status.save();
         res.status(200).send(status);
     } catch(e) {
-        res.status(400).send(e);
+        // res.status(400).send(e);
     }
 });
 
@@ -49,7 +49,7 @@ router.post("/status/postImageStatus", cors(), upload.single("image"), async (re
     await status.save();
     res.status(200).send(status);
     } catch(e) {
-        res.status(400).send(e);
+        // res.status(400).send(e);
     }
     // try {
     //     await status.save();
@@ -92,7 +92,7 @@ router.get("/status", cors(), async (req, res) => {
         // console.log(statuses_stripped);
         res.json(statuses_stripped);
     } catch(e) {
-        res.status(500).send();
+        // res.status(500).send();
     }
 });
 

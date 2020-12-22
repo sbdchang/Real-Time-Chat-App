@@ -11,7 +11,7 @@ mongoose.connect(uri, {
 }).then(() => {
     console.log("Mongo Atlas connected.")
 }).catch(error => {
-    console.log(error);
+    // console.log(error);
 });
 
 // //use lines 18-22 to use local MongoDB database

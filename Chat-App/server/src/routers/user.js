@@ -137,7 +137,7 @@ router.get("/users", cors(), async (req, res) => {
         }
         res.json(users_stripped);
     } catch (e) {
-        res.status(500).send();
+        // res.status(500).send();
     }
 });
 
@@ -151,7 +151,7 @@ router.get("/users/date", cors(), async (req, res) => {
             }
         }
     } catch (e) {
-        res.status(500).send();
+        // res.status(500).send();
     }
 });
 
@@ -162,7 +162,7 @@ router.post("/users/deactivate", cors(), async (req, res) => {
         await user.save();
         res.status(200).send();
     } catch (e) {
-        res.status(500).send();
+        // res.status(500).send();
     }
 });
 
@@ -198,7 +198,7 @@ router.post("/users/add", cors(), async (req, res) => {
         await user.save();
         res.status(200).send();
     } catch (e) {
-        res.status(500).send();
+        // res.status(500).send();
     }
 });
 
@@ -209,7 +209,7 @@ router.post("/users/addRec", cors(), async (req, res) => {
         await user.save();
         res.status(200).send();
     } catch (e) {
-        res.status(500).send();
+        // res.status(500).send();
     }
 });
 
@@ -226,7 +226,7 @@ router.post("/users/remove", cors(), async (req, res) => {
         await user.save();
         res.status(200).send();
     } catch (e) {
-        res.status(500).send();
+        // res.status(500).send();
     }
 });
 
@@ -248,7 +248,7 @@ router.post("/users/shuffle", cors(), async (req, res) => {
         await user.save();
         res.status(200).send();
     } catch (e) {
-        res.status(500).send();
+        // res.status(500).send();
     }
 });
 
@@ -395,7 +395,8 @@ router.post('/logout_one', async (req, res) => {
         await user.save();
         res.status(200).send();
     } catch (e) {
-        res.status(500).send();}});
+        // res.status(500).send();
+    }});
 
 
 module.exports = router;

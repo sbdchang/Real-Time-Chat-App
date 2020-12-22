@@ -22,7 +22,7 @@ router.post("/message/text", cors(), async (req, res) => {
         await message.save();
         res.status(200).json(message);
     } catch(e) {
-        res.status(400).send(e);
+        // res.status(400).send(e);
       }
 });
 
@@ -80,7 +80,7 @@ router.post("/message/delete", cors(), async (req, res) => {
         await Message.deleteOne({index: req.query.index});
         res.status(200).send();
     } catch(e) {
-        res.status(400).send(e);
+        // res.status(400).send(e);
     }
 });
 
@@ -90,7 +90,7 @@ router.post("/message/deleteall", cors(), async (req, res) => {
             {sender: req.query.receiver, receiver: req.query.sender}]});
         res.status(200).send();
     } catch(e) {
-        res.status(400).send(e);
+        // res.status(400).send(e);
     }
 });
 
@@ -105,7 +105,7 @@ router.post("/message/deliver", cors(), async (req, res) => {
         }
         res.status(200).send();
     } catch(e) {
-        res.status(400).send(e);
+        // res.status(400).send(e);
     }
 });
 
@@ -120,7 +120,7 @@ router.post("/message/read", cors(), async (req, res) => {
         }
         res.status(200).send();
     } catch(e) {
-        res.status(400).send(e);
+        // res.status(400).send(e);
     }
 });
 
@@ -136,7 +136,7 @@ router.get("/message", cors(), async (req, res) => {
         }
         res.json(messages_stripped);
     } catch(e) {
-        res.status(500).send();
+        // res.status(500).send();
     }
 });
 
