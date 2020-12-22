@@ -28,8 +28,8 @@ const upload = multer({
 });
 const fs = require("fs");
 const { EWOULDBLOCK } = require("constants");
-const app = express();
-app.use(cors);
+// const app = express();
+// app.use(cors);
 
 const request = require('supertest'); //import testing framework
 
@@ -64,47 +64,6 @@ beforeAll(async () => {
     expect(1).toBe(1);
   });
 
-
-  it('Should save user to database', async done => {
-    const res = await router.post("/users/register")
-    .send({
-        name: 'Zell',
-        email: 'Zelltest@gmail.com',
-        password: 'Zellpwordpword'
-      })
-  
-    // Searches the user in the database
-    const user = await User.findOne({ email: 'Zelltest@gmail.com' })
-    console.log(User)
-    expect(User.name).toBeTruthy()
-    expect(User.email).toBeTruthy()
-
-    done()
-  })
-
-  describe('Post Endpoints', () => {
-    it('should create a new post', async () => {
-      const res = await request(app)
-        .post('/users/register')
-        .send({
-          name: 'ZellZell',
-          email: 'Zelltesttest@gmail.com',
-          password: 'Zellpwordpwordpword'
-        })
-      expect(res.statusCode).toEqual(200)
-    })
-  })
-
-
-<<<<<<< HEAD
-
-describe('Test GET', () => {
-  test('Endpoint response', async () => await request(app).get('/status').send()
-    .expect(200))
-});
-
-
-=======
 describe('Tests backend /users', () => {
 
   it('Testing to get /users', async () => {
@@ -137,6 +96,15 @@ describe('Tests backend get /video/token', () => {
     const res = await request(app).post("/video/token?identity=james&room=james").expect(200);
     const body = res.body;
     expect(body).toBeTruthy();
+  });
+});
+
+describe('Tests backend get /users/register', () => {
+
+  it('Testing to get /users/register', async () => {
+    const res = await request(app).post("/users/register?identity=james&room=james").expect(461);
+    // const body = res.body;
+    // expect(body).toBeTruthy();
   });
 });
 
@@ -197,9 +165,9 @@ describe('Tests backend /users/deactivate', () => {
 
   it('Testing to post /users/deactivate', async () => {
     const res = await request(app)
-      .post("/users/deactivate")
-      .send({ usernaem: "ewr"})
-      .expect(500);
+      .post("/users/deactivate?username=ewr")
+      .send({ username: "ewr"})
+      .expect(200);
       // expect to be able to find this user
   });
 });
@@ -362,6 +330,19 @@ describe('Tests backend /message/text', () => {
   });
 });
 
+
+
+describe('Tests backend /logout_one', () => {
+
+  it('Testing to post /logout_one', async () => {
+    const res = await request(app)
+      .post("/logout_one?username=ewr")
+      .send({ username: "ewr"})
+      .expect(200);
+      // We expect this to work because the message matches what we expect
+  });
+});
+
 //
 // describe('Tests backend', () => {
 //
@@ -405,7 +386,6 @@ describe('Tests backend /message/text', () => {
 //     const res = await request(app).get("/users").expect(200);
 //   });
 // });
->>>>>>> selenium-adding
 
 /*
 //this seems to cause error when used. Maybe index is already imported so don't need

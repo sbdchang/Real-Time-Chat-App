@@ -23,11 +23,9 @@ router.post("/users/register", cors(), async (req, res) => {
         res.status(200).send(user);
     } catch (e) {
         if (e.code === 11000) {
-            res.status(460).send(e);
-        } else if (e.errors.email) {
+            res.status(460).send(e); } else if (e.errors.email) {
             console.log("email");
-            res.status(461).send(e);
-        } else if (e.errors.password) {
+            res.status(461).send(e); } else if (e.errors.password) {
             console.log("password");
             res.status(462).send(e);
         } else if (e.errors.pin) {
@@ -401,9 +399,7 @@ router.post('/logout_one', async (req, res) => {
         await user.save();
         res.status(200).send();
     } catch (e) {
-        res.status(500).send();
-    }
-});
+        res.status(500).send();}});
 
 
 module.exports = router;
