@@ -157,8 +157,6 @@ describe('Tests backend get /users/register 4', () => {
 
   it('Testing to get /users/register 4', async () => {
     const res = await request(app).post("/users/register?username=james&email=james@s.com&password=james").expect(462);
-    // const body = res.body;
-    // expect(body).toBeTruthy();
   });
 });
 
