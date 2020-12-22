@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1608673552861" clover="3.2.0">
-  <project timestamp="1608673552861" name="All files">
-    <metrics statements="742" coveredstatements="127" conditionals="411" coveredconditionals="5" methods="172" coveredmethods="25" elements="1325" coveredelements="157" complexity="0" loc="742" ncloc="742" packages="2" files="13" classes="13"/>
+<coverage generated="1608673851846" clover="3.2.0">
+  <project timestamp="1608673851846" name="All files">
+    <metrics statements="742" coveredstatements="129" conditionals="411" coveredconditionals="5" methods="172" coveredmethods="27" elements="1325" coveredelements="161" complexity="0" loc="742" ncloc="742" packages="2" files="13" classes="13"/>
     <package name="src">
       <metrics statements="40" coveredstatements="0" conditionals="32" coveredconditionals="0" methods="15" coveredmethods="0"/>
       <file name="index.js" path="/Users/jamesbaker/Desktop/project-video-and-messaging-web-app-steven-chang-hanzhang-wu-xiaoyan-su/Chat-App/client/src/index.js">
@@ -52,7 +52,7 @@
       </file>
     </package>
     <package name="src.components">
-      <metrics statements="702" coveredstatements="127" conditionals="379" coveredconditionals="5" methods="157" coveredmethods="25"/>
+      <metrics statements="702" coveredstatements="129" conditionals="379" coveredconditionals="5" methods="157" coveredmethods="27"/>
       <file name="App.js" path="/Users/jamesbaker/Desktop/project-video-and-messaging-web-app-steven-chang-hanzhang-wu-xiaoyan-su/Chat-App/client/src/components/App.js">
         <metrics statements="9" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="8" coveredmethods="0"/>
         <line num="15" count="0" type="stmt"/>
@@ -591,18 +591,18 @@
         <line num="44" count="42" type="stmt"/>
       </file>
       <file name="Participant.js" path="/Users/jamesbaker/Desktop/project-video-and-messaging-web-app-steven-chang-hanzhang-wu-xiaoyan-su/Chat-App/client/src/components/Participant.js">
-        <metrics statements="41" coveredstatements="10" conditionals="12" coveredconditionals="0" methods="18" coveredmethods="1"/>
+        <metrics statements="41" coveredstatements="12" conditionals="12" coveredconditionals="0" methods="18" coveredmethods="3"/>
         <line num="3" count="4" type="stmt"/>
-        <line num="4" count="2" type="stmt"/>
-        <line num="5" count="2" type="stmt"/>
-        <line num="7" count="2" type="stmt"/>
-        <line num="8" count="2" type="stmt"/>
-        <line num="10" count="2" type="stmt"/>
-        <line num="11" count="0" type="stmt"/>
+        <line num="4" count="1" type="stmt"/>
+        <line num="5" count="1" type="stmt"/>
+        <line num="7" count="1" type="stmt"/>
+        <line num="8" count="1" type="stmt"/>
+        <line num="10" count="1" type="stmt"/>
+        <line num="11" count="1" type="stmt"/>
         <line num="12" count="0" type="stmt"/>
         <line num="13" count="0" type="stmt"/>
-        <line num="15" count="2" type="stmt"/>
-        <line num="16" count="0" type="stmt"/>
+        <line num="15" count="1" type="stmt"/>
+        <line num="16" count="1" type="stmt"/>
         <line num="17" count="0" type="stmt"/>
         <line num="19" count="0" type="stmt"/>
         <line num="20" count="0" type="cond" truecount="0" falsecount="2"/>
@@ -620,19 +620,19 @@
         <line num="39" count="0" type="stmt"/>
         <line num="40" count="0" type="stmt"/>
         <line num="41" count="0" type="stmt"/>
-        <line num="45" count="2" type="stmt"/>
+        <line num="45" count="1" type="stmt"/>
         <line num="46" count="0" type="stmt"/>
         <line num="47" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="48" count="0" type="stmt"/>
         <line num="49" count="0" type="stmt"/>
         <line num="50" count="0" type="stmt"/>
-        <line num="55" count="2" type="stmt"/>
+        <line num="55" count="1" type="stmt"/>
         <line num="56" count="0" type="stmt"/>
         <line num="57" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="58" count="0" type="stmt"/>
         <line num="59" count="0" type="stmt"/>
         <line num="60" count="0" type="stmt"/>
-        <line num="65" count="2" type="stmt"/>
+        <line num="65" count="1" type="stmt"/>
       </file>
       <file name="Room.js" path="/Users/jamesbaker/Desktop/project-video-and-messaging-web-app-steven-chang-hanzhang-wu-xiaoyan-su/Chat-App/client/src/components/Room.js">
         <metrics statements="36" coveredstatements="14" conditionals="8" coveredconditionals="1" methods="14" coveredmethods="2"/>
