@@ -145,7 +145,6 @@ userSchema.statics.findByCredentials = async (username, password) => {
 
     if (user.incorrectAttempts >= 3) {
         user.incorrectAttempts = 2;
-
         const afterLockout = new Date(currentTime.getTime() + 3 * 60000);
         user.dateNextAvailLoginAttempt = afterLockout;
         await user.save();

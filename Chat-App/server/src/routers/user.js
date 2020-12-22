@@ -53,7 +53,6 @@ router.post("/users/login", cors(), async (req, res) => {
         });
     } catch (e) {
         const errorMessage = e.toString();
-        console.log(errorMessage);
         if (errorMessage.includes("Too many incorrect attempts")) {
             //too many incorrect login attempts
             res.status(401).send(e);
@@ -68,7 +67,6 @@ router.post("/users/login", cors(), async (req, res) => {
 })
 
 router.post("/users/login/reset", cors(), async (req, res) => {
-    console.log(req.query);
     try {
 
         const user = await User.findByCredentialsResetPass(req.query.username, req.query.rpin);
@@ -93,38 +91,38 @@ router.post("/users/login/reset", cors(), async (req, res) => {
     }
 })
 
-router.post("/users/logout", cors(), auth, async (req, res) => {
-    try {
-        //filter out and remove the token from the session that the user is logging out from
-        req.user.tokens = req.user.tokens.filter((token) => {
-            //iterate through each token in the user's tokens array
-            //if the token being logged out from matches one of the user's current tokens, function returns false and
-            //that token is removed from the tokens array. Otherwise, returns true and token is kept in tokens array
-            return token.token != req.token;
-        });
+// router.post("/users/logout", cors(), auth, async (req, res) => {
+//     try {
+//         //filter out and remove the token from the session that the user is logging out from
+//         req.user.tokens = req.user.tokens.filter((token) => {
+//             //iterate through each token in the user's tokens array
+//             //if the token being logged out from matches one of the user's current tokens, function returns false and
+//             //that token is removed from the tokens array. Otherwise, returns true and token is kept in tokens array
+//             return token.token != req.token;
+//         });
+//
+//         //save the user again, with that token removed
+//         await req.user.save();
+//
+//         res.send();
+//     } catch (e) {
+//         res.status(500).send();
+//     }
+// })
 
-        //save the user again, with that token removed
-        await req.user.save();
-
-        res.send();
-    } catch (e) {
-        res.status(500).send();
-    }
-})
-
-router.post("/users/logoutall", cors(), auth, async (req, res) => {
-    try {
-        //remove all tokens from this user's tokens array by setting it to an empty array
-        req.user.tokens = [];
-
-        //save the user again, with all tokens removed
-        await req.user.save();
-
-        res.send();
-    } catch (e) {
-        res.status(500).send();
-    }
-})
+// router.post("/users/logoutall", cors(), auth, async (req, res) => {
+//     try {
+//         //remove all tokens from this user's tokens array by setting it to an empty array
+//         req.user.tokens = [];
+//
+//         //save the user again, with all tokens removed
+//         await req.user.save();
+//
+//         res.send();
+//     } catch (e) {
+//         res.status(500).send();
+//     }
+// })
 
 //get all users currently in database
 router.get("/users", cors(), async (req, res) => {
@@ -179,7 +177,7 @@ router.post("/users/change", cors(), async (req, res) => {
         }
     } catch (e) {
         const errorMessage = e.toString();
-        if (errorMessage.includes("Incorrect corrent password.")) {
+        if (errorMessage.includes("Incorrect current password.")) {
             res.status(400).send(e);
         } else if (errorMessage.includes("Password must be at least 8 characters long.")) {
             res.status(401).send(e);
@@ -255,35 +253,35 @@ router.post("/users/shuffle", cors(), async (req, res) => {
 });
 
 //get particular user, using dynamically forming URL's
-router.get("/users/:id", cors(), async (req, res) => {
-    //req.params stores the user that is being requested
-    const _id = req.params.id;
-
-    try {
-        const user = await User.findById(_id);
-        if (!user) {
-            return res.status(404).send();
-        }
-
-        res.send(user);
-    } catch (e) {
-        res.status(500).send();
-    };
-
-    // User.findById(_id).then((user) => {
-    //     //whether or not a matching user is actually found, request will be considered a success
-    //     //use conditional logic to account for cases where no matching results are returned
-    //     if (!user) {
-    //         return res.status(404).send();
-    //     }
-
-    //     //status here will be 200
-    //     res.send(user);
-    // }).catch((e) => {
-    //     res.status(500).send();
-    // });
-
-});
+// router.get("/users/:id", cors(), async (req, res) => {
+//     //req.params stores the user that is being requested
+//     const _id = req.params.id;
+//
+//     try {
+//         const user = await User.findById(_id);
+//         if (!user) {
+//             return res.status(404).send();
+//         }
+//
+//         res.send(user);
+//     } catch (e) {
+//         res.status(500).send();
+//     };
+//
+//     // User.findById(_id).then((user) => {
+//     //     //whether or not a matching user is actually found, request will be considered a success
+//     //     //use conditional logic to account for cases where no matching results are returned
+//     //     if (!user) {
+//     //         return res.status(404).send();
+//     //     }
+//
+//     //     //status here will be 200
+//     //     res.send(user);
+//     // }).catch((e) => {
+//     //     res.status(500).send();
+//     // });
+//
+// });
 
 // router.patch("/users/update/:id", cors(), async (req, res) => {
 //     //updates will hold an array of keys (attributes) that the incoming parameter is trying to update
@@ -352,7 +350,6 @@ router.get('/video/token', (req, res) => {
     const room = req.query.room;
     const token = videoToken(identity, room, config);
     sendTokenResponse(token, res);
-
 });
 router.post('/video/token', (req, res) => {
     const identity = req.body.identity;
@@ -363,9 +360,9 @@ router.post('/video/token', (req, res) => {
 
 
 router.post('/videochat', async (req, res) => {
+      try {
     const callee = req.body.callee;
     const caller = req.body.caller;
-    try {
         const user = await User.findOne({ username: callee });
         if (user.online) {
           user.caller = caller;
@@ -374,7 +371,6 @@ router.post('/videochat', async (req, res) => {
         } else {
           res.status(201).send();
         }
-
     } catch (e) {
         res.status(500).send();
     }

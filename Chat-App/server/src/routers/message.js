@@ -23,7 +23,7 @@ router.post("/message/text", cors(), async (req, res) => {
         res.status(200).json(message);
     } catch(e) {
         res.status(400).send(e);
-}
+      }
 });
 
 router.post("/message/image", cors(), upload.single("image"), async (req, res) => {

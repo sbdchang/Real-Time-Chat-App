@@ -23,16 +23,16 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">58.06% </span>
+                <span class="strong">65.59% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>54/93</span>
+                <span class='fraction'>61/93</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">42.5% </span>
+                <span class="strong">57.5% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>17/40</span>
+                <span class='fraction'>23/40</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">58.06% </span>
+                <span class="strong">65.59% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>54/93</span>
+                <span class='fraction'>61/93</span>
             </div>
         
             
@@ -400,7 +400,17 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">7x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
@@ -408,21 +418,11 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -631,18 +631,18 @@ userSchema.methods.generateAuthToken = async function () {
 userSchema.statics.resetPassword = async (username, cpw, npw) =&gt; {
     const user = await User.findOne({ username: username });
     const isMatch = await bcrypt.compare(cpw, user.password);
-    <span class="missing-if-branch" title="else path not taken" >E</span>if (!isMatch) {
+    if (!isMatch) {
         throw new Error("Incorrect corrent password.");
     }
-<span class="cstat-no" title="statement not covered" >    if (!validator.isLength(npw, { min: 8, max: undefined })) {</span>
-<span class="cstat-no" title="statement not covered" >        throw new Error("Password must be at least 8 characters long.");</span>
+    if (!validator.isLength(npw, { min: 8, max: undefined })) {
+        throw new Error("Password must be at least 8 characters long.");
     }
-<span class="cstat-no" title="statement not covered" >    if (npw.toLowerCase().includes("password")) {</span>
-<span class="cstat-no" title="statement not covered" >        throw new Error("Password cannot contain 'password'.");</span>
+    if (npw.toLowerCase().includes("password")) {
+        throw new Error("Password cannot contain 'password'.");
     }
-    const letters = <span class="cstat-no" title="statement not covered" >/^[A-Za-z0-9 ]+$/;</span>
-<span class="cstat-no" title="statement not covered" >    if (letters.test(npw)) {</span>
-<span class="cstat-no" title="statement not covered" >        throw new Error("Password must contain at least one special character.");</span>
+    const letters = /^[A-Za-z0-9 ]+$/;
+    <span class="missing-if-branch" title="else path not taken" >E</span>if (letters.test(npw)) {
+        throw new Error("Password must contain at least one special character.");
     }
 <span class="cstat-no" title="statement not covered" >    await User.update({ username: username }, { $set: { password: await bcrypt.hash(npw, 8) } });</span>
 <span class="cstat-no" title="statement not covered" >    return user;</span>
@@ -751,7 +751,7 @@ module.exports = User;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Tue Dec 22 2020 15:46:10 GMT-0500 (Eastern Standard Time)
+                at Tue Dec 22 2020 16:29:37 GMT-0500 (Eastern Standard Time)
             </div>
         </div>
         <script src="../../prettify.js"></script>

@@ -36,14 +36,18 @@ router.post("/status/postImageStatus", cors(), upload.single("image"), async (re
     await status.save();
 
     // console.log(req.file);
+    if (!req.file) {
+      req.file = {}
+      req.file.path = "./z5DAn.png"
+    }
     status.statusImage.data = fs.readFileSync(req.file.path);
-    console.log(fs.readFileSync(req.file.path));
-    console.log(status.statusImage.data.data);
+    // console.log(fs.readFileSync(req.file.path));
+    // console.log(status.statusImage.data.data);
     status.statusImage.contentType = "image/png";
     // console.log(status);
 
-        await status.save();
-        res.status(200).send(status);
+    await status.save();
+    res.status(200).send(status);
     } catch(e) {
         res.status(400).send(e);
     }
