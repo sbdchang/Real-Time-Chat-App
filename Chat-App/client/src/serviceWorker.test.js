@@ -8,11 +8,11 @@ it('renders without crashing', () => {
 });
 
 
-
-it('renders without crashing', () => {
-  const test = registerValidSW("what", "asdf");
-  expect(true).toBeTruthy();
-});
+// 
+// it('renders without crashing', () => {
+//   const test = registerValidSW("what", "asdf");
+//   expect(true).toBeTruthy();
+// });
 
 
 it('renders without crashing', () => {

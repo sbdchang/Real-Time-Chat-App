@@ -1,3 +1,7 @@
+it('Videochat Snapshot  ', () => {
+  expect(true).toBeTruthy();
+});
+
 // // import selenium functions
 // const {
 //   Builder, By, Key, until,
