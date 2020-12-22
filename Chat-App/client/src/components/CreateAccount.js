@@ -193,12 +193,7 @@ export default class CreateAccount extends React.Component {
 							<input type='text' placeholder="Reset PIN" value={this.state.pin} onChange={this.handlePinChange} id="pin" className="pin-input" />
 							<button id="createAccounttBtn" className="createAcct-btn" onClick={this.createAcct}>Create Account</button>
 						</div>
-
-<<<<<<< HEAD
-						<div className="results-container" id="results">
-=======
 						<div className="results-container" id="results1">
->>>>>>> selenium-adding
 							{/* {this.state.recMovies} */}
 							<p id="message-1">  </p>
 						</div>
@@ -216,11 +211,7 @@ export default class CreateAccount extends React.Component {
 							<button id="loginBtn" className="login-btn" onClick={this.loginAcct.bind(this)}>Log In</button>
 						</div>
 
-<<<<<<< HEAD
-						<div className="results-container" id="results">
-=======
 						<div className="results-container" id="results2">
->>>>>>> selenium-adding
 							{/* {this.state.recMovies} */}
 							<p id="message-2">  </p>
 						</div>
