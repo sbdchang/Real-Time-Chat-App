@@ -287,58 +287,58 @@ router.get("/users/:id", cors(), async (req, res) => {
 
 });
 
-router.patch("/users/update/:id", cors(), async (req, res) => {
-    //updates will hold an array of keys (attributes) that the incoming parameter is trying to update
-    const updates = Object.keys(req.body);
-    const allowedUpdates = ["username", "email", "password"];
-    const isValidUpdateOperation = updates.every((update) => {
-        //called once for every item in updates. Every update parameter will be checked against allowedUpdates
-        //every() only returns true if every evaluation is true. One single false will make every() return false
-        return allowedUpdates.includes(update);
-    });
+// router.patch("/users/update/:id", cors(), async (req, res) => {
+//     //updates will hold an array of keys (attributes) that the incoming parameter is trying to update
+//     const updates = Object.keys(req.body);
+//     const allowedUpdates = ["username", "email", "password"];
+//     const isValidUpdateOperation = updates.every((update) => {
+//         //called once for every item in updates. Every update parameter will be checked against allowedUpdates
+//         //every() only returns true if every evaluation is true. One single false will make every() return false
+//         return allowedUpdates.includes(update);
+//     });
+//
+//     if (!isValidUpdateOperation) {
+//         return res.status(400).send({ error: "Invalid updates." });
+//     };
+//
+//     try {
+//         //new: true returns the user AFTER update is applied
+//         //runValidators: true ensures validators are run and updates conform to original requirements
+//         // const user = await User.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true });
+//
+//         const user = await User.findById(req.params.id);
+//         updates.forEach((update) => {
+//             //use bracket notation to select update field dynamically based on what "update" is in the forEach loop
+//             //specifies which field(s) in user to update, and to what value
+//             user[update] = req.body[update];
+//         });
+//
+//         await user.save();
+//
+//         if (!user) {
+//             return res.status(404).send();
+//         }
+//
+//         res.send(user);
+//     } catch (e) {
+//         res.status(400).send(e);
+//     };
+// });
 
-    if (!isValidUpdateOperation) {
-        return res.status(400).send({ error: "Invalid updates." });
-    };
-
-    try {
-        //new: true returns the user AFTER update is applied
-        //runValidators: true ensures validators are run and updates conform to original requirements
-        // const user = await User.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true });
-
-        const user = await User.findById(req.params.id);
-        updates.forEach((update) => {
-            //use bracket notation to select update field dynamically based on what "update" is in the forEach loop
-            //specifies which field(s) in user to update, and to what value
-            user[update] = req.body[update];
-        });
-
-        await user.save();
-
-        if (!user) {
-            return res.status(404).send();
-        }
-
-        res.send(user);
-    } catch (e) {
-        res.status(400).send(e);
-    };
-});
-
-router.delete("/users/delete/:id", cors(), async (req, res) => {
-    try {
-        const user = await User.findByIdAndDelete(req.params.id);
-
-        if (!user) {
-            //user to delete does not exist
-            return res.status(404).send();
-        }
-
-        res.send(user);
-    } catch (e) {
-        res.status(500).send();
-    }
-});
+// router.delete("/users/delete/:id", cors(), async (req, res) => {
+//     try {
+//         const user = await User.findByIdAndDelete(req.params.id);
+//
+//         if (!user) {
+//             //user to delete does not exist
+//             return res.status(404).send();
+//         }
+//
+//         res.send(user);
+//     } catch (e) {
+//         res.status(500).send();
+//     }
+// });
 
 const sendTokenResponse = (token, res) => {
     res.set('Content-Type', 'application/json');
