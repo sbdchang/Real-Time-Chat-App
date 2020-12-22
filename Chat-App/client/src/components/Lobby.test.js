@@ -11,3 +11,9 @@ it('Lobby snapshot', () => {
   const tree = renderer.create(<MainView />).toJSON();
   expect(tree).toMatchSnapshot();
 });
+
+
+it('renders without crashing', () => {
+  const div = document.createElement('div');
+  ReactDOM.render(<Lobby />, div);
+});
