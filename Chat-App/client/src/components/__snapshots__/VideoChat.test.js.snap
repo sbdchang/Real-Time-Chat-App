@@ -1,122 +1,44 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Videochat Snapshot   1`] = `
-<div
-  className="Mainview"
+<form
+  onSubmit={[Function]}
 >
-  <div
-    className="PageNavbar"
-  >
-    <nav
-      className="navbar navbar-expand-lg navbar-light bg-light"
+  <h2>
+    Enter a room
+  </h2>
+  <div>
+    <label
+      htmlFor="name"
     >
-      <span
-        className="navbar-brand center"
-      >
-        CIS557
-      </span>
-      <div
-        className="collapse navbar-collapse"
-        id="navbarNavAltMarkup"
-      >
-        <div
-          className="navbar-nav"
-        />
-      </div>
-    </nav>
+      Name:
+    </label>
+    <input
+      id="field"
+      onChange={[Function]}
+      required={true}
+      type="text"
+      value={null}
+    />
   </div>
-  <br />
-  <div
-    className="container"
-  >
-    <div
-      className="jumbotron"
+  <div>
+    <label
+      htmlFor="room"
     >
-      <button
-        className="user1"
-        onClick={[Function]}
-      >
-        Logout
-      </button>
-      <div
-        className="h5"
-      >
-        My Contacts
-        <button
-          className="btn"
-          id="removeselectbtn"
-          onClick={[Function]}
-        >
-          Select
-        </button>
-        <button
-          className="btn"
-          id="removebtn"
-          onClick={[Function]}
-        >
-          Remove
-        </button>
-         
-      </div>
-    </div>
-    <br />
-    <div
-      className="jumbotron"
-    >
-      <div
-        className="h5"
-      >
-        All Contacts
-        <button
-          className="btn"
-          id="addselectbtn"
-          onClick={[Function]}
-        >
-          Select
-        </button>
-        <button
-          className="btn"
-          id="addbtn"
-          onClick={[Function]}
-        >
-          Add
-        </button>
-         
-      </div>
-      <div>
-        <input
-          className="inpt"
-          id="sc"
-          onChange={[Function]}
-          placeholder="Search Contacts"
-          type="text"
-        />
-      </div>
-    </div>
-    <div
-      className="jumbotron"
-    >
-      <div
-        className="h5"
-      >
-        Recommended Contacts
-        <button
-          className="btn"
-          id="addRecselectbtn"
-          onClick={[Function]}
-        >
-          Select
-        </button>
-        <button
-          className="btn"
-          id="addRecbtn"
-          onClick={[Function]}
-        >
-          Add
-        </button>
-         
-      </div>
-    </div>
+      Room name:
+    </label>
+    <input
+      id="room"
+      onChange={[Function]}
+      required={true}
+      type="text"
+      value={null}
+    />
   </div>
-</div>
+  <button
+    type="submit"
+  >
+    Submit
+  </button>
+</form>
 `;

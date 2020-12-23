@@ -1,7 +1,6 @@
 //import React from 'react';
 import ReactDOM from 'react-dom';
 //import { render, screen } from '@testing-library/react';
-import MainView from './MainView';
 import renderer from 'react-test-renderer';
 //
 // it('renders without crashing', () => {
