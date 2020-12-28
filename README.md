@@ -1,4 +1,4 @@
-# CIS557 Project - Video and Messaging Web APP
+# Video and Messaging Web APP
 
 Deployed here: https://chat-app-557-client.herokuapp.com/
 
